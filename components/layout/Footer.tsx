@@ -1,0 +1,72 @@
+import Link from 'next/link'
+import { MessageCircle, GraduationCap } from 'lucide-react'
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#27272c] border-t border-white/6 py-14 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center flex-shrink-0">
+                <GraduationCap size={15} className="text-white" />
+              </div>
+              <span className="text-white font-bold text-lg tracking-tight">
+                Teman<span className="text-[#9eff63]">Skripsi</span>
+              </span>
+            </div>
+            <p className="text-white/40 text-sm leading-relaxed max-w-xs">
+              Skripsi itu gampang. Asal sama orang yang tepat. Sudah membantu 340+ mahasiswa se-Indonesia wisuda.
+            </p>
+            <div className="flex items-center gap-3 mt-5">
+              <a href="https://wa.me/62" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer">
+                <MessageCircle size={15} /> WhatsApp
+              </a>
+              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">Instagram</a>
+              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">TikTok</a>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-4">Program</p>
+            <div className="flex flex-col gap-2.5">
+              {[
+                ['/fastrack', 'Fast Track Sempro'],
+                ['/mentoring-sempro', 'Mentoring Sempro'],
+                ['/mentoring-penelitian', 'Mentoring Bab 4–5'],
+              ].map(([href, label]) => (
+                <Link key={href} href={href}
+                  className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-4">Navigasi</p>
+            <div className="flex flex-col gap-2.5">
+              {[
+                ['/#produk', 'Produk'],
+                ['/#testimoni', 'Alumni'],
+                ['/dashboard', 'Dashboard Client'],
+                ['/login', 'Masuk'],
+              ].map(([href, label]) => (
+                <Link key={href} href={href}
+                  className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-white/6 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-white/25 text-xs">© {new Date().getFullYear()} Teman Skripsi. All rights reserved.</p>
+          <p className="text-white/20 text-xs">Bandar Lampung, Indonesia</p>
+        </div>
+      </div>
+    </footer>
+  )
+}
