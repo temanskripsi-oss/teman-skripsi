@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { ArrowRight, Star, TrendingUp, Zap } from 'lucide-react'
 
 export default function HeroSection() {
@@ -84,21 +85,28 @@ export default function HeroSection() {
           <div className="order-1 lg:order-2 relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-[400px]">
               {/* Main visual */}
-              <div className="animate-fade-in-right relative rounded-3xl overflow-hidden h-[460px] sm:h-[500px] border border-white/8 bg-gradient-to-b from-[#2232dd]/20 via-[#1E1B4B]/80 to-[#1E1B4B]" data-delay="0.15">
-                <div className="absolute inset-0 grid-bg opacity-50" />
-                {/* Decorative shapes */}
-                <div className="absolute top-8 right-8 w-32 h-32 rounded-full border border-[#9eff63]/20" />
-                <div className="absolute top-12 right-12 w-20 h-20 rounded-full bg-[#9eff63]/5" />
-                <div className="absolute bottom-20 left-8 w-24 h-24 rounded-2xl border border-[#2232dd]/30 rotate-12" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center px-8">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center mx-auto mb-5 animate-pulse-glow">
-                      <GraduationCapIcon />
-                    </div>
-                    <p className="text-white/20 text-7xl font-black tracking-tighter">TS</p>
-                  </div>
+              <div className="animate-fade-in-right relative h-[460px] sm:h-[520px]" data-delay="0.15">
+                {/* Background circle decoration */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[360px] h-[360px] rounded-full bg-gradient-to-b from-[#2232dd]/30 to-[#7C6FCD]/10 blur-2xl" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full border border-[#2232dd]/20 animate-spin-slow" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[240px] h-[240px] rounded-full border border-[#9eff63]/15 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '20s' }} />
+                {/* Decorative dots */}
+                <div className="absolute top-10 right-6 w-3 h-3 rounded-full bg-[#9eff63] opacity-60" />
+                <div className="absolute top-20 right-16 w-2 h-2 rounded-full bg-[#4DD9C0] opacity-40" />
+                <div className="absolute top-6 left-10 w-2 h-2 rounded-full bg-[#2232dd] opacity-50" />
+                {/* Graduate photo */}
+                <div className="relative h-full flex items-end justify-center">
+                  <Image
+                    src="/images/hero-graduate.png"
+                    alt="Alumni Teman Skripsi wisuda"
+                    width={380}
+                    height={520}
+                    className="object-contain object-bottom h-full w-auto drop-shadow-2xl"
+                    priority
+                  />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1E1B4B] via-transparent to-transparent" />
+                {/* Bottom fade */}
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#1E1B4B] to-transparent" />
               </div>
 
               {/* Floating cards */}
