@@ -25,13 +25,15 @@ export async function GET(request: NextRequest) {
       }
     )
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data: { user }, error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
+    if (!error && user) {
       if (type === 'recovery') {
         return NextResponse.redirect(`${origin}/update-password`)
       }
-      return NextResponse.redirect(`${origin}${next}`)
+      const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+      const destination = profile?.role === 'admin' ? '/admin' : '/dashboard'
+      return NextResponse.redirect(`${origin}${destination}`)
     }
   }
 
