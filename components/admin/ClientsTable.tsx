@@ -3,7 +3,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Plus, X, Loader2, ChevronRight } from 'lucide-react'
-import { createClientAction } from '@/app/(admin)/admin/actions'
+import { createClientAction, sendPasswordResetAction } from '@/app/(admin)/admin/actions'
 import type { Profile, Product } from '@/types'
 
 const PRODUCTS: { value: Product | 'all-filter'; label: string }[] = [
@@ -54,6 +54,7 @@ export default function ClientsTable({ clients }: Props) {
     startTransition(async () => {
       const res = await createClientAction(form)
       if (res.error) { setError(res.error); return }
+      await sendPasswordResetAction(form.email)
       setShowModal(false)
       setForm({ email: '', full_name: '', university: '', phone: '', product: 'fastrack', active_until: '' })
       router.refresh()
@@ -204,7 +205,7 @@ export default function ClientsTable({ clients }: Props) {
                   {isPending ? <><Loader2 size={14} className="animate-spin" /> Menyimpan...</> : 'Buat Akun'}
                 </button>
               </div>
-              <p className="text-[#9CA3AF] text-xs text-center">Password acak akan dibuat. Klien perlu reset password via email.</p>
+              <p className="text-[#9CA3AF] text-xs text-center">Email set password otomatis dikirim ke klien setelah akun dibuat.</p>
             </form>
           </div>
         </div>

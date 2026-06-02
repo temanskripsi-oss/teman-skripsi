@@ -55,7 +55,12 @@ export async function updateClientAction(userId: string, data: {
 
 export async function sendPasswordResetAction(email: string) {
   const supabase = createServiceClient()
-  const { error } = await supabase.auth.admin.generateLink({ type: 'recovery', email })
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teman-skripsi-delta.vercel.app'
+  const { error } = await supabase.auth.admin.generateLink({
+    type: 'recovery',
+    email,
+    options: { redirectTo: `${siteUrl}/auth/callback?type=recovery` },
+  })
   if (error) return { error: error.message }
   return { success: true }
 }
