@@ -8,14 +8,21 @@ import {
   updateSessionAction,
   deleteSessionAction,
 } from '@/app/(admin)/admin/actions'
-import type { Profile, Session, Product } from '@/types'
+import type { Profile, Session } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all'
 const SELECT = INPUT + ' bg-white cursor-pointer'
 
-const EMPTY_SESSION = {
-  session_number: 1, session_type: 'online' as const,
-  scheduled_at: '', zoom_link: '', notes: '', status: 'upcoming' as const,
+const EMPTY_SESSION: {
+  session_number: number
+  session_type: 'online' | 'offline'
+  scheduled_at: string
+  zoom_link: string
+  notes: string
+  status: 'upcoming' | 'done'
+} = {
+  session_number: 1, session_type: 'online',
+  scheduled_at: '', zoom_link: '', notes: '', status: 'upcoming',
 }
 
 interface Props {
@@ -124,7 +131,7 @@ export default function ClientDetail({ profile, sessions, videoProgress }: Props
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Produk</label>
-              <select value={profileForm.product} onChange={e => setProfileForm(f => ({ ...f, product: e.target.value }))} className={SELECT}>
+              <select value={profileForm.product} onChange={e => setProfileForm(f => ({ ...f, product: e.target.value as import('@/types').Product }))} className={SELECT}>
                 <option value="fastrack">Fastrack</option>
                 <option value="mentoring-sempro">Mentoring Sempro</option>
                 <option value="mentoring-penelitian">Mentoring Penelitian</option>
