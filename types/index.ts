@@ -1,4 +1,5 @@
 export type Product = 'fastrack' | 'mentoring-sempro' | 'mentoring-penelitian' | 'all'
+export type Role = 'user' | 'admin'
 
 export interface Profile {
   id: string
@@ -8,6 +9,7 @@ export interface Profile {
   product: Product
   active_until: string
   created_at: string
+  role: Role
 }
 
 export interface Video {
@@ -46,4 +48,15 @@ export interface Session {
   zoom_link: string
   notes: string
   status: 'upcoming' | 'done'
+}
+
+export interface Payment {
+  id: string
+  user_id: string
+  amount: number
+  description: string
+  payment_date: string
+  status: 'paid' | 'pending'
+  created_at: string
+  profiles?: Pick<Profile, 'id' | 'full_name' | 'product'>
 }
