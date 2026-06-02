@@ -15,9 +15,11 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setError('')
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { setError('Email atau password salah. Coba lagi.'); setLoading(false) }
-    else { router.push('/dashboard'); router.refresh() }
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) { setError('Email atau password salah. Coba lagi.'); setLoading(false); return }
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
+    router.push(profile?.role === 'admin' ? '/admin' : '/dashboard')
+    router.refresh()
   }
 
   const handleGoogleLogin = async () => {
