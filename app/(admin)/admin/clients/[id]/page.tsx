@@ -9,11 +9,12 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
   const { id } = await params
   const supabase = createServiceClient()
 
-  const [{ data: profile }, { data: sessions }, { data: videos }, { data: progress }] = await Promise.all([
+  const [{ data: profile }, { data: sessions }, { data: videos }, { data: progress }, { data: userData }] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', id).single(),
     supabase.from('sessions').select('*').eq('user_id', id).order('session_number', { ascending: true }),
     supabase.from('videos').select('id').or(`product.eq.all,product.eq.${(await supabase.from('profiles').select('product').eq('id', id).single()).data?.product}`),
     supabase.from('video_progress').select('id').eq('user_id', id),
+    supabase.auth.admin.getUserById(id),
   ])
 
   if (!profile) notFound()
@@ -31,6 +32,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
         profile={profile as Profile}
         sessions={(sessions ?? []) as Session[]}
         videoProgress={{ total: videos?.length ?? 0, watched: progress?.length ?? 0 }}
+        email={userData?.user?.email ?? ''}
       />
     </div>
   )

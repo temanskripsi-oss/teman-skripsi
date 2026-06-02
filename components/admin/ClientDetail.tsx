@@ -7,6 +7,7 @@ import {
   createSessionAction,
   updateSessionAction,
   deleteSessionAction,
+  sendPasswordResetAction,
 } from '@/app/(admin)/admin/actions'
 import type { Profile, Session } from '@/types'
 
@@ -29,13 +30,24 @@ interface Props {
   profile: Profile
   sessions: Session[]
   videoProgress: { total: number; watched: number }
+  email: string
 }
 
-export default function ClientDetail({ profile, sessions, videoProgress }: Props) {
+export default function ClientDetail({ profile, sessions, videoProgress, email }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
+  const [resetSent, setResetSent] = useState(false)
+  const [resetPending, startResetTransition] = useTransition()
+
+  const handleSendReset = () => {
+    startResetTransition(async () => {
+      await sendPasswordResetAction(email)
+      setResetSent(true)
+      setTimeout(() => setResetSent(false), 4000)
+    })
+  }
 
   // Profile edit
   const [profileForm, setProfileForm] = useState({
@@ -146,6 +158,14 @@ export default function ClientDetail({ profile, sessions, videoProgress }: Props
               className="bg-[#2232dd] text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1a28b8] disabled:opacity-60 transition-colors cursor-pointer flex items-center justify-center gap-2 mt-1">
               {isPending ? <><Loader2 size={14} className="animate-spin" /> Menyimpan...</> : 'Simpan Perubahan'}
             </button>
+            {email && (
+              <button type="button" onClick={handleSendReset} disabled={resetPending || resetSent}
+                className="border border-gray-200 text-[#6B6B8A] py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 disabled:opacity-60 transition-colors cursor-pointer flex items-center justify-center gap-2">
+                {resetPending ? <><Loader2 size={14} className="animate-spin" /> Mengirim...</>
+                  : resetSent ? '✓ Email terkirim!'
+                  : `Kirim Reset Password`}
+              </button>
+            )}
           </form>
 
           {/* Stats */}
