@@ -2,9 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Video, MapPin, CheckCircle, Clock, ExternalLink, ClipboardList, RotateCcw } from 'lucide-react'
+import { ArrowLeft, Video, MapPin, CheckCircle } from 'lucide-react'
 import MentorReviewClient from '@/components/mentor/MentorReviewClient'
-import type { Profile, Session, TaskSubmission, Feedback } from '@/types'
+import MentorSessionManager from '@/components/mentor/MentorSessionManager'
+import type { Profile, Session, SessionSubmission, TaskSubmission, Feedback } from '@/types'
 
 const PRODUCT_LABELS: Record<string, string> = {
   fastrack:               'Fastrack · 1 bulan',
@@ -39,6 +40,7 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
 
   const [
     { data: sessions },
+    { data: sessionSubmissions },
     { data: submissions },
     { data: feedbacks },
     { data: videos },
@@ -46,6 +48,7 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
     { data: userData },
   ] = await Promise.all([
     service.from('sessions').select('*').eq('user_id', id).order('session_number', { ascending: true }),
+    service.from('session_submissions').select('*').eq('user_id', id),
     service.from('task_submissions').select('*, task:tasks(id, title, week_number)').eq('user_id', id).order('submitted_at', { ascending: false }),
     service.from('feedbacks').select('*').eq('user_id', id).order('created_at', { ascending: false }),
     service.from('videos').select('id').or(`product.eq.all,product.eq.${client.product}`),
@@ -135,58 +138,16 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
           )}
         </div>
 
-        {/* Right: Sesi */}
+        {/* Right: Sesi (editable by mentor) */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
-              <h2 className="font-bold text-[#1E1B4B] text-base">Jadwal Sesi</h2>
-              <p className="text-[#9CA3AF] text-xs mt-0.5">
-                {doneSessions} selesai · {sessions?.filter(s => s.status === 'upcoming').length ?? 0} upcoming
-              </p>
-            </div>
-            {!sessions || sessions.length === 0 ? (
-              <p className="text-center text-[#9CA3AF] text-sm py-10">Belum ada sesi dijadwalkan</p>
-            ) : (
-              <div className="divide-y divide-gray-50">
-                {sessions.map(s => {
-                  const upcoming = s.status === 'upcoming'
-                  const date = s.scheduled_at
-                    ? new Date(s.scheduled_at).toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
-                    : 'Belum dijadwalkan'
-                  const time = s.scheduled_at
-                    ? new Date(s.scheduled_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                    : ''
-                  return (
-                    <div key={s.id} className="px-6 py-4 flex items-start gap-4">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${upcoming ? 'bg-[#2232dd] text-white' : 'bg-gray-100 text-[#9CA3AF]'}`}>
-                        {s.session_number}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <p className="font-semibold text-[#1E1B4B] text-sm">Pertemuan {s.session_number}</p>
-                          <span className={`flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${upcoming ? 'bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20' : 'bg-green-50 text-green-600 border border-green-100'}`}>
-                            {upcoming ? <Clock size={10} /> : <CheckCircle size={10} />}
-                            {upcoming ? 'Upcoming' : 'Selesai'}
-                          </span>
-                        </div>
-                        <p className="text-[#9CA3AF] text-xs">{date}{time ? ` · ${time} WIB` : ''}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="flex items-center gap-1 text-[#9CA3AF] text-xs">
-                            {s.session_type === 'online' ? <Video size={10} /> : <MapPin size={10} />}
-                            {s.session_type}
-                          </span>
-                          {s.zoom_link && (
-                            <a href={s.zoom_link} target="_blank" rel="noopener noreferrer" className="text-[#2232dd] text-xs hover:underline">Zoom link</a>
-                          )}
-                        </div>
-                        {s.notes && <p className="text-[#6B6B8A] text-xs mt-1.5 bg-[#f4f8ff] px-2.5 py-1.5 rounded-lg border border-[#2232dd]/10">{s.notes}</p>}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </div>
+          <MentorSessionManager
+            clientId={id}
+            sessions={(sessions ?? []) as Session[]}
+            sessionSubmissions={(sessionSubmissions ?? []) as SessionSubmission[]}
+            doneSessions={doneSessions}
+            onlineSessions={onlineSessions}
+            offlineSessions={offlineSessions}
+          />
         </div>
 
         {/* Task Submissions — interactive (review) */}
