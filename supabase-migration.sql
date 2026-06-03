@@ -112,7 +112,30 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avatar_url text;
 -- CREATE POLICY "Users can upload their own avatar." ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
 -- CREATE POLICY "Users can update their own avatar." ON storage.objects FOR UPDATE USING (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
 
--- 16. Tabel registrations (pendaftaran via payment gateway Duitku)
+-- 16. Extend sessions dengan catatan dan PR
+ALTER TABLE sessions ADD COLUMN IF NOT EXISTS catatan_sesi text DEFAULT '';
+ALTER TABLE sessions ADD COLUMN IF NOT EXISTS pr_description text DEFAULT '';
+
+-- 17. Tabel session_submissions (PR submission per sesi oleh klien)
+CREATE TABLE IF NOT EXISTS session_submissions (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  session_id uuid REFERENCES sessions(id) ON DELETE CASCADE NOT NULL,
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  url text NOT NULL,
+  notes text DEFAULT '',
+  status text NOT NULL DEFAULT 'submitted' CHECK (status IN ('submitted', 'disetujui', 'revisi')),
+  mentor_feedback text DEFAULT '',
+  submitted_at timestamptz DEFAULT now() NOT NULL,
+  reviewed_at timestamptz,
+  UNIQUE (session_id, user_id)
+);
+
+ALTER TABLE session_submissions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "users_manage_own_session_submissions" ON session_submissions;
+CREATE POLICY "users_manage_own_session_submissions" ON session_submissions
+  FOR ALL USING (auth.uid() = user_id);
+
+-- 18. Tabel registrations (pendaftaran via payment gateway Duitku)
 CREATE TABLE IF NOT EXISTS registrations (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   full_name text NOT NULL,

@@ -362,3 +362,31 @@ export async function deleteFeedbackAction(feedbackId: string, userId: string) {
   revalidatePath(`/admin/clients/${userId}`)
   return { success: true }
 }
+
+export async function updateSessionProgressAction(sessionId: string, userId: string, data: {
+  catatan_sesi: string
+  pr_description: string
+}) {
+  const supabase = createServiceClient()
+  const { error } = await supabase.from('sessions').update(data).eq('id', sessionId)
+  if (error) return { error: error.message }
+  revalidatePath(`/admin/clients/${userId}`)
+  revalidatePath(`/mentor/clients/${userId}`)
+  return { success: true }
+}
+
+export async function reviewSessionSubmissionAction(submissionId: string, userId: string, data: {
+  status: 'disetujui' | 'revisi'
+  mentor_feedback: string
+}) {
+  const supabase = createServiceClient()
+  const { error } = await supabase.from('session_submissions').update({
+    ...data,
+    reviewed_at: new Date().toISOString(),
+  }).eq('id', submissionId)
+  if (error) return { error: error.message }
+  revalidatePath(`/admin/clients/${userId}`)
+  revalidatePath(`/mentor/clients/${userId}`)
+  revalidatePath('/dashboard/progress')
+  return { success: true }
+}

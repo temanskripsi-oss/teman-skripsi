@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import ClientDetail from '@/components/admin/ClientDetail'
-import type { Profile, Session, Feedback, TaskSubmission } from '@/types'
+import type { Profile, Session, Feedback, TaskSubmission, SessionSubmission } from '@/types'
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -11,7 +11,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
 
   const { data: profileData } = await supabase.from('profiles').select('product').eq('id', id).single()
 
-  const [{ data: profile }, { data: sessions }, { data: videos }, { data: progress }, { data: userData }, { data: feedbacks }, { data: submissions }] = await Promise.all([
+  const [{ data: profile }, { data: sessions }, { data: videos }, { data: progress }, { data: userData }, { data: feedbacks }, { data: submissions }, { data: sessionSubs }] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', id).single(),
     supabase.from('sessions').select('*').eq('user_id', id).order('session_number', { ascending: true }),
     supabase.from('videos').select('id').or(`product.eq.all,product.eq.${profileData?.product}`),
@@ -19,6 +19,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
     supabase.auth.admin.getUserById(id),
     supabase.from('feedbacks').select('*').eq('user_id', id).order('created_at', { ascending: false }),
     supabase.from('task_submissions').select('*, task:tasks(id, title, week_number)').eq('user_id', id).order('submitted_at', { ascending: false }),
+    supabase.from('session_submissions').select('*').eq('user_id', id),
   ])
 
   const { data: mentors } = await supabase
@@ -40,6 +41,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
         sessions={(sessions ?? []) as Session[]}
         feedbacks={(feedbacks ?? []) as Feedback[]}
         submissions={(submissions ?? []) as TaskSubmission[]}
+        sessionSubmissions={(sessionSubs ?? []) as SessionSubmission[]}
         mentors={(mentors ?? []) as { id: string; full_name: string }[]}
         videoProgress={{ total: videos?.length ?? 0, watched: progress?.length ?? 0 }}
         email={userData?.user?.email ?? ''}

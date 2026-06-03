@@ -1,7 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, X, Loader2, Pencil, Trash2, Video, MapPin, CheckCircle, Clock, FileText, ExternalLink, ClipboardList, RotateCcw } from 'lucide-react'
+import { Plus, X, Loader2, Pencil, Trash2, Video, MapPin, CheckCircle, Clock, FileText, ExternalLink, ClipboardList, RotateCcw, BookOpen } from 'lucide-react'
 import {
   updateClientAction,
   createSessionAction,
@@ -12,8 +12,10 @@ import {
   updateFeedbackAction,
   deleteFeedbackAction,
   reviewSubmissionAction,
+  updateSessionProgressAction,
+  reviewSessionSubmissionAction,
 } from '@/app/(admin)/admin/actions'
-import type { Profile, Session, Feedback, TaskSubmission } from '@/types'
+import type { Profile, Session, Feedback, TaskSubmission, SessionSubmission } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all'
 const SELECT = INPUT + ' bg-white cursor-pointer'
@@ -45,12 +47,13 @@ interface Props {
   sessions: Session[]
   feedbacks: Feedback[]
   submissions: TaskSubmission[]
+  sessionSubmissions: SessionSubmission[]
   videoProgress: { total: number; watched: number }
   email: string
   mentors: MentorOption[]
 }
 
-export default function ClientDetail({ profile, sessions, feedbacks, submissions, videoProgress, email, mentors }: Props) {
+export default function ClientDetail({ profile, sessions, feedbacks, submissions, sessionSubmissions, videoProgress, email, mentors }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState('')
@@ -209,6 +212,55 @@ export default function ClientDetail({ profile, sessions, feedbacks, submissions
     })
   }
 
+  // Session progress (catatan + PR)
+  const [progressModal, setProgressModal] = useState<Session | null>(null)
+  const [progressForm, setProgressForm] = useState({ catatan_sesi: '', pr_description: '' })
+  const [progressError, setProgressError] = useState('')
+  const [progressPending, startProgressTransition] = useTransition()
+
+  const openEditProgress = (s: Session) => {
+    setProgressForm({ catatan_sesi: s.catatan_sesi ?? '', pr_description: s.pr_description ?? '' })
+    setProgressError('')
+    setProgressModal(s)
+  }
+
+  const handleProgressSave = (e: React.FormEvent) => {
+    e.preventDefault()
+    setProgressError('')
+    startProgressTransition(async () => {
+      const res = await updateSessionProgressAction(progressModal!.id, profile.id, progressForm)
+      if (res.error) { setProgressError(res.error); return }
+      setProgressModal(null)
+      router.refresh()
+    })
+  }
+
+  // Session submission review
+  const [sessReviewModal, setSessReviewModal] = useState<SessionSubmission | null>(null)
+  const [sessReviewForm, setSessReviewForm] = useState({ status: 'disetujui' as 'disetujui' | 'revisi', mentor_feedback: '' })
+  const [sessReviewError, setSessReviewError] = useState('')
+  const [sessReviewPending, startSessReviewTransition] = useTransition()
+
+  const openSessReview = (s: SessionSubmission) => {
+    setSessReviewForm({ status: s.status === 'revisi' ? 'revisi' : 'disetujui', mentor_feedback: s.mentor_feedback ?? '' })
+    setSessReviewError('')
+    setSessReviewModal(s)
+  }
+
+  const handleSessReviewSave = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSessReviewError('')
+    startSessReviewTransition(async () => {
+      const res = await reviewSessionSubmissionAction(sessReviewModal!.id, profile.id, sessReviewForm)
+      if (res.error) { setSessReviewError(res.error); return }
+      setSessReviewModal(null)
+      router.refresh()
+    })
+  }
+
+  const sessSubsMap: Record<string, SessionSubmission> = {}
+  sessionSubmissions.forEach(s => { sessSubsMap[s.session_id] = s })
+
   const STATUS_LABEL: Record<string, { label: string; color: string; bg: string; border: string }> = {
     submitted: { label: 'Dikumpulkan', color: '#2232dd', bg: '#eff6ff', border: '#2232dd/20' },
     reviewed:  { label: 'Disetujui',   color: '#16a34a', bg: '#f0fdf4', border: '#16a34a/20' },
@@ -332,42 +384,88 @@ export default function ClientDetail({ profile, sessions, feedbacks, submissions
                 const time = s.scheduled_at
                   ? new Date(s.scheduled_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
                   : ''
+                const sessSub = sessSubsMap[s.id]
                 return (
-                  <div key={s.id} className="px-6 py-4 flex items-start gap-4">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${upcoming ? 'bg-[#2232dd] text-white' : 'bg-gray-100 text-[#9CA3AF]'}`}>
-                      {s.session_number}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <p className="font-semibold text-[#1E1B4B] text-sm">Pertemuan {s.session_number}</p>
-                        <span className={`flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${upcoming ? 'bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20' : 'bg-green-50 text-green-600 border border-green-100'}`}>
-                          {upcoming ? <Clock size={10} /> : <CheckCircle size={10} />}
-                          {upcoming ? 'Upcoming' : 'Selesai'}
-                        </span>
+                  <div key={s.id} className="px-6 py-4 border-b border-gray-50 last:border-0">
+                    <div className="flex items-start gap-4">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${upcoming ? 'bg-[#2232dd] text-white' : 'bg-gray-100 text-[#9CA3AF]'}`}>
+                        {s.session_number}
                       </div>
-                      <p className="text-[#9CA3AF] text-xs">{date}{time ? ` · ${time} WIB` : ''}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="flex items-center gap-1 text-[#9CA3AF] text-xs">
-                          {s.session_type === 'online' ? <Video size={10} /> : <MapPin size={10} />}
-                          {s.session_type}
-                        </span>
-                        {s.zoom_link && (
-                          <a href={s.zoom_link} target="_blank" rel="noopener noreferrer"
-                            className="text-[#2232dd] text-xs hover:underline">Zoom link</a>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <p className="font-semibold text-[#1E1B4B] text-sm">Pertemuan {s.session_number}</p>
+                          <span className={`flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${upcoming ? 'bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20' : 'bg-green-50 text-green-600 border border-green-100'}`}>
+                            {upcoming ? <Clock size={10} /> : <CheckCircle size={10} />}
+                            {upcoming ? 'Upcoming' : 'Selesai'}
+                          </span>
+                        </div>
+                        <p className="text-[#9CA3AF] text-xs">{date}{time ? ` · ${time} WIB` : ''}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="flex items-center gap-1 text-[#9CA3AF] text-xs">
+                            {s.session_type === 'online' ? <Video size={10} /> : <MapPin size={10} />}
+                            {s.session_type}
+                          </span>
+                          {s.zoom_link && (
+                            <a href={s.zoom_link} target="_blank" rel="noopener noreferrer"
+                              className="text-[#2232dd] text-xs hover:underline">Zoom link</a>
+                          )}
+                        </div>
+                        {s.notes && <p className="text-[#6B6B8A] text-xs mt-1.5 bg-[#f4f8ff] px-2.5 py-1.5 rounded-lg border border-[#2232dd]/10">{s.notes}</p>}
+                      </div>
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                        <button onClick={() => openEditProgress(s)} title="Catatan & PR"
+                          className="p-1.5 rounded-lg hover:bg-orange-50 text-[#9CA3AF] hover:text-orange-500 transition-colors cursor-pointer">
+                          <ClipboardList size={13} />
+                        </button>
+                        <button onClick={() => openEditSession(s)}
+                          className="p-1.5 rounded-lg hover:bg-[#eff6ff] text-[#9CA3AF] hover:text-[#2232dd] transition-colors cursor-pointer">
+                          <Pencil size={13} />
+                        </button>
+                        <button onClick={() => handleDeleteSession(s.id)}
+                          className="p-1.5 rounded-lg hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 transition-colors cursor-pointer">
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Catatan + PR */}
+                    {(s.catatan_sesi || s.pr_description) && (
+                      <div className="mt-3 ml-13 flex flex-col gap-2 pl-13" style={{ paddingLeft: '52px' }}>
+                        {s.catatan_sesi && (
+                          <div className="bg-[#f4f8ff] rounded-lg px-3 py-2 border border-[#2232dd]/10">
+                            <p className="text-xs font-semibold text-[#2232dd] mb-0.5">📝 Catatan</p>
+                            <p className="text-xs text-[#1E1B4B] line-clamp-2">{s.catatan_sesi}</p>
+                          </div>
+                        )}
+                        {s.pr_description && (
+                          <div className="bg-orange-50 rounded-lg px-3 py-2 border border-orange-100">
+                            <p className="text-xs font-semibold text-orange-600 mb-0.5">📋 PR</p>
+                            <p className="text-xs text-[#1E1B4B] line-clamp-2">{s.pr_description}</p>
+                          </div>
                         )}
                       </div>
-                      {s.notes && <p className="text-[#6B6B8A] text-xs mt-1.5 bg-[#f4f8ff] px-2.5 py-1.5 rounded-lg border border-[#2232dd]/10">{s.notes}</p>}
-                    </div>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <button onClick={() => openEditSession(s)}
-                        className="p-1.5 rounded-lg hover:bg-[#eff6ff] text-[#9CA3AF] hover:text-[#2232dd] transition-colors cursor-pointer">
-                        <Pencil size={13} />
-                      </button>
-                      <button onClick={() => handleDeleteSession(s.id)}
-                        className="p-1.5 rounded-lg hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 transition-colors cursor-pointer">
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
+                    )}
+
+                    {/* Session submission */}
+                    {sessSub && (
+                      <div className="mt-2 flex items-center gap-3 px-1" style={{ paddingLeft: '52px' }}>
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
+                          sessSub.status === 'disetujui' ? 'bg-green-50 text-green-600 border-green-100' :
+                          sessSub.status === 'revisi' ? 'bg-orange-50 text-orange-500 border-orange-100' :
+                          'bg-[#eff6ff] text-[#2232dd] border-[#2232dd]/20'
+                        }`}>
+                          {sessSub.status === 'disetujui' ? '✓ Disetujui' : sessSub.status === 'revisi' ? '↺ Revisi' : '⏳ Dikirim'}
+                        </span>
+                        <a href={sessSub.url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-xs text-[#2232dd] hover:underline">
+                          <ExternalLink size={11} /> Lihat file PR
+                        </a>
+                        <button onClick={() => openSessReview(sessSub)}
+                          className="text-xs text-[#7C6FCD] hover:underline cursor-pointer">
+                          Review
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )
               })}
@@ -663,6 +761,103 @@ export default function ClientDetail({ profile, sessions, feedbacks, submissions
                 <button type="submit" disabled={sessionPending}
                   className="flex-1 bg-[#2232dd] text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1a28b8] disabled:opacity-60 transition-colors cursor-pointer flex items-center justify-center gap-2">
                   {sessionPending ? <><Loader2 size={14} className="animate-spin" /> Menyimpan...</> : 'Simpan'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Progress Modal (catatan + PR) */}
+      {progressModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h2 className="font-bold text-[#1E1B4B] text-base">Catatan & PR — Sesi {progressModal.session_number}</h2>
+              <button onClick={() => setProgressModal(null)} className="p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer">
+                <X size={16} className="text-[#9CA3AF]" />
+              </button>
+            </div>
+            <form onSubmit={handleProgressSave} className="p-6 flex flex-col gap-4">
+              {progressError && <p className="text-red-500 text-xs bg-red-50 border border-red-100 rounded-xl px-3 py-2">{progressError}</p>}
+              <div>
+                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">📝 Catatan Sesi</label>
+                <textarea value={progressForm.catatan_sesi} rows={3}
+                  placeholder="Apa yang dibahas di sesi ini..."
+                  onChange={e => setProgressForm(f => ({ ...f, catatan_sesi: e.target.value }))}
+                  className={INPUT + ' resize-none'} />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">📋 PR untuk Klien</label>
+                <textarea value={progressForm.pr_description} rows={3}
+                  placeholder="Tugas yang harus dikerjakan sebelum sesi berikutnya..."
+                  onChange={e => setProgressForm(f => ({ ...f, pr_description: e.target.value }))}
+                  className={INPUT + ' resize-none'} />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button type="button" onClick={() => setProgressModal(null)}
+                  className="flex-1 border border-gray-200 text-[#6B6B8A] py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 cursor-pointer">
+                  Batal
+                </button>
+                <button type="submit" disabled={progressPending}
+                  className="flex-1 bg-[#2232dd] text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1a28b8] disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2">
+                  {progressPending ? <><Loader2 size={14} className="animate-spin" /> Menyimpan...</> : 'Simpan'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Session Submission Review Modal */}
+      {sessReviewModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h2 className="font-bold text-[#1E1B4B] text-base">Review PR Klien</h2>
+              <button onClick={() => setSessReviewModal(null)} className="p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer">
+                <X size={16} className="text-[#9CA3AF]" />
+              </button>
+            </div>
+            <form onSubmit={handleSessReviewSave} className="p-6 flex flex-col gap-4">
+              {sessReviewError && <p className="text-red-500 text-xs bg-red-50 border border-red-100 rounded-xl px-3 py-2">{sessReviewError}</p>}
+              <div className="bg-[#f4f8ff] rounded-xl px-4 py-3 border border-[#2232dd]/10">
+                <a href={sessReviewModal.url} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-sm text-[#2232dd] hover:underline font-medium">
+                  <ExternalLink size={13} /> Lihat file submission klien
+                </a>
+                {sessReviewModal.notes && <p className="text-xs text-[#6B6B8A] mt-1.5">Catatan: {sessReviewModal.notes}</p>}
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Status</label>
+                <div className="flex gap-3">
+                  {(['disetujui', 'revisi'] as const).map(v => (
+                    <button key={v} type="button" onClick={() => setSessReviewForm(f => ({ ...f, status: v }))}
+                      className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-colors cursor-pointer ${
+                        sessReviewForm.status === v
+                          ? v === 'disetujui' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-orange-50 text-orange-500 border-orange-200'
+                          : 'border-gray-200 text-[#9CA3AF] hover:bg-gray-50'
+                      }`}>
+                      {v === 'disetujui' ? '✓ Disetujui' : '↺ Revisi'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Feedback (opsional)</label>
+                <textarea value={sessReviewForm.mentor_feedback} rows={3}
+                  placeholder="Tulis feedback untuk klien..."
+                  onChange={e => setSessReviewForm(f => ({ ...f, mentor_feedback: e.target.value }))}
+                  className={INPUT + ' resize-none'} />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button type="button" onClick={() => setSessReviewModal(null)}
+                  className="flex-1 border border-gray-200 text-[#6B6B8A] py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 cursor-pointer">
+                  Batal
+                </button>
+                <button type="submit" disabled={sessReviewPending}
+                  className="flex-1 bg-[#2232dd] text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1a28b8] disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2">
+                  {sessReviewPending ? <><Loader2 size={14} className="animate-spin" /> Menyimpan...</> : 'Simpan Review'}
                 </button>
               </div>
             </form>

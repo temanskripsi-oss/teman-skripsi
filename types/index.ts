@@ -51,6 +51,20 @@ export interface Session {
   zoom_link: string
   notes: string
   status: 'upcoming' | 'done'
+  catatan_sesi: string
+  pr_description: string
+}
+
+export interface SessionSubmission {
+  id: string
+  session_id: string
+  user_id: string
+  url: string
+  notes: string
+  status: 'submitted' | 'disetujui' | 'revisi'
+  mentor_feedback: string
+  submitted_at: string
+  reviewed_at: string | null
 }
 
 export interface Payment {

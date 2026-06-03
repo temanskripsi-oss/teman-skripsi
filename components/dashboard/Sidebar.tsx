@@ -2,23 +2,28 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Home, Video, Gift, Calendar, User, LogOut, FileText, ClipboardList } from 'lucide-react'
+import { Home, Video, Gift, Calendar, User, LogOut, FileText, ClipboardList, BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import type { Product } from '@/types'
 
-const nav = [
-  { href: '/dashboard',          icon: Home,     label: 'Beranda' },
-  { href: '/dashboard/videos',   icon: Video,    label: 'Video Materi' },
-  { href: '/dashboard/freebies', icon: Gift,     label: 'Template & Freebies' },
-  { href: '/dashboard/schedule', icon: Calendar, label: 'Jadwal Bimbingan' },
-  { href: '/dashboard/tasks',    icon: ClipboardList, label: 'Tugas Mingguan' },
-  { href: '/dashboard/feedback', icon: FileText, label: 'Written Feedback' },
-  { href: '/dashboard/profile',  icon: User,     label: 'Profil' },
-]
+const isMentoringPrivat = (p: Product) => p === 'mentoring-sempro' || p === 'mentoring-penelitian'
 
-export default function Sidebar() {
+export default function Sidebar({ product }: { product: Product }) {
   const pathname = usePathname()
   const router   = useRouter()
   const supabase = createClient()
+  const isPrivat = isMentoringPrivat(product)
+
+  const nav = [
+    { href: '/dashboard',            icon: Home,          label: 'Beranda',           show: true },
+    { href: '/dashboard/videos',     icon: Video,         label: 'Video Materi',      show: true },
+    { href: '/dashboard/freebies',   icon: Gift,          label: 'Template & Freebies', show: true },
+    { href: '/dashboard/schedule',   icon: Calendar,      label: 'Jadwal Bimbingan',  show: true },
+    { href: '/dashboard/tasks',      icon: ClipboardList, label: 'Tugas Mingguan',    show: !isPrivat },
+    { href: '/dashboard/feedback',   icon: FileText,      label: 'Written Feedback',  show: !isPrivat },
+    { href: '/dashboard/progress',   icon: BookOpen,      label: 'Progress Bimbingan',show: isPrivat },
+    { href: '/dashboard/profile',    icon: User,          label: 'Profil',            show: true },
+  ]
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -41,7 +46,7 @@ export default function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 p-3 flex flex-col gap-0.5">
         <p className="text-[#9CA3AF] text-[10px] font-semibold uppercase tracking-widest px-3 py-2 mt-1">Menu</p>
-        {nav.map(({ href, icon: Icon, label }) => {
+        {nav.filter(n => n.show).map(({ href, icon: Icon, label }) => {
           const active = pathname === href
           return (
             <Link key={href} href={href}
