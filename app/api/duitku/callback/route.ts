@@ -47,18 +47,20 @@ export async function POST(req: NextRequest) {
 
     // Upsert profile
     if (userId) {
+      const product = reg.product ?? 'fastrack'
+      const now = new Date()
+      const activeUntil = product === 'fastrack' && reg.batch
+        ? new Date(Number(reg.batch.split('-')[0]), Number(reg.batch.split('-')[1]), 0).toISOString().split('T')[0]
+        : new Date(now.getFullYear(), now.getMonth() + 3, now.getDate()).toISOString().split('T')[0]
+
       await supabase.from('profiles').upsert({
         id: userId,
         full_name: reg.full_name,
         phone: reg.phone,
-        product: 'fastrack',
+        product,
         role: 'user',
-        start_date: `${reg.batch}-01`,
-        active_until: new Date(
-          Number(reg.batch.split('-')[0]),
-          Number(reg.batch.split('-')[1]),
-          0
-        ).toISOString().split('T')[0],
+        start_date: product === 'fastrack' && reg.batch ? `${reg.batch}-01` : now.toISOString().split('T')[0],
+        active_until: activeUntil,
       }, { onConflict: 'id' })
 
       // Kirim email reset password agar user bisa set password

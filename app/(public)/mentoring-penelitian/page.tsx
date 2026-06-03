@@ -36,7 +36,7 @@ export default function MentoringPenelitianPage() {
         headline="Udah Sempro? Sekarang Saatnya Kelar — Bab 4, 5, dan Sidang"
         sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis sampai kamu berdiri percaya diri di depan dewan penguji."
         price="Rp 2.250.000"
-        paymentLink="#"
+        paymentLink="/daftar/penelitian"
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '340+ Alumni']}
         accentColor="#0f766e"
         lightBg="#f0fdfa"

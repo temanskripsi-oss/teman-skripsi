@@ -36,7 +36,7 @@ export default function MentoringSemproPage() {
         headline="Bimbingan Privat dari Judul sampai Proposal ACC"
         sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai proposal ACC, step by step bareng mentor kamu."
         price="Rp 2.000.000"
-        paymentLink="#"
+        paymentLink="/daftar/sempro"
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
         accentColor="#2232dd"
         lightBg="#eff6ff"
