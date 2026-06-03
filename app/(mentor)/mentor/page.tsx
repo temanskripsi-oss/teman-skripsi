@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Users, Clock, CheckCircle, AlertTriangle } from 'lucide-react'
 
 const PRODUCT_LABELS: Record<string, string> = {
@@ -29,7 +30,7 @@ export default async function MentorOverviewPage() {
 
   const { data: clients } = await service
     .from('profiles')
-    .select('id, full_name, university, product, active_until, created_at')
+    .select('id, full_name, university, product, active_until, created_at, avatar_url')
     .eq('mentor_id', user.id)
     .eq('role', 'user')
     .order('created_at', { ascending: false })
@@ -126,9 +127,14 @@ export default async function MentorOverviewPage() {
                     return (
                       <Link key={c.id} href={`/mentor/clients/${c.id}`}
                         className="flex items-center gap-4 px-6 py-3.5 hover:bg-[#f4f8ff] transition-colors cursor-pointer">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                          {c.full_name?.[0]?.toUpperCase() ?? '?'}
-                        </div>
+                        {c.avatar_url ? (
+                          <Image src={c.avatar_url} alt={c.full_name} width={32} height={32}
+                            className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            {c.full_name?.[0]?.toUpperCase() ?? '?'}
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-[#1E1B4B] text-sm truncate">{c.full_name}</p>
                           <p className="text-[#9CA3AF] text-xs">{c.university}</p>

@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { Users, Calendar, DollarSign, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default async function AdminOverview() {
   const supabase = createServiceClient()
@@ -20,7 +21,7 @@ export default async function AdminOverview() {
     supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user'),
     supabase.from('sessions').select('*, profiles!sessions_user_id_fkey(full_name)').gte('scheduled_at', today).lt('scheduled_at', tomorrow).eq('status', 'upcoming'),
     supabase.from('payments').select('amount').eq('status', 'paid').gte('payment_date', firstOfMonth),
-    supabase.from('profiles').select('id, full_name, university, product, active_until, created_at').eq('role', 'user').order('created_at', { ascending: false }).limit(5),
+    supabase.from('profiles').select('id, full_name, university, product, active_until, created_at, avatar_url').eq('role', 'user').order('created_at', { ascending: false }).limit(5),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user').gte('created_at', new Date(now.getFullYear(), now.getMonth(), 1).toISOString()),
   ])
 
@@ -78,9 +79,14 @@ export default async function AdminOverview() {
             ) : recentClients.map(c => (
               <Link key={c.id} href={`/admin/clients/${c.id}`}
                 className="flex items-center gap-4 px-6 py-3.5 hover:bg-[#f4f8ff] transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                  {c.full_name?.[0]?.toUpperCase() ?? '?'}
-                </div>
+                {c.avatar_url ? (
+                  <Image src={c.avatar_url} alt={c.full_name} width={32} height={32}
+                    className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    {c.full_name?.[0]?.toUpperCase() ?? '?'}
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-[#1E1B4B] text-sm truncate">{c.full_name}</p>
                   <p className="text-[#9CA3AF] text-xs">{c.university}</p>

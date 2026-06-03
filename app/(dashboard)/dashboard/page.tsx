@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Calendar, Video, Gift, ClipboardList, FileText } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default async function DashboardHome() {
   const supabase = await createClient()
@@ -22,10 +23,20 @@ export default async function DashboardHome() {
   return (
     <div className="p-8 max-w-5xl">
       {/* Header */}
-      <div className="mb-8">
-        <p className="text-[#9CA3AF] text-sm mb-1">Dashboard</p>
-        <h1 className="text-3xl font-bold text-[#1E1B4B]">Halo, {name}!</h1>
-        <p className="text-[#9CA3AF] text-sm mt-1">Kamu semakin dekat dengan wisuda.</p>
+      <div className="mb-8 flex items-center gap-4">
+        {profile?.avatar_url ? (
+          <Image src={profile.avatar_url} alt={name} width={56} height={56}
+            className="w-14 h-14 rounded-2xl object-cover flex-shrink-0 border border-gray-100 shadow-sm" />
+        ) : (
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+            {name[0]?.toUpperCase() ?? '?'}
+          </div>
+        )}
+        <div>
+          <p className="text-[#9CA3AF] text-sm mb-0.5">Dashboard</p>
+          <h1 className="text-3xl font-bold text-[#1E1B4B]">Halo, {name}!</h1>
+          <p className="text-[#9CA3AF] text-sm mt-0.5">Kamu semakin dekat dengan wisuda.</p>
+        </div>
       </div>
 
       {/* Progress */}
