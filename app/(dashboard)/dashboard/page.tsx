@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Calendar, Video, Gift } from 'lucide-react'
+import { Calendar, Video, Gift, ClipboardList, FileText } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function DashboardHome() {
@@ -62,11 +62,13 @@ export default async function DashboardHome() {
       )}
 
       {/* Quick links */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[
-          { href:'/dashboard/videos',   icon:Video,    label:'Video Materi',        desc:'Tonton materi kurikulum',    color:'#2232dd', bg:'#eff6ff' },
-          { href:'/dashboard/freebies', icon:Gift,     label:'Template & Freebies', desc:'Download template skripsi',  color:'#16a34a', bg:'#f0fdf4' },
-          { href:'/dashboard/schedule', icon:Calendar, label:'Jadwal Bimbingan',    desc:'Lihat sesi bimbinganmu',     color:'#7C6FCD', bg:'#f5f3ff' },
+          { href:'/dashboard/videos',   icon:Video,         label:'Video Materi',        desc:'Tonton materi kurikulum',           color:'#2232dd', bg:'#eff6ff' },
+          { href:'/dashboard/freebies', icon:Gift,          label:'Template & Freebies', desc:'Download template skripsi',         color:'#16a34a', bg:'#f0fdf4' },
+          { href:'/dashboard/schedule', icon:Calendar,      label:'Jadwal Bimbingan',    desc:'Lihat sesi bimbinganmu',            color:'#7C6FCD', bg:'#f5f3ff' },
+          { href:'/dashboard/tasks',    icon:ClipboardList, label:'Tugas Mingguan',       desc:'Kumpulkan & pantau progres tugas',  color:'#ea580c', bg:'#fff7ed' },
+          { href:'/dashboard/feedback', icon:FileText,      label:'Written Feedback',     desc:'Saran & arahan dari mentor',        color:'#0891b2', bg:'#ecfeff' },
         ].map((item, i) => {
           const Icon = item.icon
           return (
