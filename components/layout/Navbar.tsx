@@ -24,7 +24,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2.5 cursor-pointer">
-            <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
+            <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
             <span className="text-white font-bold text-lg tracking-tight">
               Teman<span className="text-[#9eff63]">Skripsi</span>
             </span>

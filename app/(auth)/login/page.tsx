@@ -41,7 +41,7 @@ export default function LoginPage() {
 
         <div className="relative z-10">
           <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-            <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="flex-shrink-0" />
+            <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="flex-shrink-0 rounded-xl" />
             <span className="text-white font-bold text-xl tracking-tight">
               Teman<span className="text-[#9eff63]">Skripsi</span>
             </span>
@@ -84,7 +84,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 grid-bg-light pointer-events-none" />
         <div className="w-full max-w-md relative z-10">
           <div className="flex items-center justify-center gap-2.5 mb-8 lg:hidden">
-            <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="flex-shrink-0" />
+            <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="flex-shrink-0 rounded-xl" />
             <span className="text-[#1E1B4B] font-bold text-xl">Teman<span className="text-[#2232dd]">Skripsi</span></span>
           </div>
 

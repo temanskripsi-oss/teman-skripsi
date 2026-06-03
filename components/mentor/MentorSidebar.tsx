@@ -25,7 +25,7 @@ export default function MentorSidebar() {
     <aside className="w-60 flex-shrink-0 bg-white border-r border-gray-100 min-h-screen flex flex-col shadow-sm">
       <div className="px-5 py-5 border-b border-gray-100">
         <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
+          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
           <span className="font-bold text-base tracking-tight text-[#1E1B4B]">
             Teman<span className="text-[#2232dd]">Skripsi</span>
           </span>

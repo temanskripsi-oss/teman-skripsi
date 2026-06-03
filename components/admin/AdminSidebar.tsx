@@ -29,7 +29,7 @@ export default function AdminSidebar() {
     <aside className="w-60 flex-shrink-0 bg-[#1E1B4B] min-h-screen flex flex-col">
       <div className="px-5 py-5 border-b border-white/10">
         <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
+          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
           <div>
             <p className="font-bold text-base tracking-tight text-white leading-none">
               Teman<span className="text-[#4DD9C0]">Skripsi</span>
