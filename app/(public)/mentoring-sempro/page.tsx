@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import ProductHero from '@/components/product/ProductHero'
 import FAQ from '@/components/product/FAQ'
+import TestimonialSection from '@/components/product/TestimonialSection'
 import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -133,6 +134,11 @@ export default function MentoringSemproPage() {
         </div>
       </section>
 
+      <TestimonialSection accentColor="#2232dd" testimonials={[
+        { quote: 'Dari judul yang ditolak 3 kali, akhirnya ACC juga berkat bimbingan privat ini. Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung', initials: 'MP', accentColor: '#2232dd', lightBg: '#eff6ff' },
+        { quote: 'Bimbingan offline-nya sangat membantu, bisa tanya langsung dan dapat feedback real-time. Proposal gue selesai jauh lebih cepat dari yang gue kira.', name: 'Dimas Arya', university: 'UMITRA Lampung', initials: 'DA', accentColor: '#2232dd', lightBg: '#eff6ff' },
+        { quote: 'Mentor ngerti banget cara njelasin ke mahasiswa yang awam penelitian. Tiap sesi selalu ada progress yang nyata. Sangat worth it!', name: 'Nadia Putri', university: 'IBI Darmajaya', initials: 'NP', accentColor: '#2232dd', lightBg: '#eff6ff' },
+      ]} />
       <FAQ items={faqs} />
 
       <section className="py-16 px-4 bg-[#1E1B4B] relative overflow-hidden text-center">
