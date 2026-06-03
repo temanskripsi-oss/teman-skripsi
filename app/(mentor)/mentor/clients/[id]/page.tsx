@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Video, MapPin, CheckCircle } from 'lucide-react'
 import MentorReviewClient from '@/components/mentor/MentorReviewClient'
 import MentorSessionManager from '@/components/mentor/MentorSessionManager'
@@ -77,9 +78,19 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
           <ArrowLeft size={14} /> Kembali ke Overview
         </Link>
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-[#1E1B4B]">{client.full_name}</h1>
-            <p className="text-[#9CA3AF] text-sm mt-1">{client.university} · {userData?.user?.email}</p>
+          <div className="flex items-center gap-4">
+            {client.avatar_url ? (
+              <Image src={client.avatar_url} alt={client.full_name} width={56} height={56}
+                className="w-14 h-14 rounded-2xl object-cover flex-shrink-0 border border-gray-100 shadow-sm" />
+            ) : (
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+                {client.full_name?.[0]?.toUpperCase() ?? '?'}
+              </div>
+            )}
+            <div>
+              <h1 className="text-3xl font-bold text-[#1E1B4B]">{client.full_name}</h1>
+              <p className="text-[#9CA3AF] text-sm mt-1">{client.university} · {userData?.user?.email}</p>
+            </div>
           </div>
           <div className="flex flex-col items-end gap-1.5">
             <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-3 py-1 rounded-full font-semibold">
