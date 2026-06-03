@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function ProductHero({ badge, breadcrumb, headline, sub, price, paymentLink, trusts, accentColor = '#2232dd', lightBg = '#eff6ff' }: Props) {
-  const isLight = accentColor === '#9eff63' || accentColor === '#4DD9C0' || accentColor === '#0f766e'
+  const isLight = accentColor === '#9eff63' || accentColor === '#4DD9C0'
   return (
     <section className="relative pt-28 pb-16 px-4 overflow-hidden" style={{ background: lightBg }}>
       <div className="absolute inset-0 grid-bg-light pointer-events-none opacity-60" />
