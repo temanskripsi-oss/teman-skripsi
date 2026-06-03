@@ -86,7 +86,7 @@ export default async function ProfilePage() {
 
       <p className="text-[#9CA3AF] text-xs mt-6 text-center">
         Perlu update data? Hubungi kami via{' '}
-        <a href="https://wa.me/62" target="_blank" rel="noopener noreferrer" className="text-[#2232dd] hover:underline cursor-pointer">
+        <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer" className="text-[#2232dd] hover:underline cursor-pointer">
           WhatsApp
         </a>
       </p>

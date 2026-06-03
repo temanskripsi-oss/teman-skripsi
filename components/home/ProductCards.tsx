@@ -188,7 +188,7 @@ export default function ProductCards() {
         {/* Trust note */}
         <p className="text-center text-[#9CA3AF] text-sm mt-10">
           Semua program termasuk akses dashboard, materi video, template, dan support mentor.{' '}
-          <a href="https://wa.me/62" target="_blank" rel="noopener noreferrer" className="text-[#2232dd] font-semibold hover:underline cursor-pointer">
+          <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer" className="text-[#2232dd] font-semibold hover:underline cursor-pointer">
             Tanya dulu via WhatsApp
           </a>
         </p>

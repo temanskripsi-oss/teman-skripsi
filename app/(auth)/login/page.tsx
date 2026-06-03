@@ -91,7 +91,7 @@ export default function LoginPage() {
           <div className="mb-7">
             <h1 className="text-3xl font-bold text-[#1E1B4B] mb-1.5">Masuk ke akun</h1>
             <p className="text-[#9CA3AF] text-sm">Belum punya akun?{' '}
-              <a href="https://wa.me/62" target="_blank" rel="noopener noreferrer" className="text-[#2232dd] hover:underline cursor-pointer">Hubungi kami</a>
+              <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer" className="text-[#2232dd] hover:underline cursor-pointer">Hubungi kami</a>
             </p>
           </div>
 

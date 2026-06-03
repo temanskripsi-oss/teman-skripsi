@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { MessageCircle } from 'lucide-react'
+import { Phone } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -18,12 +18,10 @@ export default function Footer() {
               Skripsi itu gampang. Asal sama orang yang tepat. Sudah membantu 340+ mahasiswa se-Indonesia wisuda.
             </p>
             <div className="flex items-center gap-3 mt-5">
-              <a href="https://wa.me/62" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer">
-                <MessageCircle size={15} /> WhatsApp
+                <Phone size={15} /> WhatsApp
               </a>
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">Instagram</a>
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">TikTok</a>
             </div>
           </div>
 

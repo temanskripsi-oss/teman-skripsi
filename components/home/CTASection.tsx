@@ -26,7 +26,7 @@ export default function CTASection() {
             Daftar Sekarang
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </a>
-          <a href="https://wa.me/62" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white px-8 py-4 rounded-2xl text-base font-medium transition-all duration-250 cursor-pointer">
             Konsultasi Dulu
           </a>
