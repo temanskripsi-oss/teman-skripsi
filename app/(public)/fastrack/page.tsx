@@ -34,7 +34,7 @@ export default function FastTrackPage() {
         headline="Dari Judul ke Proposal Siap Seminar — dalam 30 Hari"
         sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti."
         price="Rp 500.000"
-        paymentLink="#"
+        paymentLink="/daftar"
         trusts={['340+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
         accentColor="#16a34a"
         lightBg="#f0fdf4"
