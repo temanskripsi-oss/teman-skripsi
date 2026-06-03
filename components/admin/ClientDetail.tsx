@@ -214,12 +214,12 @@ export default function ClientDetail({ profile, sessions, feedbacks, submissions
 
   // Session progress (catatan + PR)
   const [progressModal, setProgressModal] = useState<Session | null>(null)
-  const [progressForm, setProgressForm] = useState({ catatan_sesi: '', pr_description: '' })
+  const [progressForm, setProgressForm] = useState({ catatan_sesi: '', pr_description: '', session_file_url: '' })
   const [progressError, setProgressError] = useState('')
   const [progressPending, startProgressTransition] = useTransition()
 
   const openEditProgress = (s: Session) => {
-    setProgressForm({ catatan_sesi: s.catatan_sesi ?? '', pr_description: s.pr_description ?? '' })
+    setProgressForm({ catatan_sesi: s.catatan_sesi ?? '', pr_description: s.pr_description ?? '', session_file_url: s.session_file_url ?? '' })
     setProgressError('')
     setProgressModal(s)
   }
@@ -793,6 +793,11 @@ export default function ClientDetail({ profile, sessions, feedbacks, submissions
                   placeholder="Tugas yang harus dikerjakan sebelum sesi berikutnya..."
                   onChange={e => setProgressForm(f => ({ ...f, pr_description: e.target.value }))}
                   className={INPUT + ' resize-none'} />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">🔗 Link File / Materi</label>
+                <input value={progressForm.session_file_url} placeholder="https://drive.google.com/..."
+                  onChange={e => setProgressForm(f => ({ ...f, session_file_url: e.target.value }))} className={INPUT} />
               </div>
               <div className="flex gap-3 pt-1">
                 <button type="button" onClick={() => setProgressModal(null)}

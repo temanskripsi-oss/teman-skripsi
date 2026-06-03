@@ -1,7 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, X, Loader2, Pencil, Trash2, Video, MapPin, CheckCircle, Clock, ClipboardList, ExternalLink } from 'lucide-react'
+import { Plus, X, Loader2, Pencil, Trash2, Video, MapPin, CheckCircle, Clock, ClipboardList, ExternalLink, Link2 } from 'lucide-react'
 import {
   createSessionAction,
   updateSessionAction,
@@ -67,12 +67,12 @@ export default function MentorSessionManager({ clientId, sessions, sessionSubmis
 
   // Progress modal (catatan + PR)
   const [progressModal, setProgressModal] = useState<Session | null>(null)
-  const [progressForm, setProgressForm]   = useState({ catatan_sesi: '', pr_description: '' })
+  const [progressForm, setProgressForm]   = useState({ catatan_sesi: '', pr_description: '', session_file_url: '' })
   const [progressError, setProgressError] = useState('')
   const [progressPending, startProgressTransition] = useTransition()
 
   const openProgress = (s: Session) => {
-    setProgressForm({ catatan_sesi: s.catatan_sesi ?? '', pr_description: s.pr_description ?? '' })
+    setProgressForm({ catatan_sesi: s.catatan_sesi ?? '', pr_description: s.pr_description ?? '', session_file_url: s.session_file_url ?? '' })
     setProgressError(''); setProgressModal(s)
   }
   const handleProgressSave = (e: React.FormEvent) => {
@@ -178,8 +178,8 @@ export default function MentorSessionManager({ clientId, sessions, sessionSubmis
                     </div>
                   </div>
 
-                  {/* Catatan + PR */}
-                  {(s.catatan_sesi || s.pr_description) && (
+                  {/* Catatan + PR + File */}
+                  {(s.catatan_sesi || s.pr_description || s.session_file_url) && (
                     <div className="mt-3 flex flex-col gap-2" style={{ paddingLeft: '52px' }}>
                       {s.catatan_sesi && (
                         <div className="bg-[#f5f3ff] rounded-lg px-3 py-2 border border-[#7C6FCD]/10">
@@ -192,6 +192,13 @@ export default function MentorSessionManager({ clientId, sessions, sessionSubmis
                           <p className="text-xs font-semibold text-orange-600 mb-0.5">📋 PR</p>
                           <p className="text-xs text-[#1E1B4B] line-clamp-2">{s.pr_description}</p>
                         </div>
+                      )}
+                      {s.session_file_url && (
+                        <a href={s.session_file_url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100 hover:border-[#7C6FCD]/30 transition-colors">
+                          <Link2 size={11} className="text-[#7C6FCD] flex-shrink-0" />
+                          <p className="text-xs text-[#7C6FCD] font-medium truncate">Lihat file / materi</p>
+                        </a>
                       )}
                     </div>
                   )}
@@ -308,6 +315,11 @@ export default function MentorSessionManager({ clientId, sessions, sessionSubmis
                 <textarea value={progressForm.pr_description} rows={3} placeholder="Tugas yang harus dikerjakan sebelum sesi berikutnya..."
                   onChange={e => setProgressForm(f => ({ ...f, pr_description: e.target.value }))}
                   className={INPUT + ' resize-none'} />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">🔗 Link File / Materi</label>
+                <input value={progressForm.session_file_url} placeholder="https://drive.google.com/..."
+                  onChange={e => setProgressForm(f => ({ ...f, session_file_url: e.target.value }))} className={INPUT} />
               </div>
               <div className="flex gap-3 pt-1">
                 <button type="button" onClick={() => setProgressModal(null)}

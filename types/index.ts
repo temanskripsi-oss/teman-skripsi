@@ -53,6 +53,7 @@ export interface Session {
   status: 'upcoming' | 'done'
   catatan_sesi: string
   pr_description: string
+  session_file_url: string | null
 }
 
 export interface SessionSubmission {

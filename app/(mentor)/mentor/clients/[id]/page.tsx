@@ -161,15 +161,17 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
           />
         </div>
 
-        {/* Task Submissions — interactive (review) */}
-        <div className="lg:col-span-3">
-          <MentorReviewClient
-            clientId={id}
-            submissions={(submissions ?? []) as TaskSubmission[]}
-            feedbacks={(feedbacks ?? []) as Feedback[]}
-            clientProfile={client as Profile}
-          />
-        </div>
+        {/* Task Submissions — hanya untuk fastrack & all access */}
+        {!isPrivate && (
+          <div className="lg:col-span-3">
+            <MentorReviewClient
+              clientId={id}
+              submissions={(submissions ?? []) as TaskSubmission[]}
+              feedbacks={(feedbacks ?? []) as Feedback[]}
+              clientProfile={client as Profile}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

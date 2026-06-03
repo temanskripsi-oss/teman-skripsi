@@ -366,6 +366,7 @@ export async function deleteFeedbackAction(feedbackId: string, userId: string) {
 export async function updateSessionProgressAction(sessionId: string, userId: string, data: {
   catatan_sesi: string
   pr_description: string
+  session_file_url: string
 }) {
   const supabase = createServiceClient()
   const { error } = await supabase.from('sessions').update(data).eq('id', sessionId)
