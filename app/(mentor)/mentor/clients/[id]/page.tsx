@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Video, MapPin, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Video, MapPin, CheckCircle, FileText } from 'lucide-react'
 import MentorReviewClient from '@/components/mentor/MentorReviewClient'
 import MentorSessionManager from '@/components/mentor/MentorSessionManager'
 import type { Profile, Session, SessionSubmission, TaskSubmission, Feedback } from '@/types'
@@ -124,11 +124,11 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
           {/* Session stats (private only) */}
           {isPrivate && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Progress Sesi (9x)</p>
+              <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Progress Bimbingan</p>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-sm text-[#6B6B8A]">
-                    <CheckCircle size={13} className="text-green-500" /> Selesai
+                    <CheckCircle size={13} className="text-green-500" /> Sesi Selesai
                   </span>
                   <span className="font-bold text-[#1E1B4B] text-sm">{doneSessions}/9</span>
                 </div>
@@ -143,6 +143,12 @@ export default async function MentorClientDetailPage({ params }: { params: Promi
                     <MapPin size={13} className="text-orange-500" /> Offline (Lampung)
                   </span>
                   <span className="font-bold text-[#1E1B4B] text-sm">{offlineSessions}/3</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-sm text-[#6B6B8A]">
+                    <FileText size={13} className="text-[#7C6FCD]" /> Written Feedback
+                  </span>
+                  <span className="font-bold text-[#1E1B4B] text-sm">{feedbacks?.length ?? 0}/9</span>
                 </div>
               </div>
             </div>

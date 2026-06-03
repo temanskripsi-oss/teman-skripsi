@@ -1,15 +1,15 @@
 import type { Metadata } from 'next'
 import ProductHero from '@/components/product/ProductHero'
 import FAQ from '@/components/product/FAQ'
-import { MapPin, Wifi, Calendar, Video, Check, Gift, ArrowRight } from 'lucide-react'
+import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Mentoring Privat Sempro | Teman Skripsi',
-  description: 'Bimbingan 1-on-1 dari judul sampai proposal ACC. 6 pertemuan, 3 bulan masa aktif.',
+  description: 'Bimbingan 1-on-1 dari judul sampai proposal ACC. 9 pertemuan, 3 bulan masa aktif.',
 }
 
 const faqs = [
-  { q: 'Apakah bisa full online?', a: 'Untuk klien di luar Bandar Lampung, semua 6 pertemuan bisa dilakukan secara online via Zoom.' },
+  { q: 'Apakah bisa full online?', a: 'Untuk klien di luar Bandar Lampung, semua 9 pertemuan bisa dilakukan secara online via Zoom.' },
   { q: 'Bagaimana jadwal offline-nya?', a: 'Untuk klien di Bandar Lampung, 3 pertemuan offline dilakukan di lokasi yang disepakati bersama mentor.' },
   { q: 'Apa yang terjadi kalau belum selesai dalam 3 bulan?', a: 'Tim kami akan evaluasi progres dan memberikan solusi terbaik sesuai kondisi.' },
   { q: 'Siapa mentornya?', a: 'Mentor kami adalah alumni berprestasi yang sudah membantu 340+ mahasiswa lulus.' },
@@ -37,7 +37,7 @@ export default function MentoringSemproPage() {
         sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai proposal ACC, step by step bareng mentor kamu."
         price="Rp 2.000.000"
         paymentLink="#"
-        trusts={['6 Pertemuan Personal', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
+        trusts={['9 Pertemuan Personal', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
         accentColor="#2232dd"
         lightBg="#eff6ff"
       />
@@ -49,9 +49,9 @@ export default function MentoringSemproPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
             {[
-              { icon: MapPin,   title:'3x Offline', sub:'Tatap muka Bandar Lampung', color:'#7C6FCD', bg:'#f5f3ff' },
-              { icon: Wifi,     title:'3x Online',  sub:'Via Zoom, fleksibel',       color:'#2232dd', bg:'#eff6ff' },
-              { icon: Calendar, title:'3 Bulan',    sub:'Masa aktif program',        color:'#0f766e', bg:'#f0fdfa' },
+              { icon: Wifi,     title:'6x Online',          sub:'Via Zoom, fleksibel',           color:'#2232dd', bg:'#eff6ff' },
+              { icon: MapPin,   title:'3x Offline',         sub:'Tatap muka Bandar Lampung',      color:'#7C6FCD', bg:'#f5f3ff' },
+              { icon: FileText, title:'9x Written Feedback', sub:'Catatan & PR tiap bimbingan',   color:'#0f766e', bg:'#f0fdfa' },
             ].map((f, i) => {
               const Icon = f.icon
               return (
@@ -81,7 +81,7 @@ export default function MentoringSemproPage() {
               Bonus: FREE Akses Full Fast Track Sempro
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1E1B4B] mb-2">
-              Selain 6 pertemuan privat, kamu juga dapat:
+              Selain 9 pertemuan privat, kamu juga dapat:
             </h2>
             <p className="text-[#6B6B8A] text-sm">Senilai Rp 500.000 — GRATIS untuk kamu</p>
           </div>

@@ -114,7 +114,7 @@ export default function MentorSessionManager({ clientId, sessions, sessionSubmis
             <h2 className="font-bold text-[#1E1B4B] text-base">Jadwal & Progress Sesi</h2>
             <p className="text-[#9CA3AF] text-xs mt-0.5">
               {doneSessions} selesai · {sessions.filter(s => s.status === 'upcoming').length} upcoming
-              · Online {onlineSessions}/6 · Offline {offlineSessions}/3
+              · Online {onlineSessions}/6 · Offline {offlineSessions}/3 · Written {doneSessions}/9
             </p>
           </div>
           <button onClick={openAdd}

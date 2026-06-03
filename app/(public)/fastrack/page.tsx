@@ -17,12 +17,12 @@ const faqs = [
 ]
 
 const features = [
-  { icon: Video,       title: 'Video Learning Lengkap',  desc: 'Materi step by step yang bisa ditonton ulang kapan saja dan di mana saja' },
-  { icon: Users,       title: 'Zoom Coaching Mingguan',  desc: 'Sesi live bersama mentor, tanya jawab langsung, review proposal kamu' },
-  { icon: FileText,    title: 'Template Siap Pakai',     desc: 'Template proposal Bab 1-3, PPT Sempro, 100+ contoh judul ACC semua jurusan' },
-  { icon: Gift,        title: 'Bonus Eksklusif',         desc: 'Research gap framework, prompt AI untuk skripsi, script konsultasi ke dosen' },
-  { icon: CheckCircle, title: 'Dashboard Akses',         desc: 'Akses semua materi via dashboard pribadi selama masa aktif program' },
-  { icon: Users,       title: 'Komunitas Alumni',        desc: 'Bergabung dengan grup alumni untuk networking dan berbagi pengalaman' },
+  { icon: Video,       title: 'Video Learning Lengkap',       desc: 'Materi step by step yang bisa ditonton ulang kapan saja dan di mana saja' },
+  { icon: Users,       title: '4x Zoom Coaching Online',      desc: 'Sesi live bersama mentor, tanya jawab langsung, review proposal kamu' },
+  { icon: FileText,    title: '4x Written Feedback',          desc: 'Feedback tertulis detail dari mentor untuk setiap tahapan penulisan kamu' },
+  { icon: FileText,    title: 'Template Siap Pakai',          desc: 'Template proposal Bab 1-3, PPT Sempro, 100+ contoh judul ACC semua jurusan' },
+  { icon: Gift,        title: 'Bonus Eksklusif',              desc: 'Research gap framework, prompt AI untuk skripsi, script konsultasi ke dosen' },
+  { icon: CheckCircle, title: 'Dashboard Akses',              desc: 'Akses semua materi via dashboard pribadi selama masa aktif program' },
 ]
 
 export default function FastTrackPage() {
