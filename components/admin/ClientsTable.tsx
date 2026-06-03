@@ -24,9 +24,10 @@ const PRODUCT_LABELS: Record<string, string> = {
 const INPUT = 'w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all'
 const SELECT = INPUT + ' bg-white cursor-pointer'
 
-interface Props { clients: Profile[] }
+interface MentorOption { id: string; full_name: string }
+interface Props { clients: Profile[]; mentors: MentorOption[] }
 
-export default function ClientsTable({ clients }: Props) {
+export default function ClientsTable({ clients, mentors }: Props) {
   const router = useRouter()
   const [search, setSearch]       = useState('')
   const [filter, setFilter]       = useState<string>('all-filter')
@@ -36,8 +37,33 @@ export default function ClientsTable({ clients }: Props) {
 
   const [form, setForm] = useState({
     email: '', full_name: '', university: '', phone: '',
-    product: 'fastrack', active_until: '',
+    product: 'fastrack', active_until: '', mentor_id: '', start_date: '',
   })
+
+  const autoSetActiveUntil = (product: string) => {
+    const months = product === 'fastrack' ? 1 : 3
+    const d = new Date()
+    d.setMonth(d.getMonth() + months)
+    return d.toISOString().split('T')[0]
+  }
+
+  const handleMentorChange = (mentorId: string) => {
+    const today = new Date().toISOString().split('T')[0]
+    setForm(f => ({
+      ...f,
+      mentor_id: mentorId,
+      active_until: mentorId ? autoSetActiveUntil(f.product) : f.active_until,
+      start_date: mentorId ? today : '',
+    }))
+  }
+
+  const handleProductChange = (product: string) => {
+    setForm(f => ({
+      ...f,
+      product,
+      active_until: f.mentor_id ? autoSetActiveUntil(product) : f.active_until,
+    }))
+  }
 
   const filtered = clients.filter(c => {
     const matchSearch = c.full_name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -52,11 +78,11 @@ export default function ClientsTable({ clients }: Props) {
     e.preventDefault()
     setError('')
     startTransition(async () => {
-      const res = await createClientAction(form)
+      const res = await createClientAction({ ...form, mentor_id: form.mentor_id || null })
       if (res.error) { setError(res.error); return }
       await sendPasswordResetAction(form.email)
       setShowModal(false)
-      setForm({ email: '', full_name: '', university: '', phone: '', product: 'fastrack', active_until: '' })
+      setForm({ email: '', full_name: '', university: '', phone: '', product: 'fastrack', active_until: '', mentor_id: '', start_date: '' })
       router.refresh()
     })
   }
@@ -182,7 +208,7 @@ export default function ClientsTable({ clients }: Props) {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Produk</label>
-                  <select required value={form.product} onChange={e => setForm(f => ({ ...f, product: e.target.value }))} className={SELECT}>
+                  <select required value={form.product} onChange={e => handleProductChange(e.target.value)} className={SELECT}>
                     <option value="fastrack">Fastrack</option>
                     <option value="mentoring-sempro">Mentoring Sempro</option>
                     <option value="mentoring-penelitian">Mentoring Penelitian</option>
@@ -193,6 +219,18 @@ export default function ClientsTable({ clients }: Props) {
                   <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Aktif Sampai</label>
                   <input required type="date" value={form.active_until} onChange={e => setForm(f => ({ ...f, active_until: e.target.value }))}
                     className={INPUT} />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Assign Mentor</label>
+                  <select value={form.mentor_id} onChange={e => handleMentorChange(e.target.value)} className={SELECT}>
+                    <option value="">— Belum di-assign —</option>
+                    {mentors.map(m => <option key={m.id} value={m.id}>{m.full_name}</option>)}
+                  </select>
+                  {form.mentor_id && (
+                    <p className="text-[#9CA3AF] text-xs mt-1">
+                      Aktif sampai otomatis di-set: {form.active_until} ({form.product === 'fastrack' ? '+1 bulan' : '+3 bulan'})
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="flex gap-3 pt-1">

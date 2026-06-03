@@ -10,7 +10,7 @@ export default async function AdminRevenuePage() {
 
   const [{ data: payments }, { data: clients }] = await Promise.all([
     supabase.from('payments').select('*, profiles(id, full_name, product)').order('payment_date', { ascending: false }),
-    supabase.from('profiles').select('id, full_name, product').neq('role', 'admin').order('full_name', { ascending: true }),
+    supabase.from('profiles').select('id, full_name, product').eq('role', 'user').order('full_name', { ascending: true }),
   ])
 
   const allPayments = (payments ?? []) as (Payment & { profiles: Pick<Profile, 'id' | 'full_name' | 'product'> | null })[]

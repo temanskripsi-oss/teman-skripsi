@@ -31,8 +31,25 @@ export async function GET(request: NextRequest) {
       if (type === 'recovery') {
         return NextResponse.redirect(`${origin}/update-password`)
       }
-      const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-      const destination = profile?.role === 'admin' ? '/admin' : '/dashboard'
+
+      let { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+
+      // Google OAuth bisa buat user baru tanpa profile — cek by email
+      if (!profile && user.email) {
+        const { data: users } = await supabase.auth.admin.listUsers()
+        const match = users?.users.find(u => u.email === user.email && u.id !== user.id)
+        if (match) {
+          const { data: existingProfile } = await supabase.from('profiles').select('role').eq('id', match.id).single()
+          if (existingProfile?.role === 'mentor') {
+            // Update profile ID to new Google user
+            await supabase.from('profiles').update({ id: user.id }).eq('id', match.id)
+            profile = existingProfile
+          }
+        }
+      }
+
+      const role = profile?.role
+      const destination = role === 'admin' ? '/admin' : role === 'mentor' ? '/mentor' : '/dashboard'
       return NextResponse.redirect(`${origin}${destination}`)
     }
   }

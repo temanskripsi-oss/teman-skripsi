@@ -18,7 +18,8 @@ export default function LoginPage() {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) { setError('Email atau password salah. Coba lagi.'); setLoading(false); return }
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
-    router.push(profile?.role === 'admin' ? '/admin' : '/dashboard')
+    const role = profile?.role
+    router.push(role === 'admin' ? '/admin' : role === 'mentor' ? '/mentor' : '/dashboard')
     router.refresh()
   }
 

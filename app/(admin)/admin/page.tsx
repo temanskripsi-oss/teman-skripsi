@@ -17,11 +17,11 @@ export default async function AdminOverview() {
     { data: recentClients },
     { count: newClientsThisMonth },
   ] = await Promise.all([
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).neq('role', 'admin'),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user'),
     supabase.from('sessions').select('*, profiles!sessions_user_id_fkey(full_name)').gte('scheduled_at', today).lt('scheduled_at', tomorrow).eq('status', 'upcoming'),
     supabase.from('payments').select('amount').eq('status', 'paid').gte('payment_date', firstOfMonth),
-    supabase.from('profiles').select('id, full_name, university, product, active_until, created_at').neq('role', 'admin').order('created_at', { ascending: false }).limit(5),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).neq('role', 'admin').gte('created_at', new Date(now.getFullYear(), now.getMonth(), 1).toISOString()),
+    supabase.from('profiles').select('id, full_name, university, product, active_until, created_at').eq('role', 'user').order('created_at', { ascending: false }).limit(5),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user').gte('created_at', new Date(now.getFullYear(), now.getMonth(), 1).toISOString()),
   ])
 
   const revenueThisMonth = revenueData?.reduce((s, p) => s + p.amount, 0) ?? 0

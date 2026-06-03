@@ -1,12 +1,13 @@
 'use client'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Users, FileText, DollarSign, LogOut, GraduationCap, Globe } from 'lucide-react'
+import { LayoutDashboard, Users, FileText, DollarSign, LogOut, GraduationCap, Globe, UserCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const nav = [
   { href: '/admin',         icon: LayoutDashboard, label: 'Overview',  exact: true },
   { href: '/admin/clients', icon: Users,            label: 'Klien',     exact: false },
+  { href: '/admin/mentors', icon: UserCheck,        label: 'Mentor',    exact: false },
   { href: '/admin/content', icon: FileText,         label: 'Konten',    exact: false },
   { href: '/admin/revenue', icon: DollarSign,       label: 'Revenue',   exact: false },
 ]
