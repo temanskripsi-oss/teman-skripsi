@@ -12,6 +12,7 @@ export interface Profile {
   role: Role
   mentor_id: string | null
   start_date: string | null
+  avatar_url: string | null
 }
 
 export interface Video {

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { User, GraduationCap, Phone, Package, Calendar, Mail } from 'lucide-react'
+import { User, GraduationCap, Package, Calendar, Mail } from 'lucide-react'
+import ProfilePhotoUpload from '@/components/profile/ProfilePhotoUpload'
 
 const productLabels: Record<string, string> = {
   'fastrack':             'Fast Track Sempro 30 Hari',
@@ -24,14 +25,13 @@ export default async function ProfilePage() {
     { icon: User,          label: 'Nama Lengkap', value: profile?.full_name ?? '—' },
     { icon: Mail,          label: 'Email',         value: user.email ?? '—' },
     { icon: GraduationCap, label: 'Universitas',   value: profile?.university ?? '—' },
-    { icon: Phone,         label: 'No. WhatsApp',  value: profile?.phone ?? '—' },
     { icon: Package,       label: 'Program',       value: profile?.product ? (productLabels[profile.product] ?? profile.product) : '—' },
     {
       icon: Calendar, label: 'Masa Aktif', value: activeUntil ?? '—',
       badge: isExpired
         ? { label: 'Expired', cls: 'bg-red-50 text-red-500 border border-red-100' }
         : activeUntil
-          ? { label: 'Aktif',   cls: 'bg-green-50 text-[#16a34a] border border-green-100' }
+          ? { label: 'Aktif', cls: 'bg-green-50 text-[#16a34a] border border-green-100' }
           : null,
     },
   ]
@@ -44,14 +44,21 @@ export default async function ProfilePage() {
         <p className="text-[#9CA3AF] text-sm mt-1">Informasi akun dan program kamu.</p>
       </div>
 
-      {/* Avatar card */}
-      <div className="flex items-center gap-4 mb-6 bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
-          {(profile?.full_name ?? user.email ?? 'U').charAt(0).toUpperCase()}
-        </div>
+      {/* Avatar + info card */}
+      <div className="flex items-center gap-5 mb-6 bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+        <ProfilePhotoUpload
+          userId={user.id}
+          currentUrl={profile?.avatar_url ?? null}
+          name={profile?.full_name ?? user.email ?? 'U'}
+        />
         <div>
           <p className="text-[#1E1B4B] font-bold text-lg">{profile?.full_name ?? 'Client'}</p>
           <p className="text-[#9CA3AF] text-sm">{user.email}</p>
+          <span className={`inline-block mt-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+            isExpired ? 'bg-red-50 text-red-500 border-red-100' : 'bg-green-50 text-[#16a34a] border-green-100'
+          }`}>
+            {isExpired ? 'Expired' : 'Aktif'}
+          </span>
         </div>
       </div>
 

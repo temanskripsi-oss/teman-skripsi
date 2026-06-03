@@ -2,12 +2,13 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Home, Users, LogOut } from 'lucide-react'
+import { Home, Users, LogOut, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const nav = [
   { href: '/mentor',         icon: Home,  label: 'Overview' },
   { href: '/mentor/clients', icon: Users, label: 'Klien Saya' },
+  { href: '/mentor/profile', icon: User,  label: 'Profil' },
 ]
 
 export default function MentorSidebar() {

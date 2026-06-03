@@ -103,7 +103,16 @@ ALTER TABLE week_configs ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "users_view_week_configs" ON week_configs;
 CREATE POLICY "users_view_week_configs" ON week_configs FOR SELECT USING (true);
 
--- 14. Tabel registrations (pendaftaran via payment gateway Duitku)
+-- 14. Tambah avatar_url ke profiles
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avatar_url text;
+
+-- 15. Storage bucket untuk foto profil (jalankan di Supabase dashboard > Storage)
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
+-- CREATE POLICY "Avatar images are publicly accessible." ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
+-- CREATE POLICY "Users can upload their own avatar." ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
+-- CREATE POLICY "Users can update their own avatar." ON storage.objects FOR UPDATE USING (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- 16. Tabel registrations (pendaftaran via payment gateway Duitku)
 CREATE TABLE IF NOT EXISTS registrations (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   full_name text NOT NULL,

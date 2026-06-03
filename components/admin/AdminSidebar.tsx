@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { LayoutDashboard, Users, FileText, DollarSign, LogOut, Globe, UserCheck, ClipboardList } from 'lucide-react'
+import { LayoutDashboard, Users, FileText, DollarSign, LogOut, Globe, UserCheck, ClipboardList, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const nav = [
@@ -12,6 +12,7 @@ const nav = [
   { href: '/admin/content', icon: FileText,         label: 'Konten',    exact: false },
   { href: '/admin/revenue',       icon: DollarSign,     label: 'Revenue',      exact: false },
   { href: '/admin/registrations', icon: ClipboardList,  label: 'Registrasi',   exact: false },
+  { href: '/admin/profile',       icon: User,           label: 'Profil',       exact: false },
 ]
 
 export default function AdminSidebar() {
