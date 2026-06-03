@@ -31,12 +31,12 @@ export default function ProductHero({ badge, breadcrumb, headline, sub, price, p
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <p className="text-4xl font-bold text-[#1E1B4B] tracking-tight">{price}</p>
-          <a href={paymentLink} target="_blank" rel="noopener noreferrer"
+          <Link href={paymentLink}
             className="group inline-flex items-center gap-2 font-bold px-8 py-4 rounded-2xl text-base transition-all duration-250 hover:shadow-xl hover:-translate-y-0.5 cursor-pointer"
             style={{ background: accentColor, color: isLight ? '#1E1B4B' : 'white', boxShadow:`0 8px 30px ${accentColor}25` }}>
             Daftar Sekarang
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
         </div>
 
         <div className="flex flex-wrap justify-center gap-2.5">
