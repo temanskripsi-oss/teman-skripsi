@@ -289,7 +289,7 @@ export default function ContentManager({ videos, freebies, tasks, weekConfigs }:
               <p className="text-[#9CA3AF] text-sm">Belum ada tugas. Tambahkan tugas mingguan pertama.</p>
             </div>
           ) : (
-            Object.entries(groupedTasks).sort(([a], [b]) => Number(a) - Number(b)).map(([week, wTasks]) => {
+            <>{Object.entries(groupedTasks).sort(([a], [b]) => Number(a) - Number(b)).map(([week, wTasks]) => {
               const product = wTasks[0]?.product ?? 'fastrack'
               const key = `${week}-${product}`
               const currentTitle = weekTitleMap[key] ?? ''
@@ -365,7 +365,7 @@ export default function ContentManager({ videos, freebies, tasks, weekConfigs }:
                 </div>
               </div>
             )
-            })}
+          })}</>
           )}
         </div>
       )}

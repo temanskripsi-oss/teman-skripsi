@@ -5,10 +5,11 @@ import type { Video, Freebie, Task } from '@/types'
 export default async function AdminContentPage() {
   const supabase = createServiceClient()
 
-  const [{ data: videos }, { data: freebies }, { data: tasks }] = await Promise.all([
+  const [{ data: videos }, { data: freebies }, { data: tasks }, { data: weekConfigs }] = await Promise.all([
     supabase.from('videos').select('*').order('week_number', { ascending: true }).order('order_index', { ascending: true }),
     supabase.from('freebies').select('*').order('order_index', { ascending: true }),
     supabase.from('tasks').select('*').order('week_number', { ascending: true }).order('order_index', { ascending: true }),
+    supabase.from('week_configs').select('week_number, title, product'),
   ])
 
   return (
@@ -22,6 +23,7 @@ export default async function AdminContentPage() {
         videos={(videos ?? []) as Video[]}
         freebies={(freebies ?? []) as Freebie[]}
         tasks={(tasks ?? []) as Task[]}
+        weekConfigs={(weekConfigs ?? []) as { week_number: number; title: string; product: string }[]}
       />
     </div>
   )
