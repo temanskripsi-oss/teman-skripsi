@@ -1,6 +1,6 @@
 import HeroSection from '@/components/home/HeroSection'
 import StatsBar from '@/components/home/StatsBar'
-import VideoSection from '@/components/home/VideoSection'
+import WallOfGraduates from '@/components/home/WallOfGraduates'
 import ProblemSection from '@/components/home/ProblemSection'
 import ProductCards from '@/components/home/ProductCards'
 import HowItWorks from '@/components/home/HowItWorks'
@@ -12,7 +12,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       <StatsBar />
-      <VideoSection />
+      <WallOfGraduates />
       <ProblemSection />
       <ProductCards />
       <HowItWorks />
