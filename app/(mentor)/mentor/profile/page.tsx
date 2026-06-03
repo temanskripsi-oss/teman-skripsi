@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import { User, Mail, GraduationCap, Users } from 'lucide-react'
 import ProfilePhotoUpload from '@/components/profile/ProfilePhotoUpload'
@@ -8,12 +9,14 @@ export default async function MentorProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  const service = createServiceClient()
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
-  const { count: clientCount } = await supabase
+  const { count: clientCount } = await service
     .from('profiles')
     .select('*', { count: 'exact', head: true })
     .eq('mentor_id', user.id)
+    .eq('role', 'user')
 
   const fields = [
     { icon: User,          label: 'Nama Lengkap',  value: profile?.full_name ?? '—' },
