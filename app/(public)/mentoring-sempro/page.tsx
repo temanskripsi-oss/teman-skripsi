@@ -100,13 +100,13 @@ export default function MentoringSemproPage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Jadwal bimbingan</h2>
+            <p className="text-[#9CA3AF] text-sm mt-2">6x Online via Zoom · 3x Offline tatap muka (Bandar Lampung)</p>
           </div>
           <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
             <table className="w-full text-sm bg-white">
               <thead>
                 <tr className="bg-[#eff6ff] border-b border-gray-100">
                   <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Pertemuan</th>
-                  <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Format</th>
                   <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Materi</th>
                 </tr>
               </thead>
@@ -117,11 +117,13 @@ export default function MentoringSemproPage() {
                   { no:'3', materi:'Review Bab 1, mulai Bab 2 kajian pustaka' },
                   { no:'4', materi:'Review Bab 2, mulai Bab 3 metodologi' },
                   { no:'5', materi:'Review Bab 3, finalisasi proposal' },
-                  { no:'6', materi:'Review akhir, persiapan sempro' },
+                  { no:'6', materi:'Simulasi seminar proposal (sesi 1)' },
+                  { no:'7', materi:'Simulasi seminar proposal (sesi 2) + evaluasi' },
+                  { no:'8', materi:'Revisi pasca simulasi, finishing proposal' },
+                  { no:'9', materi:'Review akhir, persiapan sempro' },
                 ].map((row, i) => (
                   <tr key={i} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                    <td className="px-5 py-3.5 text-[#2232dd] font-semibold text-xs">Pertemuan {row.no}</td>
-                    <td className="px-5 py-3.5 text-[#9CA3AF] text-xs">Offline/Online</td>
+                    <td className="px-5 py-3.5 text-[#2232dd] font-semibold text-xs whitespace-nowrap">Pertemuan {row.no}</td>
                     <td className="px-5 py-3.5 text-[#374151] text-xs">{row.materi}</td>
                   </tr>
                 ))}
