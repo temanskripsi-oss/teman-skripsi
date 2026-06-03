@@ -60,7 +60,7 @@ const products = [
     tagBg: 'bg-[#0f766e] text-white',
     name: 'Mentoring Privat',
     sub: 'Paket Bab 4–5',
-    desc: 'Dari analisis data sampai kamu berdiri percaya diri di depan dewan penguji dan lulus.',
+    desc: 'Dari analisis data sampai kamu berdiri percaya diri di depan dosen penguji dan lulus.',
     price: 'Rp 2.250.000',
     href: '/mentoring-penelitian',
     accentBg: '#f0fdfa',
