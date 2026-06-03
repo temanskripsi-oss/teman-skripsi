@@ -70,7 +70,7 @@ export default function WallOfGraduates() {
           The Wall of <span className="gradient-text-navy">Graduates</span>
         </h2>
         <p className="text-[#9CA3AF] text-base max-w-xl mx-auto leading-relaxed">
-          Mereka pernah di posisi yang sama seperti kamu. Sekarang sudah di sisi lain.
+          Dulunya juga stuck, nunda, dan hopeless soal skripsi. Sekarang? Udah duluan foto toga.
         </p>
       </div>
 
