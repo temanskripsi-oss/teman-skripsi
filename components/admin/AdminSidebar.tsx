@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Users, FileText, DollarSign, LogOut, GraduationCap, Globe, UserCheck, ClipboardList } from 'lucide-react'
+import Image from 'next/image'
+import { LayoutDashboard, Users, FileText, DollarSign, LogOut, Globe, UserCheck, ClipboardList } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const nav = [
@@ -28,9 +29,7 @@ export default function AdminSidebar() {
     <aside className="w-60 flex-shrink-0 bg-[#1E1B4B] min-h-screen flex flex-col">
       <div className="px-5 py-5 border-b border-white/10">
         <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2232dd] to-[#4DD9C0] flex items-center justify-center flex-shrink-0">
-            <GraduationCap size={14} className="text-white" />
-          </div>
+          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
           <div>
             <p className="font-bold text-base tracking-tight text-white leading-none">
               Teman<span className="text-[#4DD9C0]">Skripsi</span>

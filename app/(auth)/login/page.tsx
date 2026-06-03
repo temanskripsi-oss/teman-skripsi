@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { GraduationCap, Mail, Lock, ArrowRight, Star, CheckCircle } from 'lucide-react'
+import Image from 'next/image'
+import { Mail, Lock, ArrowRight, Star, CheckCircle } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail]       = useState('')
@@ -40,9 +41,7 @@ export default function LoginPage() {
 
         <div className="relative z-10">
           <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center">
-              <GraduationCap size={17} className="text-white" />
-            </div>
+            <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="flex-shrink-0" />
             <span className="text-white font-bold text-xl tracking-tight">
               Teman<span className="text-[#9eff63]">Skripsi</span>
             </span>
@@ -85,9 +84,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 grid-bg-light pointer-events-none" />
         <div className="w-full max-w-md relative z-10">
           <div className="flex items-center justify-center gap-2.5 mb-8 lg:hidden">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center">
-              <GraduationCap size={17} className="text-white" />
-            </div>
+            <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="flex-shrink-0" />
             <span className="text-[#1E1B4B] font-bold text-xl">Teman<span className="text-[#2232dd]">Skripsi</span></span>
           </div>
 

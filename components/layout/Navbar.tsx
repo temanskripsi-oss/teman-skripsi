@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, GraduationCap } from 'lucide-react'
+import Image from 'next/image'
+import { Menu, X } from 'lucide-react'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -23,9 +24,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2.5 cursor-pointer">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center flex-shrink-0">
-              <GraduationCap size={15} className="text-white" />
-            </div>
+            <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
             <span className="text-white font-bold text-lg tracking-tight">
               Teman<span className="text-[#9eff63]">Skripsi</span>
             </span>

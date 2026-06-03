@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, Users, LogOut, GraduationCap } from 'lucide-react'
+import Image from 'next/image'
+import { Home, Users, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const nav = [
@@ -24,9 +25,7 @@ export default function MentorSidebar() {
     <aside className="w-60 flex-shrink-0 bg-white border-r border-gray-100 min-h-screen flex flex-col shadow-sm">
       <div className="px-5 py-5 border-b border-gray-100">
         <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center flex-shrink-0">
-            <GraduationCap size={14} className="text-white" />
-          </div>
+          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
           <span className="font-bold text-base tracking-tight text-[#1E1B4B]">
             Teman<span className="text-[#2232dd]">Skripsi</span>
           </span>

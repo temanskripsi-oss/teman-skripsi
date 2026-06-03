@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { MessageCircle, GraduationCap } from 'lucide-react'
+import Image from 'next/image'
+import { MessageCircle } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -8,9 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center flex-shrink-0">
-                <GraduationCap size={15} className="text-white" />
-              </div>
+              <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0" />
               <span className="text-white font-bold text-lg tracking-tight">
                 Teman<span className="text-[#9eff63]">Skripsi</span>
               </span>
