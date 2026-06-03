@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, Plus, X, Loader2, ChevronRight } from 'lucide-react'
 import { createClientAction, sendPasswordResetAction } from '@/app/(admin)/admin/actions'
 import type { Profile, Product } from '@/types'
@@ -132,9 +133,14 @@ export default function ClientsTable({ clients, mentors }: Props) {
                     <td className="px-5 py-3.5 text-[#9CA3AF] text-xs">{i + 1}</td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                          {c.full_name?.[0]?.toUpperCase() ?? '?'}
-                        </div>
+                        {c.avatar_url ? (
+                          <Image src={c.avatar_url} alt={c.full_name} width={28} height={28}
+                            className="w-7 h-7 rounded-full object-cover flex-shrink-0" />
+                        ) : (
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            {c.full_name?.[0]?.toUpperCase() ?? '?'}
+                          </div>
+                        )}
                         <div>
                           <p className="font-semibold text-[#1E1B4B]">{c.full_name}</p>
                           <p className="text-[#9CA3AF] text-xs hidden sm:block">{c.phone}</p>
