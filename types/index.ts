@@ -84,6 +84,23 @@ export interface Task {
   created_at: string
 }
 
+export interface Registration {
+  id: string
+  full_name: string
+  email: string
+  phone: string
+  batch: string
+  amount: number
+  merchant_order_id: string
+  duitku_reference: string | null
+  payment_url: string | null
+  payment_method: string | null
+  status: 'pending' | 'paid' | 'active' | 'expired'
+  user_id: string | null
+  created_at: string
+  paid_at: string | null
+}
+
 export interface TaskSubmission {
   id: string
   task_id: string

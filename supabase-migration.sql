@@ -102,3 +102,23 @@ CREATE TABLE IF NOT EXISTS week_configs (
 ALTER TABLE week_configs ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "users_view_week_configs" ON week_configs;
 CREATE POLICY "users_view_week_configs" ON week_configs FOR SELECT USING (true);
+
+-- 14. Tabel registrations (pendaftaran via payment gateway Duitku)
+CREATE TABLE IF NOT EXISTS registrations (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  full_name text NOT NULL,
+  email text NOT NULL,
+  phone text NOT NULL,
+  batch text NOT NULL,
+  amount integer NOT NULL DEFAULT 500000,
+  merchant_order_id text NOT NULL UNIQUE,
+  duitku_reference text,
+  payment_url text,
+  payment_method text,
+  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'active', 'expired')),
+  user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  created_at timestamptz DEFAULT now() NOT NULL,
+  paid_at timestamptz
+);
+
+ALTER TABLE registrations ENABLE ROW LEVEL SECURITY;
