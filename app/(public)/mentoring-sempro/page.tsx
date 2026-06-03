@@ -143,7 +143,7 @@ export default function MentoringSemproPage() {
           <p className="text-white/50 mb-8">Tempat terbatas. Daftar sekarang sebelum slot penuh.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <p className="text-2xl font-bold text-white">Rp 2.000.000</p>
-            <a href="#" className="group inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-[#1E1B4B] font-bold px-8 py-4 rounded-2xl transition-all hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
+            <a href="/daftar/sempro" className="group inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-[#1E1B4B] font-bold px-8 py-4 rounded-2xl transition-all hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
               Mulai Bimbingan <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
