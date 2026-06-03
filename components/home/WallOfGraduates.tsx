@@ -1,4 +1,5 @@
-import { GraduationCap, Award } from 'lucide-react'
+import Link from 'next/link'
+import { GraduationCap, Award, ArrowRight } from 'lucide-react'
 
 interface Graduate {
   name: string
@@ -86,9 +87,12 @@ export default function WallOfGraduates() {
 
       {/* Bottom CTA */}
       <div className="text-center mt-12 px-4">
-        <p className="text-[#9CA3AF] text-sm">
-          Namamu bisa ada di sini. <span className="text-[#2232dd] font-semibold">Mulai perjalananmu sekarang →</span>
-        </p>
+        <p className="text-[#9CA3AF] text-sm mb-5">Namamu bisa ada di sini berikutnya.</p>
+        <Link href="/#produk"
+          className="group inline-flex items-center gap-2.5 bg-[#2232dd] hover:bg-[#1a28b8] text-white font-bold px-8 py-4 rounded-2xl text-sm sm:text-base transition-all duration-200 hover:shadow-xl hover:shadow-[#2232dd]/25 hover:-translate-y-0.5 cursor-pointer">
+          Mulai Perjalananmu Sekarang
+          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+        </Link>
       </div>
     </section>
   )
