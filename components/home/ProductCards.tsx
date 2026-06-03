@@ -48,7 +48,7 @@ const products = [
     checkColor: '#2232dd',
     featured: true,
     features: [
-      '9 pertemuan personal (6x online + 3x offline)',
+      '9 pertemuan privat (6x online + 3x offline)',
       '9x written feedback dari mentor',
       '3 bulan masa aktif program',
       'Bimbingan dari judul → proposal ACC',
@@ -76,7 +76,7 @@ const products = [
     iconColor: '#0f766e',
     checkColor: '#0f766e',
     features: [
-      '9 pertemuan personal (6x online + 3x offline)',
+      '9 pertemuan privat (6x online + 3x offline)',
       '9x written feedback dari mentor',
       '3 bulan masa aktif program',
       'Bimbingan analisis data SPSS / SmartPLS',

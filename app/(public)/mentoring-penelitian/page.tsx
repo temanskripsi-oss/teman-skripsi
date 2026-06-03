@@ -5,7 +5,7 @@ import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight } from 'lucide-r
 
 export const metadata: Metadata = {
   title: 'Mentoring Privat Bab 4–5 | Teman Skripsi',
-  description: 'Analisis data sampai sidang skripsi. 9 pertemuan personal, 3 bulan masa aktif.',
+  description: 'Analisis data sampai sidang skripsi. 9 pertemuan privat, 3 bulan masa aktif.',
 }
 
 const faqs = [
@@ -37,7 +37,7 @@ export default function MentoringPenelitianPage() {
         sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis sampai kamu berdiri percaya diri di depan dewan penguji."
         price="Rp 2.250.000"
         paymentLink="#"
-        trusts={['9 Pertemuan Personal', '3 Bulan Masa Aktif', 'Simulasi Sidang', '340+ Alumni']}
+        trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '340+ Alumni']}
         accentColor="#0f766e"
         lightBg="#f0fdfa"
       />

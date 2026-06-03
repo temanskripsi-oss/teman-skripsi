@@ -37,7 +37,7 @@ export default function MentoringSemproPage() {
         sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai proposal ACC, step by step bareng mentor kamu."
         price="Rp 2.000.000"
         paymentLink="#"
-        trusts={['9 Pertemuan Personal', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
+        trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
         accentColor="#2232dd"
         lightBg="#eff6ff"
       />
