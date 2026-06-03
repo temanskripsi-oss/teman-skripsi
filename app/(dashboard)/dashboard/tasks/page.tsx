@@ -21,6 +21,11 @@ export default async function TasksPage() {
   const submissionsMap: Record<string, TaskSubmission> = {}
   subs?.forEach(s => { submissionsMap[s.task_id] = s as TaskSubmission })
 
+  const now = new Date()
+  const startDate = profile?.product === 'fastrack'
+    ? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
+    : (profile?.start_date ?? null)
+
   return (
     <div className="p-8 max-w-4xl">
       <div className="mb-8">
@@ -31,7 +36,7 @@ export default async function TasksPage() {
       <TasksClient
         tasks={(tasks ?? []) as Task[]}
         submissionsMap={submissionsMap}
-        startDate={profile?.start_date ?? null}
+        startDate={startDate}
       />
     </div>
   )

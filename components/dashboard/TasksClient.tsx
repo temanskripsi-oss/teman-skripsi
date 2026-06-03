@@ -14,7 +14,7 @@ function getDeadlineInfo(startDate: string | null, weekNumber: number) {
   if (!startDate) return null
   const start = new Date(startDate)
   const deadline = new Date(start)
-  deadline.setDate(deadline.getDate() + weekNumber * 7)
+  deadline.setDate(deadline.getDate() + weekNumber * 7 - 1)
 
   const now = new Date()
   now.setHours(0, 0, 0, 0)
