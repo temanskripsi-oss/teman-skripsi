@@ -135,7 +135,7 @@ export default async function MentorDetailPage({ params }: { params: Promise<{ i
                               <div>
                                 <p className="font-semibold text-[#1E1B4B] text-sm">{client.full_name}</p>
                                 <Link href={`/admin/clients/${client.id}`}
-                                  className="text-[#2232dd] text-xs hover:underline" onClick={e => e.stopPropagation()}>
+                                  className="text-[#2232dd] text-xs hover:underline">
                                   Lihat detail →
                                 </Link>
                               </div>
