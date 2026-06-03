@@ -48,7 +48,6 @@ const products = [
       '9x written feedback dari mentor',
       '3 bulan masa aktif program',
       'Bimbingan dari judul → proposal ACC',
-      'Review unlimited via WhatsApp dengan mentor',
       'Persiapan & simulasi seminar proposal',
       'Akses dashboard + video learning',
       'Template & freebies lengkap',
