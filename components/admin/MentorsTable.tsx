@@ -1,7 +1,8 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, X, Loader2, Trash2, UserCheck, Users } from 'lucide-react'
+import Image from 'next/image'
+import { Plus, X, Loader2, Trash2, UserCheck, Users, ChevronRight } from 'lucide-react'
 import { createMentorAction, deleteMentorAction } from '@/app/(admin)/admin/actions'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all'
@@ -11,6 +12,7 @@ interface Mentor {
   full_name: string
   phone: string
   email: string
+  avatar_url: string | null
   clientCount: number
 }
 
@@ -75,13 +77,20 @@ export default function MentorsTable({ mentors }: Props) {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {mentors.map((m, i) => (
-                  <tr key={m.id} className="hover:bg-[#f4f8ff]/60 transition-colors">
+                  <tr key={m.id}
+                    onClick={() => router.push(`/admin/mentors/${m.id}`)}
+                    className="hover:bg-[#f4f8ff]/60 transition-colors cursor-pointer">
                     <td className="px-5 py-3.5 text-[#9CA3AF] text-xs">{i + 1}</td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7C6FCD] to-[#2232dd] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                          {m.full_name?.[0]?.toUpperCase() ?? '?'}
-                        </div>
+                        {m.avatar_url ? (
+                          <Image src={m.avatar_url} alt={m.full_name} width={32} height={32}
+                            className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7C6FCD] to-[#2232dd] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            {m.full_name?.[0]?.toUpperCase() ?? '?'}
+                          </div>
+                        )}
                         <div>
                           <p className="font-semibold text-[#1E1B4B]">{m.full_name}</p>
                           <p className="text-[#9CA3AF] text-xs">{m.phone}</p>
@@ -95,11 +104,12 @@ export default function MentorsTable({ mentors }: Props) {
                         {m.clientCount}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5">
-                      <button onClick={() => handleDelete(m.id, m.full_name)}
+                    <td className="px-5 py-3.5 flex items-center gap-2 justify-end">
+                      <button onClick={e => { e.stopPropagation(); handleDelete(m.id, m.full_name) }}
                         className="p-1.5 rounded-lg hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 transition-colors cursor-pointer">
                         <Trash2 size={14} />
                       </button>
+                      <ChevronRight size={14} className="text-[#9CA3AF]" />
                     </td>
                   </tr>
                 ))}

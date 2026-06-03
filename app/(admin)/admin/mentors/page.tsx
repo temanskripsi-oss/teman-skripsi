@@ -5,7 +5,7 @@ export default async function AdminMentorsPage() {
   const supabase = createServiceClient()
 
   const [{ data: mentorProfiles }, { data: clients }] = await Promise.all([
-    supabase.from('profiles').select('id, full_name, phone').eq('role', 'mentor').order('created_at', { ascending: false }),
+    supabase.from('profiles').select('id, full_name, phone, avatar_url').eq('role', 'mentor').order('created_at', { ascending: false }),
     supabase.from('profiles').select('id, mentor_id').eq('role', 'user').not('mentor_id', 'is', null),
   ])
 
@@ -19,6 +19,7 @@ export default async function AdminMentorsPage() {
         full_name: m.full_name ?? '',
         phone: m.phone ?? '',
         email: userData?.user?.email ?? '',
+        avatar_url: (m as { avatar_url?: string }).avatar_url ?? null,
         clientCount,
       }
     })
