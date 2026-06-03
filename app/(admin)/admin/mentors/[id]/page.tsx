@@ -14,15 +14,23 @@ export default async function MentorDetailPage({ params }: { params: Promise<{ i
   const { id } = await params
   const supabase = createServiceClient()
 
-  const [{ data: mentorData }, { data: clients }, { data: videoProgress }, { data: taskSubs }] = await Promise.all([
-    supabase.auth.admin.getUserById(id),
-    supabase.from('profiles').select('*').eq('mentor_id', id).eq('role', 'user').order('created_at', { ascending: false }),
-    supabase.from('video_progress').select('user_id'),
-    supabase.from('task_submissions').select('user_id, status'),
-  ])
-
   const { data: mentorProfile } = await supabase.from('profiles').select('*').eq('id', id).single()
   if (!mentorProfile || mentorProfile.role !== 'mentor') notFound()
+
+  const [authResult, { data: clients }] = await Promise.all([
+    supabase.auth.admin.getUserById(id).catch(() => ({ data: { user: null } })),
+    supabase.from('profiles').select('*').eq('mentor_id', id).eq('role', 'user').order('created_at', { ascending: false }),
+  ])
+
+  const mentorEmail = authResult?.data?.user?.email ?? ''
+  const clientIds   = (clients ?? []).map(c => c.id)
+
+  const [{ data: videoProgress }, { data: taskSubs }] = clientIds.length > 0
+    ? await Promise.all([
+        supabase.from('video_progress').select('user_id').in('user_id', clientIds),
+        supabase.from('task_submissions').select('user_id, status').in('user_id', clientIds),
+      ])
+    : [{ data: [] }, { data: [] }]
 
   const clientList = clients ?? []
 
@@ -56,7 +64,7 @@ export default async function MentorDetailPage({ params }: { params: Promise<{ i
           <h1 className="text-2xl font-bold text-[#1E1B4B]">{mentorProfile.full_name}</h1>
           <div className="flex flex-wrap gap-4 mt-2">
             <span className="flex items-center gap-1.5 text-[#9CA3AF] text-sm">
-              <Mail size={13} /> {mentorData?.user?.email ?? '—'}
+              <Mail size={13} /> {mentorEmail || '—'}
             </span>
             {mentorProfile.phone && (
               <span className="flex items-center gap-1.5 text-[#9CA3AF] text-sm">
