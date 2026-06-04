@@ -13,7 +13,7 @@ export default async function MentorLayout({ children }: { children: React.React
   return (
     <div className="flex min-h-screen bg-[#f4f8ff]">
       <MentorSidebar />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto pt-14 md:pt-0">{children}</main>
     </div>
   )
 }
