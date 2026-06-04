@@ -1,5 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import { Users, Calendar, DollarSign, TrendingUp } from 'lucide-react'
+import { Users, Calendar, DollarSign, TrendingUp, BarChart2, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -7,7 +7,8 @@ export default async function AdminOverview() {
   const supabase = createServiceClient()
 
   const now = new Date()
-  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0]
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+  const firstOfMonthDate = firstOfMonth.split('T')[0]
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString()
 
@@ -17,16 +18,30 @@ export default async function AdminOverview() {
     { data: revenueData },
     { data: recentClients },
     { count: newClientsThisMonth },
+    { data: fastrackBatch },
+    { data: privatBatch },
+    { data: sessionsBatch },
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user'),
     supabase.from('sessions').select('*, profiles!sessions_user_id_fkey(full_name)').gte('scheduled_at', today).lt('scheduled_at', tomorrow).eq('status', 'upcoming'),
-    supabase.from('payments').select('amount').eq('status', 'paid').gte('payment_date', firstOfMonth),
+    supabase.from('payments').select('amount').eq('status', 'paid').gte('payment_date', firstOfMonthDate),
     supabase.from('profiles').select('id, full_name, university, product, active_until, created_at, avatar_url').eq('role', 'user').order('created_at', { ascending: false }).limit(5),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user').gte('created_at', new Date(now.getFullYear(), now.getMonth(), 1).toISOString()),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'user').gte('created_at', firstOfMonth),
+    // Fastrack batch bulan ini
+    supabase.from('profiles').select('id').eq('role', 'user').eq('product', 'fastrack')
+      .gte('start_date', firstOfMonthDate)
+      .lt('start_date', new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString().split('T')[0]),
+    // Privat batch bulan ini
+    supabase.from('profiles').select('id').eq('role', 'user').in('product', ['mentoring-sempro', 'mentoring-penelitian'])
+      .gte('start_date', firstOfMonthDate)
+      .lt('start_date', new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString().split('T')[0]),
+    // Sesi selesai bulan ini
+    supabase.from('sessions').select('id').eq('status', 'done').gte('scheduled_at', firstOfMonth),
   ])
 
   const revenueThisMonth = revenueData?.reduce((s, p) => s + p.amount, 0) ?? 0
   const fmt = (n: number) => `Rp ${(n / 1_000_000).toFixed(1)}jt`
+  const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']
 
   const stats = [
     { label: 'Total Klien',    value: String(totalClients ?? 0),     icon: Users,      color: '#2232dd', bg: '#eff6ff' },
@@ -64,6 +79,36 @@ export default async function AdminOverview() {
             </div>
           )
         })}
+      </div>
+
+      {/* Rekap Batch Bulan Ini */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-[#f5f3ff]"><BarChart2 size={15} className="text-[#7C6FCD]" /></div>
+            <div>
+              <p className="font-semibold text-[#1E1B4B] text-sm">Rekap Batch {MONTHS[now.getMonth()]} {now.getFullYear()}</p>
+              <p className="text-[#9CA3AF] text-xs">Real-time bulan berjalan</p>
+            </div>
+          </div>
+          <Link href="/admin/rekap" className="flex items-center gap-1 text-xs text-[#7C6FCD] font-medium hover:underline">
+            Lihat detail <ArrowRight size={12} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-[#eff6ff] rounded-xl px-4 py-3 text-center">
+            <p className="text-xl font-bold text-[#2232dd]">{fastrackBatch?.length ?? 0}</p>
+            <p className="text-[10px] text-[#9CA3AF] mt-0.5">Peserta Fastrack</p>
+          </div>
+          <div className="bg-[#f5f3ff] rounded-xl px-4 py-3 text-center">
+            <p className="text-xl font-bold text-[#7C6FCD]">{privatBatch?.length ?? 0}</p>
+            <p className="text-[10px] text-[#9CA3AF] mt-0.5">Klien Privat</p>
+          </div>
+          <div className="bg-[#f0fdf4] rounded-xl px-4 py-3 text-center">
+            <p className="text-xl font-bold text-green-600">{sessionsBatch?.length ?? 0}</p>
+            <p className="text-[10px] text-[#9CA3AF] mt-0.5">Sesi Selesai</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
