@@ -34,12 +34,14 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
     })
   }
 
-  if (isLocked && unlockedAt) {
-    const unlockDate = new Date(unlockedAt)
-    const unlockLabel = unlockDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-    const now = new Date()
-    const diffMs = unlockDate.getTime() - now.getTime()
-    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+  if (isLocked) {
+    const unlockDate = unlockedAt ? new Date(unlockedAt) : null
+    const unlockLabel = unlockDate
+      ? unlockDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+      : null
+    const diffDays = unlockDate
+      ? Math.ceil((unlockDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+      : null
 
     return (
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-14 text-center max-w-lg mx-auto">
@@ -51,9 +53,18 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
           Kami sengaja atur begini supaya kamu belajar bareng teman-teman satu batch, tetap fokus, dan hasilnya lebih maksimal.
         </p>
         <div className="bg-[#f5f3ff] rounded-2xl px-6 py-4 border border-[#7C6FCD]/15 mb-5 inline-block">
-          <p className="text-[#9CA3AF] text-xs mb-1">Video terbuka mulai</p>
-          <p className="text-[#7C6FCD] font-bold text-lg">{unlockLabel}</p>
-          <p className="text-[#9CA3AF] text-xs mt-1">{diffDays} hari lagi</p>
+          {unlockLabel ? (
+            <>
+              <p className="text-[#9CA3AF] text-xs mb-1">Video terbuka mulai</p>
+              <p className="text-[#7C6FCD] font-bold text-lg">{unlockLabel}</p>
+              <p className="text-[#9CA3AF] text-xs mt-1">{diffDays} hari lagi</p>
+            </>
+          ) : (
+            <>
+              <p className="text-[#7C6FCD] font-bold text-base">Jadwal batch sedang dikonfirmasi</p>
+              <p className="text-[#9CA3AF] text-xs mt-1">Kamu akan dihubungi via WhatsApp</p>
+            </>
+          )}
         </div>
         <p className="text-[#9CA3AF] text-xs leading-relaxed">
           Sambil nunggu, eksplor dulu fitur lain di dashboard — jadwal bimbingan, tugas, dan progres kamu sudah bisa diakses sekarang.
