@@ -56,31 +56,41 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
   }
 
   return (
-    <div className="flex gap-6">
-      {/* Left Sidebar */}
-      <div className="w-52 flex-shrink-0">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden sticky top-6">
+    <div className="flex flex-col md:flex-row gap-6">
+      {/* Filter — horizontal scroll on mobile, sidebar on desktop */}
+      <div className="md:w-52 md:flex-shrink-0">
+        {/* Mobile: horizontal pill tabs */}
+        <div className="flex md:hidden gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {[null, ...weeks].map((week) => (
+            <button key={week ?? 'all'}
+              onClick={() => setSelectedWeek(week)}
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer border ${
+                selectedWeek === week
+                  ? 'bg-[#2232dd] text-white border-[#2232dd]'
+                  : 'bg-white text-[#6B6B8A] border-gray-200'
+              }`}>
+              {week === null ? 'Semua' : `Minggu ${week}`}
+            </button>
+          ))}
+        </div>
+
+        {/* Desktop: card sidebar */}
+        <div className="hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden sticky top-6">
           <div className="px-4 py-3 border-b border-gray-100">
             <p className="text-xs font-bold text-[#1E1B4B] uppercase tracking-widest">Courses:</p>
           </div>
           <div className="p-2">
-            <button
-              onClick={() => setSelectedWeek(null)}
+            <button onClick={() => setSelectedWeek(null)}
               className={`w-full text-left px-3 py-2 rounded-xl text-sm transition-colors cursor-pointer mb-1 ${
-                selectedWeek === null
-                  ? 'text-[#2232dd] font-semibold underline underline-offset-2'
-                  : 'text-[#6B6B8A] hover:text-[#1E1B4B] hover:bg-[#f4f8ff]'
+                selectedWeek === null ? 'text-[#2232dd] font-semibold underline underline-offset-2' : 'text-[#6B6B8A] hover:text-[#1E1B4B] hover:bg-[#f4f8ff]'
               }`}>
               All Classes
             </button>
             <div className="h-px bg-gray-100 my-1.5 mx-1" />
             {weeks.map(week => (
-              <button key={week}
-                onClick={() => setSelectedWeek(week)}
+              <button key={week} onClick={() => setSelectedWeek(week)}
                 className={`w-full text-left px-3 py-2 rounded-xl text-sm transition-colors cursor-pointer ${
-                  selectedWeek === week
-                    ? 'text-[#2232dd] font-semibold underline underline-offset-2'
-                    : 'text-[#6B6B8A] hover:text-[#1E1B4B] hover:bg-[#f4f8ff]'
+                  selectedWeek === week ? 'text-[#2232dd] font-semibold underline underline-offset-2' : 'text-[#6B6B8A] hover:text-[#1E1B4B] hover:bg-[#f4f8ff]'
                 }`}>
                 Minggu {week}
               </button>
@@ -89,12 +99,12 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
         </div>
       </div>
 
-      {/* Right: Grid */}
+      {/* Grid */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[#1E1B4B] mb-5">
+        <p className="text-sm font-semibold text-[#1E1B4B] mb-4">
           {selectedWeek !== null ? `Minggu ${selectedWeek}` : 'All Classes'}
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((video, idx) => {
             const videoId = getYouTubeId(video.youtube_url)
             const thumbnail = videoId
