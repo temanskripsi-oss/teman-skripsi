@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Calendar, Video, Gift, ClipboardList, FileText } from 'lucide-react'
+import { Calendar, Video, Gift, ClipboardList, FileText, CalendarClock } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -10,6 +10,22 @@ export default async function DashboardHome() {
   if (!user) redirect('/login')
 
   const { data: profile }  = await supabase.from('profiles').select('*').eq('id', user.id).single()
+
+  // Hitung video lock status untuk fastrack
+  let unlockedAt: Date | null = null
+  const isFastrack = profile?.product === 'fastrack'
+  if (isFastrack && profile?.start_date) {
+    const batchStart = new Date(profile.start_date)
+    unlockedAt = new Date(batchStart)
+    unlockedAt.setDate(unlockedAt.getDate() - 3)
+  }
+  const isVideoLocked = isFastrack && (unlockedAt === null || new Date() < unlockedAt)
+  const unlockLabel = unlockedAt
+    ? unlockedAt.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    : null
+  const diffDays = unlockedAt
+    ? Math.ceil((unlockedAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : null
   const { data: sessions } = await supabase.from('sessions').select('*').eq('user_id', user.id).eq('status','upcoming').order('scheduled_at',{ascending:true}).limit(1)
   const { data: videos }   = await supabase.from('videos').select('id').or(`product.eq.all,product.eq.${profile?.product}`)
   const { data: progress } = await supabase.from('video_progress').select('id').eq('user_id', user.id)
@@ -38,6 +54,26 @@ export default async function DashboardHome() {
           <p className="text-[#9CA3AF] text-sm mt-0.5">Kamu semakin dekat dengan wisuda.</p>
         </div>
       </div>
+
+      {/* Video locked banner (fastrack only) */}
+      {isVideoLocked && (
+        <div className="bg-[#f5f3ff] rounded-2xl p-5 mb-5 border border-[#7C6FCD]/20 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-[#7C6FCD]/10 flex items-center justify-center flex-shrink-0">
+            <CalendarClock size={20} className="text-[#7C6FCD]" />
+          </div>
+          <div className="flex-1">
+            <p className="font-semibold text-[#1E1B4B] text-sm mb-0.5">Video materi dibuka H-3 sebelum batch mulai</p>
+            <p className="text-[#6B6B8A] text-xs leading-relaxed">
+              Kami sengaja atur begini supaya kamu belajar bareng teman-teman satu batch, tetap fokus, dan hasilnya lebih maksimal.
+            </p>
+            {unlockLabel ? (
+              <p className="text-[#7C6FCD] text-xs font-semibold mt-2">Terbuka mulai {unlockLabel} · {diffDays} hari lagi</p>
+            ) : (
+              <p className="text-[#7C6FCD] text-xs font-semibold mt-2">Jadwal batch sedang dikonfirmasi — kamu akan dihubungi via WhatsApp</p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Progress */}
       <div className="bg-white rounded-2xl p-6 mb-5 border border-gray-100 shadow-sm">
