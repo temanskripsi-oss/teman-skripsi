@@ -6,12 +6,9 @@ import { Download, FileText } from 'lucide-react'
 const DEFAULT_FREEBIES = [
   'Template Proposal Bab 1, 2, 3',
   'Template PPT Sempro',
-  '100+ Contoh Judul ACC',
   'Research Gap Framework',
   'Prompt AI untuk Skripsi',
   'Script Konsultasi ke Dosen',
-  'Checklist ACC Judul',
-  'Template Email ke Dosen',
   'Database 300+ Jurnal Skripsi',
 ]
 
