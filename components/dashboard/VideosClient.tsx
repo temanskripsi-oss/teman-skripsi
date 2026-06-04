@@ -1,6 +1,6 @@
 'use client'
 import { useState, useTransition } from 'react'
-import { Lock, Play, CheckCircle, X, Video } from 'lucide-react'
+import { Lock, Play, CheckCircle, X, Video, CalendarClock } from 'lucide-react'
 import { markVideoWatchedAction } from '@/app/(dashboard)/dashboard/actions'
 import type { Video as VideoType } from '@/types'
 
@@ -12,9 +12,11 @@ function getYouTubeId(url: string): string | null {
 interface Props {
   videos: VideoType[]
   watchedIds: string[]
+  isLocked?: boolean
+  unlockedAt?: string | null
 }
 
-export default function VideosClient({ videos, watchedIds: initialWatchedIds }: Props) {
+export default function VideosClient({ videos, watchedIds: initialWatchedIds, isLocked = false, unlockedAt }: Props) {
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null)
   const [activeVideo, setActiveVideo] = useState<VideoType | null>(null)
   const [watchedIds, setWatchedIds] = useState<Set<string>>(new Set(initialWatchedIds))
@@ -30,6 +32,34 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds }: 
       await markVideoWatchedAction(videoId)
       setWatchedIds(prev => new Set([...prev, videoId]))
     })
+  }
+
+  if (isLocked && unlockedAt) {
+    const unlockDate = new Date(unlockedAt)
+    const unlockLabel = unlockDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    const now = new Date()
+    const diffMs = unlockDate.getTime() - now.getTime()
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+
+    return (
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-14 text-center max-w-lg mx-auto">
+        <div className="w-16 h-16 rounded-2xl bg-[#f5f3ff] flex items-center justify-center mx-auto mb-5">
+          <CalendarClock size={28} className="text-[#7C6FCD]" />
+        </div>
+        <h2 className="text-xl font-bold text-[#1E1B4B] mb-2">Video materi dibuka H-3 sebelum batch mulai</h2>
+        <p className="text-[#6B6B8A] text-sm leading-relaxed mb-5">
+          Kami sengaja atur begini supaya kamu belajar bareng teman-teman satu batch, tetap fokus, dan hasilnya lebih maksimal.
+        </p>
+        <div className="bg-[#f5f3ff] rounded-2xl px-6 py-4 border border-[#7C6FCD]/15 mb-5 inline-block">
+          <p className="text-[#9CA3AF] text-xs mb-1">Video terbuka mulai</p>
+          <p className="text-[#7C6FCD] font-bold text-lg">{unlockLabel}</p>
+          <p className="text-[#9CA3AF] text-xs mt-1">{diffDays} hari lagi</p>
+        </div>
+        <p className="text-[#9CA3AF] text-xs leading-relaxed">
+          Sambil nunggu, eksplor dulu fitur lain di dashboard — jadwal bimbingan, tugas, dan progres kamu sudah bisa diakses sekarang.
+        </p>
+      </div>
+    )
   }
 
   if (videos.length === 0) {

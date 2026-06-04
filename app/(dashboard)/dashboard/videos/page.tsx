@@ -8,7 +8,17 @@ export default async function VideosPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile }  = await supabase.from('profiles').select('product').eq('id', user.id).single()
+  const { data: profile }  = await supabase.from('profiles').select('product, start_date').eq('id', user.id).single()
+
+  // Fastrack: video terbuka H-3 sebelum tanggal 1 bulan batch
+  let unlockedAt: Date | null = null
+  if (profile?.product === 'fastrack' && profile?.start_date) {
+    const batchStart = new Date(profile.start_date)
+    unlockedAt = new Date(batchStart)
+    unlockedAt.setDate(unlockedAt.getDate() - 3)
+  }
+  const isLocked = unlockedAt !== null && new Date() < unlockedAt
+
   const { data: videos }   = await supabase
     .from('videos')
     .select('*')
@@ -32,6 +42,8 @@ export default async function VideosPage() {
       <VideosClient
         videos={(videos ?? []) as Video[]}
         watchedIds={watchedIds}
+        isLocked={isLocked}
+        unlockedAt={unlockedAt?.toISOString() ?? null}
       />
     </div>
   )
