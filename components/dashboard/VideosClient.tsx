@@ -34,44 +34,15 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
     })
   }
 
-  if (isLocked) {
-    const unlockDate = unlockedAt ? new Date(unlockedAt) : null
-    const unlockLabel = unlockDate
-      ? unlockDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-      : null
-    const diffDays = unlockDate
-      ? Math.ceil((unlockDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-      : null
+  const [showLockedModal, setShowLockedModal] = useState(false)
 
-    return (
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-14 text-center max-w-lg mx-auto">
-        <div className="w-16 h-16 rounded-2xl bg-[#f5f3ff] flex items-center justify-center mx-auto mb-5">
-          <CalendarClock size={28} className="text-[#7C6FCD]" />
-        </div>
-        <h2 className="text-xl font-bold text-[#1E1B4B] mb-2">Video materi dibuka H-3 sebelum batch mulai</h2>
-        <p className="text-[#6B6B8A] text-sm leading-relaxed mb-5">
-          Kami sengaja atur begini supaya kamu belajar bareng teman-teman satu batch, tetap fokus, dan hasilnya lebih maksimal.
-        </p>
-        <div className="bg-[#f5f3ff] rounded-2xl px-6 py-4 border border-[#7C6FCD]/15 mb-5 inline-block">
-          {unlockLabel ? (
-            <>
-              <p className="text-[#9CA3AF] text-xs mb-1">Video terbuka mulai</p>
-              <p className="text-[#7C6FCD] font-bold text-lg">{unlockLabel}</p>
-              <p className="text-[#9CA3AF] text-xs mt-1">{diffDays} hari lagi</p>
-            </>
-          ) : (
-            <>
-              <p className="text-[#7C6FCD] font-bold text-base">Jadwal batch sedang dikonfirmasi</p>
-              <p className="text-[#9CA3AF] text-xs mt-1">Kamu akan dihubungi via WhatsApp</p>
-            </>
-          )}
-        </div>
-        <p className="text-[#9CA3AF] text-xs leading-relaxed">
-          Sambil nunggu, eksplor dulu fitur lain di dashboard — jadwal bimbingan, tugas, dan progres kamu sudah bisa diakses sekarang.
-        </p>
-      </div>
-    )
-  }
+  const unlockDate = unlockedAt ? new Date(unlockedAt) : null
+  const unlockLabel = unlockDate
+    ? unlockDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    : null
+  const diffDays = unlockDate
+    ? Math.ceil((unlockDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : null
 
   if (videos.length === 0) {
     return (
@@ -133,7 +104,7 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
             const num = String(idx + 1).padStart(2, '0')
 
             return (
-              <button key={video.id} onClick={() => setActiveVideo(video)}
+              <button key={video.id} onClick={() => isLocked ? setShowLockedModal(true) : setActiveVideo(video)}
                 className="text-left group cursor-pointer">
                 {/* Thumbnail */}
                 <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#1E1B4B] mb-2.5 shadow-sm">
@@ -171,6 +142,43 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
           })}
         </div>
       </div>
+
+      {/* Locked Modal */}
+      {showLockedModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={e => { if (e.target === e.currentTarget) setShowLockedModal(false) }}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center">
+            <button onClick={() => setShowLockedModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer">
+              <X size={16} className="text-[#9CA3AF]" />
+            </button>
+            <div className="w-16 h-16 rounded-2xl bg-[#f5f3ff] flex items-center justify-center mx-auto mb-5">
+              <CalendarClock size={28} className="text-[#7C6FCD]" />
+            </div>
+            <h2 className="text-xl font-bold text-[#1E1B4B] mb-2">Video materi dibuka H-3 sebelum batch mulai</h2>
+            <p className="text-[#6B6B8A] text-sm leading-relaxed mb-5">
+              Kami sengaja atur begini supaya kamu belajar bareng teman-teman satu batch, tetap fokus, dan hasilnya lebih maksimal.
+            </p>
+            <div className="bg-[#f5f3ff] rounded-2xl px-6 py-4 border border-[#7C6FCD]/15 mb-5">
+              {unlockLabel ? (
+                <>
+                  <p className="text-[#9CA3AF] text-xs mb-1">Video terbuka mulai</p>
+                  <p className="text-[#7C6FCD] font-bold text-lg">{unlockLabel}</p>
+                  <p className="text-[#9CA3AF] text-xs mt-1">{diffDays} hari lagi</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-[#7C6FCD] font-bold text-base">Jadwal batch sedang dikonfirmasi</p>
+                  <p className="text-[#9CA3AF] text-xs mt-1">Kamu akan dihubungi via WhatsApp</p>
+                </>
+              )}
+            </div>
+            <p className="text-[#9CA3AF] text-xs leading-relaxed">
+              Sambil nunggu, eksplor dulu fitur lain di dashboard — jadwal bimbingan, tugas, dan progres kamu sudah bisa diakses sekarang.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Video Player Modal */}
       {activeVideo && (() => {
