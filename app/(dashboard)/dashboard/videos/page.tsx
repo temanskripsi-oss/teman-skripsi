@@ -10,7 +10,7 @@ export default async function VideosPage() {
 
   const { data: profile }  = await supabase.from('profiles').select('product, start_date').eq('id', user.id).single()
 
-  // Fastrack: video terbuka H-3 sebelum tanggal 1 bulan batch
+  // Fastrack: locked sampai H-3 sebelum start_date
   // Jika start_date belum di-set admin → tetap locked
   let unlockedAt: Date | null = null
   const isFastrack = profile?.product === 'fastrack'

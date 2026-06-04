@@ -11,7 +11,7 @@ export default async function DashboardHome() {
 
   const { data: profile }  = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
-  // Hitung video lock status untuk fastrack
+  // Fastrack: locked sampai H-3 sebelum start_date
   let unlockedAt: Date | null = null
   const isFastrack = profile?.product === 'fastrack'
   if (isFastrack && profile?.start_date) {
