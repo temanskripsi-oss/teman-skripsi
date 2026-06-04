@@ -112,46 +112,46 @@ export default function TasksClient({ tasks, submissionsMap: initialMap, startDa
                 const st = sub ? STATUS[sub.status] : null
                 const StatusIcon = st?.icon
                 return (
-                  <div key={task.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#eff6ff] text-[#2232dd] flex items-center justify-center flex-shrink-0">
-                      <ClipboardList size={18} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <p className="font-semibold text-[#1E1B4B] text-sm mb-0.5">{task.title}</p>
-                          {task.description && (
-                            <p className="text-[#6B6B8A] text-xs leading-relaxed mb-2">{task.description}</p>
+                  <div key={task.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-[#eff6ff] text-[#2232dd] flex items-center justify-center flex-shrink-0">
+                        <ClipboardList size={16} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="font-semibold text-[#1E1B4B] text-sm leading-snug">{task.title}</p>
+                          {st && StatusIcon && (
+                            <span className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border flex-shrink-0 ${st.color} ${st.bg} ${st.border}`}>
+                              <StatusIcon size={10} /> {st.label}
+                            </span>
                           )}
                         </div>
-                        {st && StatusIcon && (
-                          <span className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border flex-shrink-0 ${st.color} ${st.bg} ${st.border}`}>
-                            <StatusIcon size={11} /> {st.label}
-                          </span>
+                        {task.description && (
+                          <p className="text-[#6B6B8A] text-xs leading-relaxed mt-0.5">{task.description}</p>
+                        )}
+                        {sub && (
+                          <div className="mt-2 space-y-1.5">
+                            <a href={sub.url} target="_blank" rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs text-[#2232dd] hover:underline">
+                              <ExternalLink size={11} /> Lihat file yang dikumpulkan
+                            </a>
+                            {sub.mentor_feedback && (
+                              <div className="bg-[#f4f8ff] border border-[#2232dd]/10 rounded-xl px-3 py-2">
+                                <p className="text-xs font-semibold text-[#2232dd] mb-0.5">Feedback Mentor:</p>
+                                <p className="text-xs text-[#6B6B8A]">{sub.mentor_feedback}</p>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
-                      {sub && (
-                        <div className="mt-2 space-y-1.5">
-                          <a href={sub.url} target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs text-[#2232dd] hover:underline">
-                            <ExternalLink size={11} /> Lihat file yang dikumpulkan
-                          </a>
-                          {sub.mentor_feedback && (
-                            <div className="bg-[#f4f8ff] border border-[#2232dd]/10 rounded-xl px-3 py-2">
-                              <p className="text-xs font-semibold text-[#2232dd] mb-0.5">Feedback Mentor:</p>
-                              <p className="text-xs text-[#6B6B8A]">{sub.mentor_feedback}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
                     </div>
                     <button onClick={() => openSubmit(task)}
-                      className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                      className={`mt-3 w-full py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
                         sub?.status === 'reviewed'
                           ? 'bg-green-50 text-green-600 border border-green-100 cursor-default'
                           : 'bg-[#2232dd] text-white hover:bg-[#1a28b8]'
                       }`}>
-                      {sub ? (sub.status === 'reviewed' ? '✓ Selesai' : 'Ubah') : 'Kumpulkan'}
+                      {sub ? (sub.status === 'reviewed' ? '✓ Selesai' : 'Ubah Submission') : 'Kumpulkan Tugas'}
                     </button>
                   </div>
                 )
