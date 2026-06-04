@@ -110,7 +110,7 @@ export default function VideosClient({ videos, watchedIds: initialWatchedIds, is
                 <div className="relative aspect-video rounded-2xl overflow-hidden bg-[#1E1B4B] mb-2.5 shadow-sm">
                   {thumbnail ? (
                     <img src={thumbnail} alt={video.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      className={`w-full h-full object-cover transition-transform duration-300 ${isLocked ? 'blur-sm scale-105' : 'group-hover:scale-105'}`} />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-[#1E1B4B] to-[#2232dd] flex items-center justify-center">
                       <Play size={28} className="text-white/40" />
