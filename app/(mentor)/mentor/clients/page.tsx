@@ -29,7 +29,7 @@ export default async function MentorClientsPage() {
   const now = new Date()
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-4 sm:p-8 max-w-5xl">
       <div className="mb-8">
         <p className="text-[#9CA3AF] text-sm mb-1">Mentor Panel</p>
         <h1 className="text-3xl font-bold text-[#1E1B4B]">Klien Saya</h1>
@@ -48,25 +48,29 @@ export default async function MentorClientsPage() {
               const daysLeft = Math.ceil((new Date(c.active_until).getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
               return (
                 <Link key={c.id} href={`/mentor/clients/${c.id}`}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-[#f4f8ff] transition-colors cursor-pointer">
+                  className="flex items-center gap-3 px-4 sm:px-6 py-4 hover:bg-[#f4f8ff] transition-colors cursor-pointer">
                   {c.avatar_url ? (
-                    <Image src={c.avatar_url} alt={c.full_name} width={36} height={36}
-                      className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
+                    <Image src={c.avatar_url} alt={c.full_name} width={40} height={40}
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                       {c.full_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#1E1B4B] text-sm">{c.full_name}</p>
-                    <p className="text-[#9CA3AF] text-xs">{c.university}</p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-semibold text-[#1E1B4B] text-sm leading-tight">{c.full_name}</p>
+                      <span className="text-[10px] bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2 py-0.5 rounded-full font-medium flex-shrink-0">
+                        {PRODUCT_LABELS[c.product] ?? c.product}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <p className="text-[#9CA3AF] text-xs truncate">{c.university}</p>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0 ${expired ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`}>
+                        {expired ? 'Berakhir' : `${daysLeft}h lagi`}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-medium flex-shrink-0">
-                    {PRODUCT_LABELS[c.product] ?? c.product}
-                  </span>
-                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0 ${expired ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`}>
-                    {expired ? 'Berakhir' : `${daysLeft}h lagi`}
-                  </span>
                   <ChevronRight size={15} className="text-[#9CA3AF] flex-shrink-0" />
                 </Link>
               )
