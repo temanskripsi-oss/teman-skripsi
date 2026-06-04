@@ -304,6 +304,11 @@ export default function ClientDetail({ profile, sessions, feedbacks, submissions
               </select>
             </div>
             <div>
+              <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Tanggal Mulai Batch</label>
+              <input type="date" value={profileForm.start_date} onChange={e => setProfileForm(f => ({ ...f, start_date: e.target.value }))} className={INPUT} />
+              <p className="text-[#9CA3AF] text-[10px] mt-1">Fastrack: video terbuka H-3 dari tanggal ini</p>
+            </div>
+            <div>
               <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Aktif Sampai</label>
               <input type="date" value={profileForm.active_until} onChange={e => setProfileForm(f => ({ ...f, active_until: e.target.value }))} className={INPUT} />
             </div>
