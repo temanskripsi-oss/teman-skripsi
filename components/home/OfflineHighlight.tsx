@@ -18,7 +18,7 @@ export default function OfflineHighlight() {
           {/* Photo */}
           <div className="relative w-full md:w-2/5 min-h-[280px] md:min-h-[360px] bg-gradient-to-br from-[#1E1B4B] to-[#2232dd] flex items-center justify-center">
             <Image
-              src="/images/offline-mentoring.jpg"
+              src="/images/offline-mentoring.jpeg"
               alt="Sesi mentoring offline TemanSkripsi di Bandar Lampung"
               fill
               className="object-cover object-center"
