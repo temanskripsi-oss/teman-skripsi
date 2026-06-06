@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
@@ -49,6 +50,9 @@ export async function GET(request: NextRequest) {
       }
 
       if (!profile) {
+        // Hapus permanen dari auth.users supaya tidak jadi ghost account
+        const serviceClient = createServiceClient()
+        await serviceClient.auth.admin.deleteUser(user.id)
         await supabase.auth.signOut()
         return NextResponse.redirect(`${origin}/login?error=not_registered`)
       }

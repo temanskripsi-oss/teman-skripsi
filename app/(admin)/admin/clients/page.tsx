@@ -1,14 +1,29 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import ClientsTable from '@/components/admin/ClientsTable'
+import GhostAccountsCleaner from '@/components/admin/GhostAccountsCleaner'
 import type { Profile } from '@/types'
 
 export default async function AdminClientsPage() {
   const supabase = createServiceClient()
 
-  const [{ data: clients }, { data: mentors }] = await Promise.all([
+  const [{ data: clients }, { data: mentors }, { data: { users: authUsers } }] = await Promise.all([
     supabase.from('profiles').select('*').eq('role', 'user').order('created_at', { ascending: false }),
     supabase.from('profiles').select('id, full_name').eq('role', 'mentor').order('full_name', { ascending: true }),
+    supabase.auth.admin.listUsers({ perPage: 1000 }),
   ])
+
+  const profileIds = new Set((clients ?? []).map((c: Profile) => c.id))
+  const { data: mentorProfiles } = await supabase.from('profiles').select('id').eq('role', 'mentor')
+  const { data: adminProfiles } = await supabase.from('profiles').select('id').eq('role', 'admin')
+  const knownIds = new Set([
+    ...(clients ?? []).map((c: Profile) => c.id),
+    ...(mentorProfiles ?? []).map((m: { id: string }) => m.id),
+    ...(adminProfiles ?? []).map((a: { id: string }) => a.id),
+  ])
+
+  const ghostAccounts = (authUsers ?? [])
+    .filter(u => !knownIds.has(u.id))
+    .map(u => ({ id: u.id, email: u.email ?? '(no email)', created_at: u.created_at }))
 
   return (
     <div className="p-8 max-w-6xl">
@@ -17,6 +32,9 @@ export default async function AdminClientsPage() {
         <h1 className="text-3xl font-bold text-[#1E1B4B]">Klien</h1>
         <p className="text-[#9CA3AF] text-sm mt-1">Kelola semua klien TemanSkripsi</p>
       </div>
+      {ghostAccounts.length > 0 && (
+        <GhostAccountsCleaner ghosts={ghostAccounts} />
+      )}
       <ClientsTable
         clients={(clients ?? []) as Profile[]}
         mentors={(mentors ?? []) as { id: string; full_name: string }[]}
