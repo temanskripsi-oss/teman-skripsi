@@ -26,10 +26,33 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const { pathname } = request.nextUrl
+
   if (!user && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
+  }
+
+  if (user && pathname.startsWith('/dashboard')) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile) {
+      await supabase.auth.signOut()
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      url.searchParams.set('error', 'not_registered')
+      const res = NextResponse.redirect(url)
+      supabaseResponse.cookies.getAll().forEach(cookie => {
+        if (cookie.name.includes('auth-token') || cookie.name.includes('supabase')) {
+          res.cookies.delete(cookie.name)
+        }
+      })
+      return res
+    }
   }
 
   return supabaseResponse
