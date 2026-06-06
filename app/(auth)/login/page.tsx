@@ -1,18 +1,30 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Lock, ArrowRight, Star, CheckCircle } from 'lucide-react'
+import { Mail, Lock, ArrowRight, Star, CheckCircle, X } from 'lucide-react'
 
 export default function LoginPage() {
+  return <Suspense><LoginContent /></Suspense>
+}
+
+function LoginContent() {
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState('')
-  const router   = useRouter()
-  const supabase = createClient()
+  const [showNotRegistered, setShowNotRegistered] = useState(false)
+  const router       = useRouter()
+  const searchParams = useSearchParams()
+  const supabase     = createClient()
+
+  useEffect(() => {
+    if (searchParams.get('error') === 'not_registered') {
+      setShowNotRegistered(true)
+    }
+  }, [searchParams])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setError('')
@@ -34,6 +46,39 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
+      {showNotRegistered && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 relative">
+            <button onClick={() => setShowNotRegistered(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+              <X size={20} />
+            </button>
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-[#1E1B4B] mb-2">Email Belum Terdaftar</h2>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  Akun kamu belum terdaftar di platform kami. Kamu perlu mendaftar paket <span className="font-semibold text-[#2232dd]">Fastrack</span> atau <span className="font-semibold text-[#2232dd]">Mentoring Privat</span> terlebih dahulu.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/6289524785477"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-[#2232dd] hover:bg-[#1a28b8] text-white font-semibold py-3 rounded-xl text-sm transition-all text-center"
+              >
+                Daftar Sekarang
+              </a>
+              <button onClick={() => setShowNotRegistered(false)} className="text-gray-400 text-sm hover:text-gray-600 transition-colors">
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Left — brand panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#1E1B4B] relative overflow-hidden flex-col justify-between p-12">
         <div className="absolute inset-0 grid-bg-dark pointer-events-none" />

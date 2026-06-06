@@ -48,7 +48,12 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const role = profile?.role
+      if (!profile) {
+        await supabase.auth.signOut()
+        return NextResponse.redirect(`${origin}/login?error=not_registered`)
+      }
+
+      const role = profile.role
       const destination = role === 'admin' ? '/admin' : role === 'mentor' ? '/mentor' : '/dashboard'
       return NextResponse.redirect(`${origin}${destination}`)
     }

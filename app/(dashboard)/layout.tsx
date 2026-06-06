@@ -1,14 +1,21 @@
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import Sidebar from '@/components/dashboard/Sidebar'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const { data: profile } = user
-    ? await supabase.from('profiles').select('product').eq('id', user.id).single()
-    : { data: null }
 
-  const product = profile?.product ?? 'fastrack'
+  if (!user) redirect('/login')
+
+  const { data: profile } = await supabase.from('profiles').select('role, product').eq('id', user.id).single()
+
+  if (!profile) {
+    await supabase.auth.signOut()
+    redirect('/login?error=not_registered')
+  }
+
+  const product = profile.product ?? 'fastrack'
 
   return (
     <div className="flex min-h-screen bg-[#f4f8ff]">
