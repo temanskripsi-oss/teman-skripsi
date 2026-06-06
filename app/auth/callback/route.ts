@@ -33,10 +33,10 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(`${origin}/update-password`)
       }
 
-      let { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+      let { data: profile } = await supabase.from('profiles').select('role, full_name').eq('id', user.id).single()
 
       // Google OAuth bisa buat user baru tanpa profile — cek by email
-      if (!profile && user.email) {
+      if ((!profile || !profile.full_name) && user.email) {
         const { data: users } = await supabase.auth.admin.listUsers()
         const match = users?.users.find(u => u.email === user.email && u.id !== user.id)
         if (match) {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (!profile) {
+      if (!profile || !profile.full_name) {
         const serviceClient = createServiceClient()
         await serviceClient.auth.admin.deleteUser(user.id)
         return NextResponse.redirect(`${origin}/auth/signout-unregistered`)
