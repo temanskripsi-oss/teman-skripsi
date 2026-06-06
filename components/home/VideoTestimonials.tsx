@@ -26,13 +26,6 @@ const VIDEO_TESTIMONIALS = [
     quote: 'Yang bikin beda itu mentornya sabar banget, nggak ngerasa dihakimi pas nanya hal yang sama berkali-kali. Bimbingan offline-nya juga ngebantu banget, bisa langsung tunjuk-tunjuk bagian yang bingung.',
     videoId: '',
   },
-  {
-    name: 'Nadila Kurnia Sari',
-    description: 'Alumni Mentoring Privat · Sidang Akhir ACC',
-    university: 'UIN Raden Intan Lampung',
-    quote: 'Awalnya takut banget ikut mentoring karena takut mahal tapi nggak hasil. Ternyata dalam 6 minggu skripsi gua udah selesai dan langsung sidang. Worth it banget, nyesel kenapa nggak dari dulu.',
-    videoId: '',
-  },
 ]
 
 const CARD_TESTIMONIALS = [
