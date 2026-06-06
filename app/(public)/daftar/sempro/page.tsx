@@ -50,16 +50,16 @@ export default function DaftarSemproPage() {
         {/* Order summary */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-5">
           <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Ringkasan Order</p>
-          <div className="flex justify-between items-center">
-            <div>
+          <div className="flex justify-between items-start gap-3">
+            <div className="flex-1 min-w-0">
               <p className="font-semibold text-[#1E1B4B] text-sm">Mentoring Privat Sempro</p>
               <p className="text-[#9CA3AF] text-xs">9 pertemuan privat · 3 bulan masa aktif</p>
             </div>
-            <p className="font-bold text-[#1E1B4B]">Rp {PRICE.toLocaleString('id-ID')}</p>
+            <p className="font-bold text-[#1E1B4B] flex-shrink-0">Rp {PRICE.toLocaleString('id-ID')}</p>
           </div>
-          <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between">
+          <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center gap-3">
             <p className="text-sm font-semibold text-[#1E1B4B]">Total</p>
-            <p className="text-lg font-bold text-[#2232dd]">Rp {PRICE.toLocaleString('id-ID')}</p>
+            <p className="text-lg font-bold text-[#2232dd] flex-shrink-0">Rp {PRICE.toLocaleString('id-ID')}</p>
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             {['9 Pertemuan Privat','9x Written Feedback','6x Online · 3x Offline','Akses Dashboard'].map(f => (
