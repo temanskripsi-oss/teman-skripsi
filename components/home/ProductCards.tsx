@@ -150,13 +150,13 @@ export default function ProductCards() {
                       const text = isObj ? f.text : f
                       const highlight = isObj && f.highlight
                       return (
-                        <li key={fi} className={`flex items-start gap-3 text-sm leading-snug ${highlight ? 'font-semibold' : ''}`}>
-                          <Check size={15} className="flex-shrink-0 mt-0.5" style={{ color: p.checkColor }} />
-                          <span className={highlight ? `text-[${p.iconColor}]` : 'text-[#374151]'}
+                        <li key={fi} className={`flex items-center gap-3 text-sm leading-snug ${highlight ? 'font-semibold' : ''}`}>
+                          <Check size={15} className="flex-shrink-0" style={{ color: p.checkColor }} />
+                          <span className="flex items-center gap-1.5 flex-wrap"
                             style={highlight ? { color: p.iconColor } : undefined}>
-                            {text}
+                            <span className={highlight ? '' : 'text-[#374151]'}>{text}</span>
                             {highlight && (
-                              <span className="ml-1.5 inline-flex items-center bg-[#9eff63]/20 text-[#16a34a] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#9eff63]/40">
+                              <span className="inline-flex items-center bg-[#9eff63]/20 text-[#16a34a] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#9eff63]/40 whitespace-nowrap">
                                 GRATIS
                               </span>
                             )}
