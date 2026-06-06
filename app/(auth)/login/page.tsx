@@ -65,9 +65,7 @@ function LoginContent() {
                 </p>
               </div>
               <a
-                href="https://wa.me/6289524785477"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/#produk"
                 className="w-full bg-[#2232dd] hover:bg-[#1a28b8] text-white font-semibold py-3 rounded-xl text-sm transition-all text-center"
               >
                 Daftar Sekarang
