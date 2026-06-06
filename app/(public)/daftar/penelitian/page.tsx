@@ -43,7 +43,7 @@ export default function DaftarPenelitianPage() {
           <div className="inline-flex items-center gap-2 bg-[#ccfbf1] border border-[#0f766e]/20 text-[#0f766e] text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
             <FlaskConical size={13} /> Mentoring Privat Bab 4–5
           </div>
-          <h1 className="text-3xl font-bold text-[#1E1B4B]">Daftar Mentoring Bab 4–5</h1>
+          <h1 className="text-3xl font-bold text-[#1E1B4B]">Daftar Mentoring<br />Bab 4–5</h1>
           <p className="text-[#9CA3AF] text-sm mt-2">Dari analisis data sampai sidang. Isi form untuk lanjut bayar.</p>
         </div>
 
