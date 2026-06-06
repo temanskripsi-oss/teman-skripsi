@@ -3,8 +3,8 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Search, Plus, X, Loader2, ChevronRight } from 'lucide-react'
-import { createClientAction, sendPasswordResetAction } from '@/app/(admin)/admin/actions'
+import { Search, Plus, X, Loader2, ChevronRight, Trash2, AlertTriangle } from 'lucide-react'
+import { createClientAction, sendPasswordResetAction, deleteClientAction } from '@/app/(admin)/admin/actions'
 import type { Profile, Product } from '@/types'
 
 const PRODUCTS: { value: Product | 'all-filter'; label: string }[] = [
@@ -32,9 +32,19 @@ export default function ClientsTable({ clients, mentors }: Props) {
   const router = useRouter()
   const [search, setSearch]       = useState('')
   const [filter, setFilter]       = useState<string>('all-filter')
-  const [showModal, setShowModal] = useState(false)
-  const [error, setError]         = useState('')
-  const [isPending, startTransition] = useTransition()
+  const [showModal, setShowModal]       = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
+  const [error, setError]               = useState('')
+  const [isPending, startTransition]    = useTransition()
+
+  const handleDelete = () => {
+    if (!deleteTarget) return
+    startTransition(async () => {
+      await deleteClientAction(deleteTarget.id)
+      setDeleteTarget(null)
+      router.refresh()
+    })
+  }
 
   const [form, setForm] = useState({
     email: '', full_name: '', university: '', phone: '',
@@ -162,10 +172,18 @@ export default function ClientsTable({ clients, mentors }: Props) {
                       </span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <Link href={`/admin/clients/${c.id}`}
-                        className="flex items-center gap-1 text-[#2232dd] text-xs font-medium hover:underline cursor-pointer">
-                        Detail <ChevronRight size={13} />
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setDeleteTarget({ id: c.id, name: c.full_name })}
+                          className="p-1.5 rounded-lg hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 transition-colors cursor-pointer"
+                          title="Hapus klien">
+                          <Trash2 size={14} />
+                        </button>
+                        <Link href={`/admin/clients/${c.id}`}
+                          className="flex items-center gap-1 text-[#2232dd] text-xs font-medium hover:underline cursor-pointer">
+                          Detail <ChevronRight size={13} />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 )
@@ -177,6 +195,35 @@ export default function ClientsTable({ clients, mentors }: Props) {
           <p className="text-[#9CA3AF] text-xs">{filtered.length} dari {clients.length} klien</p>
         </div>
       </div>
+
+      {/* Delete Confirm Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 flex flex-col gap-4">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+                <AlertTriangle size={18} className="text-red-500" />
+              </div>
+              <div>
+                <h2 className="font-bold text-[#1E1B4B] text-base mb-1">Hapus Klien?</h2>
+                <p className="text-[#6B6B8A] text-sm">
+                  Akun <span className="font-semibold text-[#1E1B4B]">{deleteTarget.name}</span> akan dihapus permanen beserta semua aksesnya. Mereka harus daftar ulang untuk bisa masuk lagi.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 pt-1">
+              <button onClick={() => setDeleteTarget(null)} disabled={isPending}
+                className="flex-1 border border-gray-200 text-[#6B6B8A] py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-60">
+                Batal
+              </button>
+              <button onClick={handleDelete} disabled={isPending}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2">
+                {isPending ? <><Loader2 size={14} className="animate-spin" /> Menghapus...</> : 'Ya, Hapus'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add Client Modal */}
       {showModal && (

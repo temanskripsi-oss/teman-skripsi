@@ -2,7 +2,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Plus, X, Loader2, Trash2, UserCheck, Users, ChevronRight } from 'lucide-react'
+import { Plus, X, Loader2, Trash2, UserCheck, Users, ChevronRight, AlertTriangle } from 'lucide-react'
 import { createMentorAction, deleteMentorAction } from '@/app/(admin)/admin/actions'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all'
@@ -20,9 +20,10 @@ interface Props { mentors: Mentor[] }
 
 export default function MentorsTable({ mentors }: Props) {
   const router = useRouter()
-  const [showModal, setShowModal] = useState(false)
-  const [error, setError]         = useState('')
-  const [isPending, startTransition] = useTransition()
+  const [showModal, setShowModal]       = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
+  const [error, setError]               = useState('')
+  const [isPending, startTransition]    = useTransition()
   const [form, setForm] = useState({ email: '', full_name: '', phone: '' })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -37,10 +38,11 @@ export default function MentorsTable({ mentors }: Props) {
     })
   }
 
-  const handleDelete = (id: string, name: string) => {
-    if (!confirm(`Hapus akun mentor ${name}? Tindakan ini tidak bisa dibatalkan.`)) return
+  const handleDelete = () => {
+    if (!deleteTarget) return
     startTransition(async () => {
-      await deleteMentorAction(id)
+      await deleteMentorAction(deleteTarget.id)
+      setDeleteTarget(null)
       router.refresh()
     })
   }
@@ -105,7 +107,7 @@ export default function MentorsTable({ mentors }: Props) {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 flex items-center gap-2 justify-end">
-                      <button onClick={e => { e.stopPropagation(); handleDelete(m.id, m.full_name) }}
+                      <button onClick={e => { e.stopPropagation(); setDeleteTarget({ id: m.id, name: m.full_name }) }}
                         className="p-1.5 rounded-lg hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 transition-colors cursor-pointer">
                         <Trash2 size={14} />
                       </button>
@@ -118,6 +120,35 @@ export default function MentorsTable({ mentors }: Props) {
           </div>
           <div className="px-5 py-3 border-t border-gray-50">
             <p className="text-[#9CA3AF] text-xs">{mentors.length} mentor terdaftar</p>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirm Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 flex flex-col gap-4">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+                <AlertTriangle size={18} className="text-red-500" />
+              </div>
+              <div>
+                <h2 className="font-bold text-[#1E1B4B] text-base mb-1">Hapus Mentor?</h2>
+                <p className="text-[#6B6B8A] text-sm">
+                  Akun <span className="font-semibold text-[#1E1B4B]">{deleteTarget.name}</span> akan dihapus permanen beserta semua aksesnya. Mereka harus daftar ulang untuk bisa masuk lagi.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 pt-1">
+              <button onClick={() => setDeleteTarget(null)} disabled={isPending}
+                className="flex-1 border border-gray-200 text-[#6B6B8A] py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-60">
+                Batal
+              </button>
+              <button onClick={handleDelete} disabled={isPending}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2">
+                {isPending ? <><Loader2 size={14} className="animate-spin" /> Menghapus...</> : 'Ya, Hapus'}
+              </button>
+            </div>
           </div>
         </div>
       )}
