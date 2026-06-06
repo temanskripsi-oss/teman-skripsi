@@ -50,11 +50,19 @@ export async function GET(request: NextRequest) {
       }
 
       if (!profile) {
-        // Hapus permanen dari auth.users supaya tidak jadi ghost account
         const serviceClient = createServiceClient()
         await serviceClient.auth.admin.deleteUser(user.id)
-        await supabase.auth.signOut()
-        return NextResponse.redirect(`${origin}/login?error=not_registered`)
+
+        const redirectUrl = new URL(`${origin}/login`)
+        redirectUrl.searchParams.set('error', 'not_registered')
+        const res = NextResponse.redirect(redirectUrl)
+        // Manually clear Supabase session cookies on the response
+        cookieStore.getAll().forEach(cookie => {
+          if (cookie.name.startsWith('sb-')) {
+            res.cookies.set(cookie.name, '', { maxAge: 0, path: '/' })
+          }
+        })
+        return res
       }
 
       const role = profile.role

@@ -41,14 +41,14 @@ export async function proxy(request: NextRequest) {
       .single()
 
     if (!profile) {
-      await supabase.auth.signOut()
       const url = request.nextUrl.clone()
       url.pathname = '/login'
       url.searchParams.set('error', 'not_registered')
       const res = NextResponse.redirect(url)
-      supabaseResponse.cookies.getAll().forEach(cookie => {
-        if (cookie.name.includes('auth-token') || cookie.name.includes('supabase')) {
-          res.cookies.delete(cookie.name)
+      // Manually clear Supabase session cookies
+      request.cookies.getAll().forEach(cookie => {
+        if (cookie.name.startsWith('sb-')) {
+          res.cookies.set(cookie.name, '', { maxAge: 0, path: '/' })
         }
       })
       return res
