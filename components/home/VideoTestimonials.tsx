@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Image from 'next/image'
 import { ChevronLeft, ChevronRight, Play, Star, Quote } from 'lucide-react'
 
 const VIDEO_TESTIMONIALS = [
@@ -9,6 +10,7 @@ const VIDEO_TESTIMONIALS = [
     university: 'Polinela Lampung',
     quote: 'Bab 4 dan 5 itu yang paling bikin pusing — ngolah data, nulis pembahasan, takut salah. Sama TemanSkripsi semuanya jadi lebih jelas. Mentor nemenin dari awal sampai akhirnya sidang ACC. Alhamdulillah, nggak nyangka bisa secepet ini.',
     videoId: 'z8_bcAJV4hY',
+    thumbnail: '/images/testimonial-heppy-salma.jpg',
   },
   {
     name: 'Alin Permatasari',
@@ -113,12 +115,12 @@ export default function VideoTestimonials() {
                 />
               ) : (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#2232dd]/80 to-[#1E1B4B] flex items-center justify-center">
-                    <div className="text-center px-6">
-                      <p className="text-white/40 text-sm mb-1">Video segera hadir</p>
-                      <p className="text-white/20 text-xs">{t.name}</p>
-                    </div>
-                  </div>
+                  {'thumbnail' in t && t.thumbnail ? (
+                    <Image src={(t as typeof t & { thumbnail: string }).thumbnail} alt={t.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 46vw" />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2232dd]/80 to-[#1E1B4B]" />
+                  )}
+                  <div className="absolute inset-0 bg-black/20" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                       <Play size={24} className="text-[#2232dd] ml-1" fill="#2232dd" />
