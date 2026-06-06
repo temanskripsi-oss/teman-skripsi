@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
         const { data: users } = await supabase.auth.admin.listUsers()
         const match = users?.users.find(u => u.email === user.email && u.id !== user.id)
         if (match) {
-          const { data: existingProfile } = await supabase.from('profiles').select('role').eq('id', match.id).single()
+          const { data: existingProfile } = await supabase.from('profiles').select('role, full_name').eq('id', match.id).single()
           if (existingProfile?.role === 'mentor') {
             // Update profile ID to new Google user
             await supabase.from('profiles').update({ id: user.id }).eq('id', match.id)
