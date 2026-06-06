@@ -149,8 +149,11 @@ export default function HeroSection() {
               <div className="absolute right-2 bottom-8 glass-card rounded-2xl px-3.5 py-2.5 animate-float shadow-xl shadow-black/30">
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-1.5">
-                    {['#2232dd','#9eff63','#7C6FCD'].map((c,i) => (
-                      <div key={i} className="w-6 h-6 rounded-full border border-white/15" style={{ background:c }} />
+                    {[['RP','#2232dd'],['SD','#7C6FCD'],['DA','#4DD9C0']].map(([init,bg],i) => (
+                      <div key={i} className="w-6 h-6 rounded-full border border-white/15 flex items-center justify-center text-[7px] font-bold"
+                        style={{ background: bg, color: bg === '#4DD9C0' ? '#1E1B4B' : 'white' }}>
+                        {init}
+                      </div>
                     ))}
                   </div>
                   <div>
