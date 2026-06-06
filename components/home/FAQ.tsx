@@ -79,7 +79,7 @@ export default function FAQ() {
           <div className="w-full md:w-[44%] flex-shrink-0">
             <div className="relative rounded-3xl overflow-hidden aspect-[4/5] bg-gradient-to-br from-[#1E1B4B] to-[#2232dd]">
               <Image
-                src="/images/faq-mentor.jpg"
+                src="/images/faq-mentor.jpeg"
                 alt="Sesi bimbingan TemanSkripsi"
                 fill
                 className="object-cover object-center"
