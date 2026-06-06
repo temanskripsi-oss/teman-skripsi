@@ -11,7 +11,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const { data: profile } = await supabase.from('profiles').select('role, product').eq('id', user.id).single()
 
   if (!profile) {
-    await supabase.auth.signOut()
     redirect('/login?error=not_registered')
   }
 
