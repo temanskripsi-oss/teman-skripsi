@@ -7,7 +7,7 @@ export default function OfflineHighlight() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2232dd] bg-[#eff6ff] border border-[#2232dd]/20 px-3 py-1.5 rounded-full mb-4">
-            <MapPin size={11} /> Bandar Lampung
+            <MapPin size={11} /> Bandar Lampung, Lampung
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#1E1B4B]">
             Satu-satunya Bimbingan Skripsi<br className="hidden md:block" /> yang Bisa Tatap Muka
@@ -42,14 +42,14 @@ export default function OfflineHighlight() {
             </p>
             <div>
               <p className="font-bold text-[#1E1B4B] text-sm">Bimbingan Offline TemanSkripsi</p>
-              <p className="text-[#6B6B8A] text-sm mt-0.5">Bandar Lampung · Tatap Muka Langsung dengan Mentor</p>
+              <p className="text-[#6B6B8A] text-sm mt-0.5">Bandar Lampung, Lampung · Tatap Muka Langsung dengan Mentor</p>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
               {[
                 'Konsultasi tatap muka langsung',
                 'Review dokumen real-time',
                 'Jadwal fleksibel',
-                'Khusus area Bandar Lampung',
+                'Khusus area Bandar Lampung, Lampung',
               ].map((item, i) => (
                 <span key={i} className="flex items-center gap-1.5 text-xs font-semibold text-[#2232dd] bg-white border border-[#2232dd]/20 px-3 py-1.5 rounded-full">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#2232dd]" />
