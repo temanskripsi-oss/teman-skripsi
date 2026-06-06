@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft } from 'lucide-react'
 import ClientDetail from '@/components/admin/ClientDetail'
+import DeleteClientButton from '@/components/admin/DeleteClientButton'
 import type { Profile, Session, Feedback, TaskSubmission, SessionSubmission } from '@/types'
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -34,19 +35,22 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
         <Link href="/admin/clients" className="inline-flex items-center gap-2 text-[#9CA3AF] text-sm hover:text-[#1E1B4B] transition-colors mb-4 cursor-pointer">
           <ArrowLeft size={14} /> Kembali ke Klien
         </Link>
-        <div className="flex items-center gap-4">
-          {profile.avatar_url ? (
-            <Image src={profile.avatar_url} alt={profile.full_name} width={56} height={56}
-              className="w-14 h-14 rounded-2xl object-cover flex-shrink-0 border border-gray-100 shadow-sm" />
-          ) : (
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
-              {profile.full_name?.[0]?.toUpperCase() ?? '?'}
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            {profile.avatar_url ? (
+              <Image src={profile.avatar_url} alt={profile.full_name} width={56} height={56}
+                className="w-14 h-14 rounded-2xl object-cover flex-shrink-0 border border-gray-100 shadow-sm" />
+            ) : (
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+                {profile.full_name?.[0]?.toUpperCase() ?? '?'}
+              </div>
+            )}
+            <div>
+              <h1 className="text-3xl font-bold text-[#1E1B4B]">{profile.full_name}</h1>
+              <p className="text-[#9CA3AF] text-sm mt-1">{profile.university} · {profile.phone}</p>
             </div>
-          )}
-          <div>
-            <h1 className="text-3xl font-bold text-[#1E1B4B]">{profile.full_name}</h1>
-            <p className="text-[#9CA3AF] text-sm mt-1">{profile.university} · {profile.phone}</p>
           </div>
+          <DeleteClientButton userId={profile.id} name={profile.full_name} />
         </div>
       </div>
       <ClientDetail
