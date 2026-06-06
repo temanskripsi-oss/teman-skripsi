@@ -33,20 +33,6 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (user && pathname.startsWith('/dashboard')) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/auth/signout-unregistered'
-      return NextResponse.redirect(url)
-    }
-  }
-
   return supabaseResponse
 }
 

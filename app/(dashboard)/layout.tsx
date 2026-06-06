@@ -11,7 +11,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const { data: profile } = await supabase.from('profiles').select('role, product').eq('id', user.id).single()
 
   if (!profile) {
-    redirect('/login?error=not_registered')
+    redirect('/auth/signout-unregistered')
   }
 
   const product = profile.product ?? 'fastrack'
