@@ -52,17 +52,7 @@ export async function GET(request: NextRequest) {
       if (!profile) {
         const serviceClient = createServiceClient()
         await serviceClient.auth.admin.deleteUser(user.id)
-
-        const redirectUrl = new URL(`${origin}/login`)
-        redirectUrl.searchParams.set('error', 'not_registered')
-        const res = NextResponse.redirect(redirectUrl)
-        // Manually clear Supabase session cookies on the response
-        cookieStore.getAll().forEach(cookie => {
-          if (cookie.name.startsWith('sb-')) {
-            res.cookies.set(cookie.name, '', { maxAge: 0, path: '/' })
-          }
-        })
-        return res
+        return NextResponse.redirect(`${origin}/auth/signout-unregistered`)
       }
 
       const role = profile.role
