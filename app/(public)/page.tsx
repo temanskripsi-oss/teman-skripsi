@@ -3,6 +3,7 @@ import StatsBar from '@/components/home/StatsBar'
 import WallOfGraduates from '@/components/home/WallOfGraduates'
 import ProblemSection from '@/components/home/ProblemSection'
 import ProductCards from '@/components/home/ProductCards'
+import OfflineHighlight from '@/components/home/OfflineHighlight'
 import HowItWorks from '@/components/home/HowItWorks'
 import Testimonials from '@/components/home/Testimonials'
 import CTASection from '@/components/home/CTASection'
@@ -15,6 +16,7 @@ export default function HomePage() {
       <WallOfGraduates />
       <ProblemSection />
       <ProductCards />
+      <OfflineHighlight />
       <HowItWorks />
       <Testimonials />
       <CTASection />
