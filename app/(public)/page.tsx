@@ -6,6 +6,7 @@ import ProductCards from '@/components/home/ProductCards'
 import OfflineHighlight from '@/components/home/OfflineHighlight'
 import HowItWorks from '@/components/home/HowItWorks'
 import Testimonials from '@/components/home/Testimonials'
+import VideoTestimonials from '@/components/home/VideoTestimonials'
 import CTASection from '@/components/home/CTASection'
 
 export default function HomePage() {
@@ -19,6 +20,7 @@ export default function HomePage() {
       <OfflineHighlight />
       <HowItWorks />
       <Testimonials />
+      <VideoTestimonials />
       <CTASection />
     </>
   )
