@@ -4,6 +4,13 @@ import { ChevronLeft, ChevronRight, Play, Star, Quote } from 'lucide-react'
 
 const VIDEO_TESTIMONIALS = [
   {
+    name: 'Heppy Salma',
+    description: 'Alumni Mentoring Privat · Bab 4–5 · Sidang Akhir ACC',
+    university: 'Polinela Lampung',
+    quote: 'Bab 4 dan 5 itu yang paling bikin pusing — ngolah data, nulis pembahasan, takut salah. Sama TemanSkripsi semuanya jadi lebih jelas. Mentor nemenin dari awal sampai akhirnya sidang ACC. Alhamdulillah, nggak nyangka bisa secepet ini.',
+    videoId: 'z8_bcAJV4hY',
+  },
+  {
     name: 'Alin Permatasari',
     description: 'Alumni Mentoring Privat · Sidang Akhir ACC',
     university: 'UIN Raden Intan Lampung',
@@ -99,7 +106,7 @@ export default function VideoTestimonials() {
               onClick={() => t.videoId && setPlaying(true)}>
               {playing && t.videoId ? (
                 <iframe
-                  src={`https://www.youtube.com/embed/${t.videoId}?autoplay=1`}
+                  src={`https://www.youtube.com/embed/${t.videoId}?autoplay=1&playsinline=1`}
                   className="absolute inset-0 w-full h-full"
                   allow="autoplay; encrypted-media"
                   allowFullScreen
