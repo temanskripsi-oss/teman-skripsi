@@ -258,6 +258,7 @@ export async function createMentorAction(data: {
 
 export async function deleteGhostAccountAction(userId: string) {
   const supabase = createServiceClient()
+  await supabase.from('profiles').delete().eq('id', userId)
   const { error } = await supabase.auth.admin.deleteUser(userId)
   if (error) return { error: error.message }
   revalidatePath('/admin/clients')
@@ -266,6 +267,7 @@ export async function deleteGhostAccountAction(userId: string) {
 
 export async function deleteClientAction(userId: string) {
   const supabase = createServiceClient()
+  await supabase.from('profiles').delete().eq('id', userId)
   const { error } = await supabase.auth.admin.deleteUser(userId)
   if (error) return { error: error.message }
   revalidatePath('/admin/clients')

@@ -6,22 +6,17 @@ import type { Profile } from '@/types'
 export default async function AdminClientsPage() {
   const supabase = createServiceClient()
 
-  const [{ data: clients }, { data: mentors }, { data: { users: authUsers } }] = await Promise.all([
+  const [{ data: clients }, { data: mentors }] = await Promise.all([
     supabase.from('profiles').select('*').eq('role', 'user').order('created_at', { ascending: false }),
     supabase.from('profiles').select('id, full_name').eq('role', 'mentor').order('full_name', { ascending: true }),
-    supabase.auth.admin.listUsers({ perPage: 1000 }),
   ])
 
-  const profileIds = new Set((clients ?? []).map((c: Profile) => c.id))
-  const { data: mentorProfiles } = await supabase.from('profiles').select('id').eq('role', 'mentor')
-  const { data: adminProfiles } = await supabase.from('profiles').select('id').eq('role', 'admin')
-  const knownIds = new Set([
-    ...(clients ?? []).map((c: Profile) => c.id),
-    ...(mentorProfiles ?? []).map((m: { id: string }) => m.id),
-    ...(adminProfiles ?? []).map((a: { id: string }) => a.id),
-  ])
+  const { data: allProfiles } = await supabase.from('profiles').select('id')
+  const { data: listUsersData } = await supabase.auth.admin.listUsers({ perPage: 1000 })
+  const authUsers = listUsersData?.users ?? []
 
-  const ghostAccounts = (authUsers ?? [])
+  const knownIds = new Set((allProfiles ?? []).map((p: { id: string }) => p.id))
+  const ghostAccounts = authUsers
     .filter(u => !knownIds.has(u.id))
     .map(u => ({ id: u.id, email: u.email ?? '(no email)', created_at: u.created_at }))
 
