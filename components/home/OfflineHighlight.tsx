@@ -25,11 +25,6 @@ export default function OfflineHighlight() {
               sizes="(max-width: 768px) 100vw, 40vw"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#1E1B4B]/20" />
-            {/* Placeholder saat foto belum ada */}
-            <div className="relative z-10 text-center px-6">
-              <MapPin size={40} className="text-white/30 mx-auto mb-3" />
-              <p className="text-white/40 text-sm font-medium">Foto segera hadir</p>
-            </div>
           </div>
 
           {/* Quote */}
