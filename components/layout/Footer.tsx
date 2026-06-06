@@ -15,7 +15,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-              Skripsi itu gampang. Asal sama orang yang tepat. Sudah membantu 340+ mahasiswa se-Indonesia wisuda.
+              Teman Skripsi hadir untuk membuktikan bahwa skripsi tidak harus ribet dan sulit. Kami percaya setiap mahasiswa berhak lulus tepat waktu dan misi kami yaitu membantu 1.000.000 mahasiswa Indonesia wisuda dengan cara yang mudah, terarah, dan penuh kebahagiaan.
             </p>
             <div className="flex items-center gap-3 mt-5">
               <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer"
