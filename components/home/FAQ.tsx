@@ -85,10 +85,6 @@ export default function FAQ() {
                 className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 44vw"
               />
-              {/* Placeholder */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <p className="text-white/20 text-sm">Foto segera hadir</p>
-              </div>
             </div>
           </div>
 
