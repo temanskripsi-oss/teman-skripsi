@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Phone } from 'lucide-react'
+import { Phone, Mail } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -21,6 +21,10 @@ export default function Footer() {
               <a href="https://wa.me/6289524785477" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer">
                 <Phone size={15} /> WhatsApp
+              </a>
+              <a href="mailto:arezakurniawan17@gmail.com"
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer">
+                <Mail size={15} /> Email Support
               </a>
             </div>
           </div>
