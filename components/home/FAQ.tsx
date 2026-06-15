@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: 'Apakah ada garansi hasil?',
-    a: 'Kami berkomitmen mendampingi kamu sampai ACC atau sidang. Jika dalam periode program belum mencapai target, kami akan lanjutkan bimbingan tanpa biaya tambahan. Kepuasan dan keberhasilan kamu adalah prioritas kami.',
+    a: 'Masa aktif program sesuai paket yang kamu pilih. Kami mendampingi penuh selama periode tersebut — mentor siap, materi ada, jadwal bisa diatur. Hasil akhir sangat bergantung pada konsistensi kamu mengerjakan. Selama kamu aktif dan mau diajak maju, kami pastikan prosesnya semaksimal mungkin.',
   },
 ]
 
