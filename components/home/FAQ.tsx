@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: 'Apakah mentor siap membantu kapan saja?',
-    a: 'Mentor kami tersedia setiap hari melalui WhatsApp untuk pertanyaan singkat dan konsultasi cepat. Untuk sesi bimbingan mendalam, kamu bisa jadwalkan sesuai kesepakatan. Kami pastikan tidak ada pertanyaan yang tidak terjawab.',
+    a: 'Mentor kami tersedia setiap hari melalui dashboard untuk pertanyaan singkat dan konsultasi cepat. Untuk sesi bimbingan mendalam, kamu bisa jadwalkan langsung di dashboard sesuai kesepakatan. Kami pastikan tidak ada pertanyaan yang tidak terjawab.',
   },
   {
     q: 'Apakah cocok untuk semua jurusan?',
@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: 'Bagaimana sistem pembayarannya?',
-    a: 'Pembayaran dilakukan di awal sebelum program dimulai. Kami menyediakan beberapa metode pembayaran termasuk transfer bank dan e-wallet. Untuk info harga lengkap, hubungi kami via WhatsApp dan kami akan bantu temukan paket yang sesuai budget kamu.',
+    a: 'Pembayaran dilakukan di awal sebelum program dimulai. Kami menyediakan beberapa metode pembayaran termasuk transfer bank dan e-wallet. Untuk info harga lengkap, kamu bisa langsung cek halaman produk kami.',
   },
   {
     q: 'Apakah ada garansi hasil?',
