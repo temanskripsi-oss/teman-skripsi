@@ -1,6 +1,7 @@
 import HeroSection from '@/components/home/HeroSection'
 import StatsBar from '@/components/home/StatsBar'
 import WallOfGraduates from '@/components/home/WallOfGraduates'
+import MentorActivity from '@/components/home/MentorActivity'
 import ProblemSection from '@/components/home/ProblemSection'
 import ProductCards from '@/components/home/ProductCards'
 import OfflineHighlight from '@/components/home/OfflineHighlight'
@@ -16,6 +17,7 @@ export default function HomePage() {
       <HeroSection />
       <StatsBar />
       <WallOfGraduates />
+      <MentorActivity />
       <ProblemSection />
       <ProductCards />
       <OfflineHighlight />
