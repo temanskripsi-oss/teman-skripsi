@@ -88,7 +88,7 @@ export default function VideoTestimonials() {
         <div className="text-center mb-12">
           <span className="text-[#2232dd] text-xs font-bold uppercase tracking-widest mb-4 block">Kisah Sukses Alumni</span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#1E1B4B] leading-tight">
-            Mereka Dulu Nyangkut Skripsi.<br className="hidden md:block" />
+            Mereka Dulu Hopeless soal Skripsi.<br className="hidden md:block" />
             <span className="text-[#2232dd]">Sekarang Udah Wisuda.</span>
           </h2>
         </div>
