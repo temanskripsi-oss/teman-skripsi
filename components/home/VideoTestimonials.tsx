@@ -12,20 +12,6 @@ const VIDEO_TESTIMONIALS = [
     videoId: 'z8_bcAJV4hY',
     thumbnail: '/images/testimonial-heppy-salma.jpg',
   },
-  {
-    name: 'Alin Permatasari',
-    description: 'Alumni Mentoring Privat · Sidang Akhir ACC',
-    university: 'UIN Raden Intan Lampung',
-    quote: 'Jujur gua udah pasrah. Hampir 2 tahun stuck di bab 3, ngerasa kayak udah mentok. Pas ikut Mentoring Privat TemanSkripsi, mentor gua nemenin step by step sampai akhirnya sidang ACC. Nggak nyangka bisa secepet ini.',
-    videoId: '',
-  },
-  {
-    name: 'Fijira Pasya',
-    description: 'Alumni Mentoring Privat · Sidang Akhir ACC',
-    university: 'Universitas Lampung',
-    quote: 'Yang bikin beda itu mentornya sabar banget, nggak ngerasa dihakimi pas nanya hal yang sama berkali-kali. Bimbingan offline-nya juga ngebantu banget, bisa langsung tunjuk-tunjuk bagian yang bingung.',
-    videoId: '',
-  },
 ]
 
 const CARD_TESTIMONIALS = [
@@ -132,13 +118,13 @@ export default function VideoTestimonials() {
             <p className="text-[#9CA3AF] text-sm mb-5">{t.description} · {t.university}</p>
             <p className="text-[#374151] text-base leading-relaxed mb-8">"{t.quote}"</p>
             <div className="flex items-center gap-3">
-              <button onClick={prevVideo} className="w-10 h-10 rounded-full bg-white border border-gray-200 hover:border-[#2232dd] hover:bg-[#eff6ff] flex items-center justify-center transition-all cursor-pointer">
+              <button disabled className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center opacity-30 cursor-not-allowed">
                 <ChevronLeft size={18} className="text-[#6B6B8A]" />
               </button>
-              <button onClick={nextVideo} className="w-10 h-10 rounded-full bg-white border border-gray-200 hover:border-[#2232dd] hover:bg-[#eff6ff] flex items-center justify-center transition-all cursor-pointer">
+              <button disabled className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center opacity-30 cursor-not-allowed">
                 <ChevronRight size={18} className="text-[#6B6B8A]" />
               </button>
-              <span className="text-[#9CA3AF] text-xs ml-2">{activeVideo + 1} / {VIDEO_TESTIMONIALS.length}</span>
+              <span className="text-[#9CA3AF] text-xs ml-2">1 / 1</span>
             </div>
           </div>
         </div>
