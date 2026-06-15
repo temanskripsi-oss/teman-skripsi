@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: 'Bagaimana sistem pembayarannya?',
-    a: 'Pembayaran dilakukan di awal sebelum program dimulai. Kami menyediakan beberapa metode pembayaran termasuk transfer bank dan e-wallet. Untuk info harga lengkap, kamu bisa langsung cek halaman produk kami.',
+    a: 'Pembayaran dilakukan langsung di website kami. Setelah pembayaran berhasil, kamu otomatis mendapatkan akses ke dashboard client — termasuk materi, jadwal, tugas, dan komunikasi dengan mentor. Tidak perlu konfirmasi manual, semua langsung aktif.',
   },
   {
     q: 'Apakah ada garansi hasil?',
