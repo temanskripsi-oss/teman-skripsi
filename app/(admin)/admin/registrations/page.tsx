@@ -1,5 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import { getBatchLabel } from '@/lib/duitku'
+import { getBatchLabel } from '@/lib/mayar'
 import type { Registration } from '@/types'
 import { Users, Clock, CheckCircle, XCircle } from 'lucide-react'
 

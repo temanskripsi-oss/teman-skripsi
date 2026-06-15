@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { GraduationCap, CheckCircle, Loader2, CreditCard, Building2 } from 'lucide-react'
-import { PAYMENT_METHODS, getNextBatch } from '@/lib/duitku'
+import { GraduationCap, CheckCircle, Loader2 } from 'lucide-react'
+import { getNextBatch } from '@/lib/mayar'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
 
@@ -13,20 +13,18 @@ export default function DaftarPage() {
   const { label: batchLabel, value: batchValue } = getNextBatch()
 
   const [form, setForm] = useState({ full_name: '', email: '', phone: '' })
-  const [method, setMethod] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!method) { setError('Pilih metode pembayaran terlebih dahulu'); return }
     setError('')
     setLoading(true)
     try {
-      const res = await fetch('/api/duitku/create', {
+      const res = await fetch('/api/mayar/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, payment_method: method }),
+        body: JSON.stringify({ ...form }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Terjadi kesalahan'); setLoading(false); return }
@@ -98,39 +96,13 @@ export default function DaftarPage() {
               onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} className={INPUT} />
           </div>
 
-          {/* Payment Method */}
-          <div>
-            <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Metode Pembayaran</p>
-            <div className="grid grid-cols-1 gap-2">
-              {PAYMENT_METHODS.map(m => (
-                <button key={m.code} type="button" onClick={() => setMethod(m.code)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all cursor-pointer ${
-                    method === m.code
-                      ? 'border-[#2232dd] bg-[#eff6ff] shadow-sm'
-                      : 'border-gray-200 hover:border-[#2232dd]/40 hover:bg-[#f4f8ff]'
-                  }`}>
-                  <div className={`p-1.5 rounded-lg flex-shrink-0 ${method === m.code ? 'bg-[#2232dd] text-white' : 'bg-gray-100 text-[#6B6B8A]'}`}>
-                    {m.code === 'QRIS' ? <CreditCard size={14} /> : <Building2 size={14} />}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-[#1E1B4B]">{m.label}</p>
-                    <p className="text-xs text-[#9CA3AF]">{m.desc}</p>
-                  </div>
-                  <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${method === m.code ? 'border-[#2232dd] bg-[#2232dd]' : 'border-gray-300'}`}>
-                    {method === m.code && <div className="w-full h-full rounded-full bg-white scale-[0.4] block" />}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
           <button type="submit" disabled={loading}
             className="w-full bg-[#2232dd] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#1a28b8] disabled:opacity-60 transition-colors flex items-center justify-center gap-2 cursor-pointer mt-1">
             {loading ? <><Loader2 size={16} className="animate-spin" /> Memproses...</> : `Lanjut Bayar — Rp ${PRICE.toLocaleString('id-ID')}`}
           </button>
 
           <p className="text-center text-[#9CA3AF] text-[11px]">
-            Pembayaran diproses oleh Duitku · Aman & Terenkripsi
+            Pembayaran diproses oleh Mayar · Aman & Terenkripsi
           </p>
         </form>
       </div>
