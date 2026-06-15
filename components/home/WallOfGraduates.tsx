@@ -83,12 +83,12 @@ export default function WallOfGraduates() {
 
       {/* Row 1 — scroll left */}
       <div className="flex gap-4 animate-marquee-left mb-4" style={{ width: 'max-content' }}>
-        {[...ROW_1, ...ROW_1].map((g, i) => <GradCard key={i} g={g} />)}
+        {[...ROW_1, ...ROW_1, ...ROW_1, ...ROW_1].map((g, i) => <GradCard key={i} g={g} />)}
       </div>
 
       {/* Row 2 — scroll right */}
       <div className="flex gap-4 animate-marquee-right" style={{ width: 'max-content' }}>
-        {[...ROW_2, ...ROW_2].map((g, i) => <GradCard key={i} g={g} />)}
+        {[...ROW_2, ...ROW_2, ...ROW_2, ...ROW_2].map((g, i) => <GradCard key={i} g={g} />)}
       </div>
 
       {/* Bottom CTA */}
