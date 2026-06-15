@@ -105,12 +105,12 @@ export interface Registration {
   full_name: string
   email: string
   phone: string
-  batch: string
+  batch: string | null
+  product: string | null
   amount: number
   merchant_order_id: string
-  duitku_reference: string | null
+  mayar_transaction_id: string | null
   payment_url: string | null
-  payment_method: string | null
   status: 'pending' | 'paid' | 'active' | 'expired'
   user_id: string | null
   created_at: string
