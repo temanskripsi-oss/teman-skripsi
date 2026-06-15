@@ -69,7 +69,7 @@ export default async function AdminRegistrationsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-[#fafafa]">
-                  {['Nama', 'Email', 'No. HP', 'Batch', 'Metode', 'Status', 'Tanggal'].map(h => (
+                  {['Nama', 'Email', 'No. HP', 'Produk', 'Batch', 'Status', 'Tanggal'].map(h => (
                     <th key={h} className="text-left px-5 py-3.5 text-[#9CA3AF] text-xs font-semibold">{h}</th>
                   ))}
                 </tr>
@@ -82,12 +82,16 @@ export default async function AdminRegistrationsPage() {
                       <td className="px-5 py-3.5 font-medium text-[#1E1B4B]">{r.full_name}</td>
                       <td className="px-5 py-3.5 text-[#6B6B8A]">{r.email}</td>
                       <td className="px-5 py-3.5 text-[#6B6B8A]">{r.phone}</td>
+                      <td className="px-5 py-3.5 text-[#6B6B8A] text-xs capitalize">{r.product ?? '-'}</td>
                       <td className="px-5 py-3.5">
-                        <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-semibold">
-                          {getBatchLabel(r.batch)}
-                        </span>
+                        {r.batch ? (
+                          <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-semibold">
+                            {getBatchLabel(r.batch)}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-[#9CA3AF]">-</span>
+                        )}
                       </td>
-                      <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{r.payment_method ?? '-'}</td>
                       <td className="px-5 py-3.5">
                         <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${st.color} ${st.bg} ${st.border}`}>
                           {st.label}
