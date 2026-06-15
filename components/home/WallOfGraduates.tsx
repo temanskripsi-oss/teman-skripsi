@@ -18,21 +18,23 @@ const BADGE: Record<Graduate['milestone'], { label: string; bg: string; text: st
 }
 
 const ROW_1: Graduate[] = [
-  { name: 'Alin Permatasari', prodi: 'Akuntansi Syariah',    university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#2232dd] to-[#7C6FCD]', photo: '/graduates/Alin Permatasari-sidang akhir.jpeg' },
-  { name: 'Amalia',           prodi: 'Psikologi',            university: 'UIN Raden Intan Lampung', milestone: 'Wisuda',       color: 'from-[#7C6FCD] to-[#4DD9C0]', photo: '/graduates/Amalia-wisuda.jpeg' },
-  { name: 'Tiara Ayu',        prodi: 'Akuntansi Syariah',    university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#ea580c] to-[#f59e0b]', photo: '/graduates/Tiara Ayu-Sidang Akhir.jpeg' },
-  { name: 'Ela Joevira',      prodi: 'Pendidikan Biologi',   university: 'UIN Raden Intan Lampung', milestone: 'Sempro',       color: 'from-[#16a34a] to-[#2232dd]', photo: '/graduates/Ela Joevira Pendidikan Biologi Sempro.jpeg' },
-  { name: 'Diah Anggraini',   prodi: 'Pendidikan Biologi',   university: 'UIN Raden Intan Lampung', milestone: 'Sempro',       color: 'from-[#2232dd] to-[#7C6FCD]', photo: '/graduates/Diah Anggraini  Pendidikan Biologi Sempro.jpeg' },
-  { name: 'Sarah Salsabila',  prodi: 'Akuntansi Syariah',    university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#16a34a] to-[#0f766e]', photo: '/graduates/Sarah Salsabilla-Sidang Akhir.jpeg' },
+  { name: 'Alin Permatasari', prodi: 'Akuntansi Syariah',       university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#2232dd] to-[#7C6FCD]', photo: '/graduates/Alin Permatasari-sidang akhir.jpeg' },
+  { name: 'Amalia',           prodi: 'Psikologi',               university: 'UIN Raden Intan Lampung', milestone: 'Wisuda',       color: 'from-[#7C6FCD] to-[#4DD9C0]', photo: '/graduates/Amalia-wisuda.jpeg' },
+  { name: 'Tiara Ayu',        prodi: 'Akuntansi Syariah',       university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#ea580c] to-[#f59e0b]', photo: '/graduates/Tiara Ayu-Sidang Akhir.jpeg' },
+  { name: 'Ela Joevira',      prodi: 'Pendidikan Biologi',      university: 'UIN Raden Intan Lampung', milestone: 'Sempro',       color: 'from-[#16a34a] to-[#2232dd]', photo: '/graduates/Ela Joevira Pendidikan Biologi Sempro.jpeg' },
+  { name: 'Diah Anggraini',   prodi: 'Pendidikan Biologi',      university: 'UIN Raden Intan Lampung', milestone: 'Sempro',       color: 'from-[#2232dd] to-[#7C6FCD]', photo: '/graduates/Diah Anggraini  Pendidikan Biologi Sempro.jpeg' },
+  { name: 'Sarah Salsabila',  prodi: 'Akuntansi Syariah',       university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#16a34a] to-[#0f766e]', photo: '/graduates/Sarah Salsabilla-Sidang Akhir.jpeg' },
+  { name: 'Sulthon',          prodi: 'Manajemen Pendidikan Islam', university: 'UIN Raden Intan Lampung', milestone: 'Sempro', color: 'from-[#7C6FCD] to-[#2232dd]', photo: '/graduates/Sultohon-Sempro.jpeg' },
 ]
 
 const ROW_2: Graduate[] = [
-  { name: 'Fijira Pasya',     prodi: 'Pendidikan Olahraga',  university: 'Universitas Lampung',     milestone: 'Sidang Akhir', color: 'from-[#0f766e] to-[#4DD9C0]', photo: '/graduates/Fijira Pasya-sidang akhir.jpeg' },
-  { name: 'Nadila Kurnia Sari',prodi: 'PGMI',                university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#7C6FCD] to-[#ea580c]', photo: '/graduates/Nadila Kurnia Sari-sidang akhir.jpeg' },
-  { name: 'Khazanah',         prodi: 'Manajemen Bisnis Syariah', university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#2232dd] to-[#4DD9C0]', photo: '/graduates/Khazanah-Sidang Akhir.jpeg' },
-  { name: 'Ela Joevira',      prodi: 'Pendidikan Biologi',   university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#7C6FCD] to-[#0f766e]', photo: '/graduates/Ela Joevira Pendidikan Biologi Sidang Akhir.jpeg' },
-  { name: 'Ela Joevira',      prodi: 'Pendidikan Biologi',   university: 'UIN Raden Intan Lampung', milestone: 'Wisuda',       color: 'from-[#4DD9C0] to-[#2232dd]', photo: '/graduates/Ela Joevira Pendidikan Biologi wisuda.jpeg' },
-  { name: 'Sulthon',          prodi: 'Manajemen Pendidikan Islam', university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#7C6FCD] to-[#2232dd]', photo: '/graduates/Sultohon-Sempro.jpeg' },
+  { name: 'Fijira Pasya',      prodi: 'Pendidikan Olahraga',    university: 'Universitas Lampung',     milestone: 'Sidang Akhir', color: 'from-[#0f766e] to-[#4DD9C0]', photo: '/graduates/Fijira Pasya-sidang akhir.jpeg' },
+  { name: 'Nadila Kurnia Sari',prodi: 'PGMI',                   university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#7C6FCD] to-[#ea580c]', photo: '/graduates/Nadila Kurnia Sari-sidang akhir.jpeg' },
+  { name: 'Khazanah',          prodi: 'Manajemen Bisnis Syariah', university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#2232dd] to-[#4DD9C0]', photo: '/graduates/Khazanah-Sidang Akhir.jpeg' },
+  { name: 'Ela Joevira',       prodi: 'Pendidikan Biologi',     university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#7C6FCD] to-[#0f766e]', photo: '/graduates/Ela Joevira Pendidikan Biologi Sidang Akhir.jpeg' },
+  { name: 'Ela Joevira',       prodi: 'Pendidikan Biologi',     university: 'UIN Raden Intan Lampung', milestone: 'Wisuda',       color: 'from-[#4DD9C0] to-[#2232dd]', photo: '/graduates/Ela Joevira Pendidikan Biologi wisuda.jpeg' },
+  { name: 'Alin Permatasari',  prodi: 'Akuntansi Syariah',      university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#ea580c] to-[#f59e0b]', photo: '/graduates/Alin Permatasari-sidang akhir.jpeg' },
+  { name: 'Diah Anggraini',    prodi: 'Pendidikan Biologi',     university: 'UIN Raden Intan Lampung', milestone: 'Sempro',       color: 'from-[#0f766e] to-[#2232dd]', photo: '/graduates/Diah Anggraini  Pendidikan Biologi Sempro.jpeg' },
 ]
 
 function GradCard({ g }: { g: Graduate }) {
