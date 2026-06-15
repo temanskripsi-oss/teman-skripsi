@@ -67,7 +67,7 @@ export default function VideoTestimonials() {
   const nextVideo = () => { setActiveVideo(i => (i + 1) % VIDEO_TESTIMONIALS.length); setPlaying(false) }
 
   return (
-    <section className="py-20 px-4 bg-[#f4f8ff]">
+    <section id="testimoni" className="py-20 px-4 bg-[#f4f8ff]">
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
