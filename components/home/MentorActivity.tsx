@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Globe, BookOpen, Users, Presentation } from 'lucide-react'
 
 const PHOTOS = [
