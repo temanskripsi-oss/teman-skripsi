@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Globe, BookOpen, Users, Presentation } from 'lucide-react'
 
 const PHOTOS = [
@@ -62,10 +63,8 @@ export default function MentorActivity() {
           <div className="relative aspect-square bg-[#fdf4ff]">
             <div className="absolute inset-0 flex items-center justify-center text-[#7C6FCD]/20 text-xs font-medium">Foto</div>
           </div>
-          <div className="col-span-2 md:col-span-3 relative h-52 bg-[#fff7ed]">
-            <div className="absolute inset-0 flex items-center justify-center text-[#ea580c]/20 text-sm font-medium">
-              Foto kegiatan bersama delegasi UiTM Malaysia
-            </div>
+          <div className="col-span-2 md:col-span-3 relative h-52 bg-[#fff7ed] overflow-hidden">
+            <Image src="/images/malaysia/foto bersama.jpeg" alt="Foto bersama delegasi UiTM Malaysia" fill className="object-cover object-center" sizes="100vw" />
           </div>
         </div>
 
