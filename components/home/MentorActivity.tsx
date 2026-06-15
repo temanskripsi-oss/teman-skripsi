@@ -50,22 +50,69 @@ export default function MentorActivity() {
           </p>
         </div>
 
-        {/* Photo Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-14 rounded-3xl overflow-hidden">
-          <div className="col-span-2 md:col-span-2 row-span-2 relative aspect-[4/3] bg-[#e8eeff]">
-            <div className="absolute inset-0 flex items-center justify-center text-[#2232dd]/20 text-sm font-medium">
-              Foto segera hadir
+        {/* Photo Grid — Editorial Style */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-14" style={{ gridTemplateRows: 'auto' }}>
+
+          {/* Spotlight utama — besar di kiri */}
+          <div className="col-span-2 md:col-span-2 relative rounded-2xl overflow-hidden" style={{ height: '420px' }}>
+            <Image
+              src="/images/malaysia/foto utama.jpeg"
+              alt="Gelar Rista di UiTM Malaysia"
+              fill
+              className="object-cover object-center transition-transform duration-500 hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 66vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4">
+              <span className="text-white text-xs font-bold bg-[#2232dd] px-3 py-1.5 rounded-full">Collaborative Teaching Session</span>
             </div>
           </div>
-          <div className="relative aspect-square bg-[#f0fdf4]">
-            <div className="absolute inset-0 flex items-center justify-center text-[#16a34a]/20 text-xs font-medium">Foto</div>
+
+          {/* Kolom kanan — 2 foto pendukung */}
+          <div className="flex flex-col gap-3">
+            <div className="relative rounded-2xl overflow-hidden flex-1" style={{ height: '202px' }}>
+              <Image
+                src="/images/malaysia/foto pendukung 1.jpeg"
+                alt="Sesi akademik di UiTM Malaysia"
+                fill
+                className="object-cover object-center transition-transform duration-500 hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            </div>
+            <div className="relative rounded-2xl overflow-hidden flex-1" style={{ height: '202px' }}>
+              <Image
+                src="/images/malaysia/foto pendukung 2.jpeg"
+                alt="Presentasi riset internasional"
+                fill
+                className="object-cover object-center transition-transform duration-500 hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            </div>
           </div>
-          <div className="relative aspect-square bg-[#fdf4ff]">
-            <div className="absolute inset-0 flex items-center justify-center text-[#7C6FCD]/20 text-xs font-medium">Foto</div>
+
+          {/* Banner bawah — foto bersama full width */}
+          <div className="col-span-2 md:col-span-3 relative rounded-2xl overflow-hidden" style={{ height: '320px' }}>
+            <Image
+              src="/images/malaysia/foto bersama.jpeg"
+              alt="Foto bersama delegasi Universitas Lampung dan UiTM Malaysia"
+              fill
+              className="object-cover object-center transition-transform duration-500 hover:scale-105"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+            <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
+              <div>
+                <p className="text-white font-bold text-base md:text-lg leading-tight">Delegasi Universitas Lampung × UiTM Malaysia</p>
+                <p className="text-white/70 text-xs mt-1">International Academic Collaborative Programme · 9 Juni 2026</p>
+              </div>
+              <span className="flex-shrink-0 text-white text-[10px] font-bold bg-white/20 backdrop-blur-sm border border-white/30 px-3 py-1.5 rounded-full">
+                Malaysia 🇲🇾
+              </span>
+            </div>
           </div>
-          <div className="col-span-2 md:col-span-3 relative h-52 bg-[#fff7ed] overflow-hidden">
-            <Image src="/images/malaysia/foto bersama.jpeg" alt="Foto bersama delegasi UiTM Malaysia" fill className="object-cover object-center" sizes="100vw" />
-          </div>
+
         </div>
 
         {/* Highlight Cards */}
