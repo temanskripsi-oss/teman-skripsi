@@ -16,7 +16,7 @@ const ORDER_PREFIX: Record<string, string> = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { full_name, email, phone, product = 'fastrack' } = await req.json()
+    const { full_name, email, phone, product = 'fastrack', affiliate_code, discount_amount = 0 } = await req.json()
 
     if (!full_name || !email || !phone) {
       return NextResponse.json({ error: 'Semua field wajib diisi' }, { status: 400 })
@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
 
     const supabase = createServiceClient()
     const amount = PRICES[product]
+    const finalPrice = amount - discount_amount
 
     if (product === 'fastrack') {
       const { data: existing } = await supabase
@@ -49,7 +50,24 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    await supabase.from('registrations').insert({
+    // Validasi ulang affiliate code jika ada
+    let validatedCode: string | null = null
+    let commissionAmount = 0
+    if (affiliate_code) {
+      const { data: codeData } = await supabase
+        .from('affiliate_codes')
+        .select('code, commission_per_sale, discount_amount')
+        .eq('code', affiliate_code.toUpperCase().trim())
+        .eq('is_active', true)
+        .single()
+
+      if (codeData) {
+        validatedCode = codeData.code
+        commissionAmount = codeData.commission_per_sale
+      }
+    }
+
+    const { data: newReg } = await supabase.from('registrations').insert({
       full_name,
       email,
       phone,
@@ -58,9 +76,28 @@ export async function POST(req: NextRequest) {
       amount,
       merchant_order_id: merchantOrderId,
       status: 'pending',
-    })
+      affiliate_code: validatedCode,
+      discount_amount: validatedCode ? discount_amount : 0,
+      final_price: validatedCode ? finalPrice : amount,
+    }).select('id').single()
 
-    return NextResponse.json({ orderId: merchantOrderId, amount })
+    // Track affiliate transaction
+    if (validatedCode && newReg) {
+      await supabase.rpc('increment_affiliate_stats', {
+        p_code: validatedCode,
+        p_commission: commissionAmount,
+      })
+
+      await supabase.from('affiliate_transactions').insert({
+        affiliate_code: validatedCode,
+        registration_id: newReg.id,
+        buyer_name: full_name,
+        commission_amount: commissionAmount,
+        status: 'pending',
+      })
+    }
+
+    return NextResponse.json({ orderId: merchantOrderId, amount: validatedCode ? finalPrice : amount })
   } catch (err) {
     console.error('[register]', err)
     return NextResponse.json({ error: 'Terjadi kesalahan server' }, { status: 500 })

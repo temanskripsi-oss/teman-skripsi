@@ -115,6 +115,34 @@ export interface Registration {
   user_id: string | null
   created_at: string
   paid_at: string | null
+  affiliate_code: string | null
+  discount_amount: number
+  final_price: number | null
+}
+
+export interface AffiliateCode {
+  id: string
+  code: string
+  sales_name: string
+  sales_email: string
+  sales_password: string
+  sales_whatsapp: string | null
+  commission_per_sale: number
+  discount_amount: number
+  total_sales: number
+  total_commission: number
+  is_active: boolean
+  created_at: string
+}
+
+export interface AffiliateTransaction {
+  id: string
+  affiliate_code: string
+  registration_id: string
+  buyer_name: string
+  commission_amount: number
+  status: 'pending' | 'paid'
+  created_at: string
 }
 
 export interface TaskSubmission {
