@@ -122,7 +122,7 @@ export default function AdminRegistrationsPage() {
                       <td className="px-5 py-3.5 text-[#6B6B8A] text-xs capitalize">{r.product ?? '-'}</td>
                       <td className="px-5 py-3.5">
                         {r.batch ? (
-                          <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-semibold">
+                          <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-semibold whitespace-nowrap">
                             {getBatchLabel(r.batch)}
                           </span>
                         ) : (
