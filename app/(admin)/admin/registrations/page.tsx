@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getBatchLabel } from '@/lib/mayar'
 import type { Registration } from '@/types'
-import { Users, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react'
+import { Users, Clock, CheckCircle, XCircle, Loader2, Trash2 } from 'lucide-react'
 
 const STATUS_CONFIG = {
   pending: { label: 'Menunggu Bayar', color: 'text-orange-500',  bg: 'bg-orange-50',  border: 'border-orange-100' },
@@ -15,6 +15,7 @@ export default function AdminRegistrationsPage() {
   const [list, setList] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [activating, setActivating] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   const fetchData = useCallback(async () => {
     const res = await fetch('/api/admin/registrations')
@@ -37,6 +38,18 @@ export default function AdminRegistrationsPage() {
     if (!res.ok) { alert(data.error ?? 'Gagal mengaktifkan'); setActivating(null); return }
     await fetchData()
     setActivating(null)
+  }
+
+  const deleteReg = async (id: string, name: string) => {
+    if (!confirm(`Hapus permanen data "${name}"? Mereka harus daftar ulang.`)) return
+    setDeleting(id)
+    await fetch('/api/admin/registrations', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ registrationId: id }),
+    })
+    await fetchData()
+    setDeleting(null)
   }
 
   const stats = {
@@ -125,18 +138,26 @@ export default function AdminRegistrationsPage() {
                         {new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </td>
                       <td className="px-5 py-3.5">
-                        {r.status === 'pending' ? (
+                        <div className="flex items-center gap-2">
+                          {r.status === 'pending' && (
+                            <button
+                              onClick={() => activate(r.id)}
+                              disabled={isActivating}
+                              className="flex items-center gap-1.5 text-xs font-semibold bg-[#16a34a] text-white px-3 py-1.5 rounded-lg hover:bg-[#15803d] disabled:opacity-60 transition-colors"
+                            >
+                              {isActivating ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
+                              Aktifkan
+                            </button>
+                          )}
                           <button
-                            onClick={() => activate(r.id)}
-                            disabled={isActivating}
-                            className="flex items-center gap-1.5 text-xs font-semibold bg-[#16a34a] text-white px-3 py-1.5 rounded-lg hover:bg-[#15803d] disabled:opacity-60 transition-colors"
+                            onClick={() => deleteReg(r.id, r.full_name)}
+                            disabled={deleting === r.id}
+                            className="flex items-center gap-1.5 text-xs font-semibold text-red-500 bg-red-50 border border-red-100 px-3 py-1.5 rounded-lg hover:bg-red-100 disabled:opacity-60 transition-colors"
                           >
-                            {isActivating ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
-                            Aktifkan
+                            {deleting === r.id ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />}
+                            Hapus
                           </button>
-                        ) : (
-                          <span className="text-xs text-[#9CA3AF]">—</span>
-                        )}
+                        </div>
                       </td>
                     </tr>
                   )
