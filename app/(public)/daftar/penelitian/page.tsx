@@ -1,34 +1,121 @@
 'use client'
 import { useState } from 'react'
-import { FlaskConical, CheckCircle, Loader2 } from 'lucide-react'
+import Image from 'next/image'
+import { FlaskConical, CheckCircle, Loader2, MessageCircle, Copy, Check } from 'lucide-react'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#0f766e]/30 focus:border-[#0f766e] transition-all placeholder:text-gray-400'
 
 const PRICE   = 2_250_000
 const PRODUCT = 'mentoring-penelitian'
+const ADMIN_WA = '6289524785477'
 
 export default function DaftarPenelitianPage() {
   const [form, setForm]     = useState({ full_name: '', email: '', phone: '' })
   const [error, setError]   = useState('')
   const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      const res = await fetch('/api/mayar/create', {
+      const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, product: PRODUCT }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Terjadi kesalahan'); setLoading(false); return }
-      window.location.href = data.paymentUrl
+      setSubmitted(true)
     } catch {
       setError('Gagal terhubung ke server. Coba lagi.')
+    } finally {
       setLoading(false)
     }
+  }
+
+  const copyNominal = () => {
+    navigator.clipboard.writeText(String(PRICE))
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const waMessage = encodeURIComponent(
+    `Halo admin, saya sudah transfer QRIS untuk Mentoring Privat Bab 4–5.\n\nNama: ${form.full_name}\nEmail: ${form.email}\nNominal: Rp ${PRICE.toLocaleString('id-ID')}\n\n*Mohon konfirmasi pembayarannya ya. Terima kasih!*`
+  )
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-[#f0fdfa] py-12 px-4">
+        <div className="max-w-lg mx-auto">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#ccfbf1] border border-[#0f766e]/20 text-[#0f766e] text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
+              <FlaskConical size={13} /> Mentoring Privat Bab 4–5
+            </div>
+            <h1 className="text-2xl font-bold text-[#1E1B4B]">Selesaikan Pembayaran</h1>
+            <p className="text-[#9CA3AF] text-sm mt-1">Scan QRIS di bawah, lalu konfirmasi ke admin</p>
+          </div>
+
+          {/* Nominal */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
+            <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Nominal Transfer</p>
+            <div className="flex items-center justify-between">
+              <p className="text-2xl font-bold text-[#0f766e]">Rp {PRICE.toLocaleString('id-ID')}</p>
+              <button onClick={copyNominal} className="flex items-center gap-1.5 text-xs font-semibold text-[#0f766e] bg-[#ccfbf1] border border-[#0f766e]/20 px-3 py-2 rounded-lg hover:bg-[#99f6e4] transition-colors">
+                {copied ? <><Check size={12} /> Disalin!</> : <><Copy size={12} /> Salin</>}
+              </button>
+            </div>
+            <p className="text-xs text-[#9CA3AF] mt-1">Mentoring Privat Bab 4–5 · 9 pertemuan</p>
+          </div>
+
+          {/* QRIS */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4 flex flex-col items-center">
+            <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-4 self-start">Scan QRIS</p>
+            <Image
+              src="/images/Qris Code.JPG"
+              alt="QRIS Teman Skripsi"
+              width={280}
+              height={280}
+              className="rounded-xl border border-gray-100"
+            />
+            <p className="text-xs text-[#9CA3AF] mt-3 text-center">Buka aplikasi m-banking atau e-wallet → Pilih Scan QR</p>
+          </div>
+
+          {/* Instruksi */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
+            <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Langkah Selanjutnya</p>
+            <ol className="flex flex-col gap-3">
+              {[
+                'Scan QRIS di atas & transfer nominal yang tertera',
+                'Screenshot bukti pembayaran',
+                'Kirim bukti ke WhatsApp admin di bawah',
+                'Admin akan aktivasi akses dashboard kamu',
+              ].map((step, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="w-5 h-5 rounded-full bg-[#0f766e] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                  <p className="text-sm text-[#1E1B4B]">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          {/* WA Button */}
+          <a
+            href={`https://wa.me/${ADMIN_WA}?text=${waMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full bg-[#16a34a] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#15803d] transition-colors"
+          >
+            <MessageCircle size={16} /> Konfirmasi via WhatsApp Admin
+          </a>
+          <p className="text-center text-[#9CA3AF] text-[11px] mt-3">
+            Akses dashboard aktif setelah pembayaran diverifikasi admin
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -98,7 +185,7 @@ export default function DaftarPenelitianPage() {
           </button>
 
           <p className="text-center text-[#9CA3AF] text-[11px]">
-            Pembayaran diproses oleh Mayar · Aman & Terenkripsi
+            Data kamu aman & tidak dibagikan ke pihak lain
           </p>
         </form>
       </div>
