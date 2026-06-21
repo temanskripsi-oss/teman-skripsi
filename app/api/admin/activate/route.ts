@@ -49,6 +49,19 @@ export async function POST(req: NextRequest) {
       }, { onConflict: 'id' })
 
       await supabase.auth.admin.generateLink({ type: 'recovery', email: reg.email })
+
+      const PRODUCT_LABELS: Record<string, string> = {
+        fastrack: 'Fast Track Sempro',
+        'mentoring-sempro': 'Mentoring Privat Sempro',
+        'mentoring-penelitian': 'Mentoring Privat Bab 4–5',
+      }
+      await supabase.from('payments').insert({
+        user_id: userId,
+        amount: reg.amount,
+        description: PRODUCT_LABELS[reg.product ?? 'fastrack'] ?? reg.product,
+        payment_date: new Date().toISOString().split('T')[0],
+        status: 'paid',
+      })
     }
 
     await supabase.from('registrations').update({
