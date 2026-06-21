@@ -1,7 +1,8 @@
-import { createServiceClient } from '@/lib/supabase/service'
+'use client'
+import { useState, useEffect, useCallback } from 'react'
 import { getBatchLabel } from '@/lib/mayar'
 import type { Registration } from '@/types'
-import { Users, Clock, CheckCircle, XCircle } from 'lucide-react'
+import { Users, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
 const STATUS_CONFIG = {
   pending: { label: 'Menunggu Bayar', color: 'text-orange-500',  bg: 'bg-orange-50',  border: 'border-orange-100' },
@@ -10,15 +11,33 @@ const STATUS_CONFIG = {
   expired: { label: 'Expired',        color: 'text-[#9CA3AF]',   bg: 'bg-gray-50',    border: 'border-gray-100' },
 } as const
 
-export default async function AdminRegistrationsPage() {
-  const supabase = createServiceClient()
+export default function AdminRegistrationsPage() {
+  const [list, setList] = useState<Registration[]>([])
+  const [loading, setLoading] = useState(true)
+  const [activating, setActivating] = useState<string | null>(null)
 
-  const { data: registrations } = await supabase
-    .from('registrations')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const fetchData = useCallback(async () => {
+    const res = await fetch('/api/admin/registrations')
+    const data = await res.json()
+    setList(data ?? [])
+    setLoading(false)
+  }, [])
 
-  const list = (registrations ?? []) as Registration[]
+  useEffect(() => { fetchData() }, [fetchData])
+
+  const activate = async (id: string) => {
+    if (!confirm('Aktifkan pendaftar ini? Akun dashboard akan langsung dibuat.')) return
+    setActivating(id)
+    const res = await fetch('/api/admin/activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ registrationId: id }),
+    })
+    const data = await res.json()
+    if (!res.ok) { alert(data.error ?? 'Gagal mengaktifkan'); setActivating(null); return }
+    await fetchData()
+    setActivating(null)
+  }
 
   const stats = {
     total:   list.length,
@@ -31,8 +50,8 @@ export default async function AdminRegistrationsPage() {
     <div className="p-8 max-w-6xl">
       <div className="mb-8">
         <p className="text-[#9CA3AF] text-sm mb-1">Admin Panel</p>
-        <h1 className="text-3xl font-bold text-[#1E1B4B]">Registrasi Fastrack</h1>
-        <p className="text-[#9CA3AF] text-sm mt-1">Pantau semua pendaftaran batch Fastrack</p>
+        <h1 className="text-3xl font-bold text-[#1E1B4B]">Registrasi</h1>
+        <p className="text-[#9CA3AF] text-sm mt-1">Pantau dan aktifkan pendaftar</p>
       </div>
 
       {/* Stats */}
@@ -59,7 +78,11 @@ export default async function AdminRegistrationsPage() {
       </div>
 
       {/* Table */}
-      {list.length === 0 ? (
+      {loading ? (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-14 text-center">
+          <Loader2 size={24} className="animate-spin text-[#9CA3AF] mx-auto" />
+        </div>
+      ) : list.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-14 text-center">
           <p className="text-[#9CA3AF] text-sm">Belum ada registrasi masuk.</p>
         </div>
@@ -69,14 +92,15 @@ export default async function AdminRegistrationsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-[#fafafa]">
-                  {['Nama', 'Email', 'No. HP', 'Produk', 'Batch', 'Status', 'Tanggal'].map(h => (
+                  {['Nama', 'Email', 'No. HP', 'Produk', 'Batch', 'Status', 'Tanggal', 'Aksi'].map(h => (
                     <th key={h} className="text-left px-5 py-3.5 text-[#9CA3AF] text-xs font-semibold">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {list.map(r => {
-                  const st = STATUS_CONFIG[r.status]
+                  const st = STATUS_CONFIG[r.status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.pending
+                  const isActivating = activating === r.id
                   return (
                     <tr key={r.id} className="hover:bg-[#fafafa] transition-colors">
                       <td className="px-5 py-3.5 font-medium text-[#1E1B4B]">{r.full_name}</td>
@@ -99,6 +123,20 @@ export default async function AdminRegistrationsPage() {
                       </td>
                       <td className="px-5 py-3.5 text-[#9CA3AF] text-xs">
                         {new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </td>
+                      <td className="px-5 py-3.5">
+                        {r.status === 'pending' ? (
+                          <button
+                            onClick={() => activate(r.id)}
+                            disabled={isActivating}
+                            className="flex items-center gap-1.5 text-xs font-semibold bg-[#16a34a] text-white px-3 py-1.5 rounded-lg hover:bg-[#15803d] disabled:opacity-60 transition-colors"
+                          >
+                            {isActivating ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
+                            Aktifkan
+                          </button>
+                        ) : (
+                          <span className="text-xs text-[#9CA3AF]">—</span>
+                        )}
                       </td>
                     </tr>
                   )
