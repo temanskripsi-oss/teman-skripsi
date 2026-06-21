@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { Trophy, LogOut, RefreshCw, TrendingUp, DollarSign, Medal } from 'lucide-react'
 
 interface LeaderboardEntry {
@@ -81,9 +80,6 @@ export default function LeaderboardPage() {
         <button onClick={logout} className="absolute right-4 top-4 flex items-center gap-1.5 text-white/40 hover:text-white/80 text-xs transition-colors">
           <LogOut size={13} /> Keluar
         </button>
-        <div className="flex justify-center mb-3">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={36} height={36} className="rounded-xl opacity-80" />
-        </div>
         <h1 className="text-2xl font-bold text-white">🏆 Leaderboard Sales</h1>
         <p className="text-white/40 text-xs mt-1">
           Teman Skripsi · Update otomatis tiap 30 detik
