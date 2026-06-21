@@ -130,7 +130,7 @@ export default function AdminRegistrationsPage() {
                         )}
                       </td>
                       <td className="px-5 py-3.5">
-                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${st.color} ${st.bg} ${st.border}`}>
+                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap ${st.color} ${st.bg} ${st.border}`}>
                           {st.label}
                         </span>
                       </td>
