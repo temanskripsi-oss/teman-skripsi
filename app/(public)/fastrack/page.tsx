@@ -18,7 +18,6 @@ const ACCENT = '#16a34a'
 
 const tabs = [
   { id: 'overview', label: 'Overview' },
-  { id: 'kurikulum', label: 'Kurikulum' },
   { id: 'timeline', label: 'Timeline' },
   { id: 'mentor', label: 'Mentor' },
   { id: 'testimoni', label: 'Testimoni' },
@@ -105,33 +104,6 @@ export default function FastTrackPage() {
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Timeline 30 Hari</h2>
           </div>
           <TimelineHybrid phases={phases} />
-        </div>
-      </section>
-
-      <section id="kurikulum" className="py-16 px-4 bg-white scroll-mt-32">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Kurikulum 30 Hari</h2>
-          </div>
-          <div className="flex flex-col gap-3">
-            {[
-              { week:'Hari 1–3',   color:'#16a34a', bg:'#f0fdf4', title:'Orientasi & Menemukan Topik', desc:'Pengenalan program, cara kerja skripsi, teknik menemukan topik kuat dan relevan.' },
-              { week:'Hari 4–10',  color:'#2232dd', bg:'#eff6ff', title:'Bab 1 — Pendahuluan',         desc:'Latar belakang, rumusan masalah, tujuan penelitian yang membuat dosen langsung setuju.' },
-              { week:'Hari 11–18', color:'#7C6FCD', bg:'#f5f3ff', title:'Bab 2 — Kajian Pustaka',      desc:'Cara mencari jurnal yang tepat, kerangka teori, penelitian terdahulu yang kuat.' },
-              { week:'Hari 19–27', color:'#0f766e', bg:'#f0fdfa', title:'Bab 3 — Metodologi',          desc:'Jenis penelitian, populasi sampel, instrumen, dan teknik analisis data.' },
-              { week:'Hari 28–30', color:'#16a34a', bg:'#f0fdf4', title:'Finalisasi & Review',         desc:'Review keseluruhan proposal, sesi Q&A, persiapan seminar proposal.' },
-            ].map((item, i) => (
-              <div key={i} className="bg-white border border-gray-100 rounded-2xl px-5 py-4 flex gap-4 items-start hover:shadow-md transition-all shadow-sm">
-                <span className="flex-shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap border" style={{ background: item.bg, color: item.color, borderColor: `${item.color}20` }}>
-                  {item.week}
-                </span>
-                <div>
-                  <p className="font-semibold text-[#1E1B4B] text-sm mb-0.5">{item.title}</p>
-                  <p className="text-[#9CA3AF] text-xs leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
