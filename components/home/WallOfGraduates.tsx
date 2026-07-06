@@ -25,6 +25,7 @@ const ROW_1: Graduate[] = [
   { name: 'Diah Anggraini',   prodi: 'Pendidikan Biologi',      university: 'UIN Raden Intan Lampung', milestone: 'Sempro',       color: 'from-[#2232dd] to-[#7C6FCD]', photo: '/graduates/Diah Anggraini  Pendidikan Biologi Sempro.jpeg' },
   { name: 'Sarah Salsabila',  prodi: 'Akuntansi Syariah',       university: 'UIN Raden Intan Lampung', milestone: 'Sidang Akhir', color: 'from-[#16a34a] to-[#0f766e]', photo: '/graduates/Sarah Salsabilla-Sidang Akhir.jpeg' },
   { name: 'Sulthon',          prodi: 'Manajemen Pendidikan Islam', university: 'UIN Raden Intan Lampung', milestone: 'Sempro', color: 'from-[#7C6FCD] to-[#2232dd]', photo: '/graduates/Sultohon-Sempro.jpeg' },
+  { name: 'M. Rendi Bachtiar', prodi: 'Pengelolaan Perkebunan Kopi', university: 'Politeknik Negeri Lampung', milestone: 'Sidang Akhir', color: 'from-[#ea580c] to-[#2232dd]', photo: '/graduates/M. Rendi Bachtiar S.Tr.P.jpeg' },
 ]
 
 const ROW_2: Graduate[] = [
