@@ -12,10 +12,15 @@ export default async function VideosPage() {
 
   // Fastrack: locked sampai H-3 sebelum start_date
   // Jika start_date belum di-set admin → tetap locked
+  // Jika start_date sudah lewat/berjalan (late joiner) → dorong ke batch bulan berikutnya
   let unlockedAt: Date | null = null
   const isFastrack = profile?.product === 'fastrack'
   if (isFastrack && profile?.start_date) {
     const batchStart = new Date(profile.start_date)
+    const today = new Date()
+    if (today >= batchStart) {
+      batchStart.setMonth(batchStart.getMonth() + 1)
+    }
     unlockedAt = new Date(batchStart)
     unlockedAt.setDate(unlockedAt.getDate() - 3)
   }
