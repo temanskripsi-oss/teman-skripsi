@@ -57,7 +57,7 @@ export default function HeroProgram({ badge, breadcrumb, headline, sub, price, p
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <p className="text-[#6B6B8A] text-xs mb-8">Pembayaran aman via Mayar · Akses langsung ke dashboard</p>
+            <p className="text-[#6B6B8A] text-xs mb-8">Pembayaran via QRIS · Akses langsung ke dashboard</p>
 
             <div className="flex flex-wrap gap-2.5">
               {trusts.map((t, i) => (
