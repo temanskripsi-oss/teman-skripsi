@@ -174,11 +174,13 @@ export default function MentoringSemproPage() {
 
           <div className="hidden lg:block">
             <StickyPricingCard
+              icon={Users}
               name="Mentoring Privat Sempro"
               price="Rp 2.000.000"
               paymentLink="/daftar/sempro"
               accentColor={ACCENT}
-              trustText="340+ alumni sudah bergabung"
+              trustCount="340+"
+              trustNames={['Mega Pratiwi', 'Dimas Arya', 'Nadia Putri']}
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online + Offline' },
                 { icon: Clock, label: 'Durasi', value: '3 Bulan' },

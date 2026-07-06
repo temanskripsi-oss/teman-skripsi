@@ -8,7 +8,7 @@ import TimelineHybrid, { type TimelinePhase } from '@/components/program/Timelin
 import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
-import { ArrowRight, Video, Clock, Users } from 'lucide-react'
+import { ArrowRight, Video, Clock, Users, Zap } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Fast Track Sempro 30 Hari | Teman Skripsi',
@@ -128,11 +128,13 @@ export default function FastTrackPage() {
           {/* Sticky pricing sidebar */}
           <div className="hidden lg:block">
             <StickyPricingCard
+              icon={Zap}
               name="Fast Track Sempro"
               price="Rp 500.000"
               paymentLink="/daftar"
               accentColor={ACCENT}
-              trustText="340+ alumni sudah bergabung"
+              trustCount="340+"
+              trustNames={['Aulia Rahma', 'Rizky Maulana', 'Sinta Dewi']}
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online' },
                 { icon: Clock, label: 'Durasi', value: '30 Hari' },

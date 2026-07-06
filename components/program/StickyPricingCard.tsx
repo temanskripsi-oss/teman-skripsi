@@ -8,35 +8,42 @@ export interface PricingFact {
 }
 
 interface Props {
+  icon: LucideIcon
   name: string
   price: string
-  originalPrice?: string
   paymentLink: string
   facts: PricingFact[]
-  trustText: string
+  trustCount: string
+  trustNames: string[]
   accentColor?: string
 }
 
-export default function StickyPricingCard({ name, price, originalPrice, paymentLink, facts, trustText, accentColor = '#2232dd' }: Props) {
+function initialsOf(name: string) {
+  return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
+}
+
+export default function StickyPricingCard({ icon: Icon, name, price, paymentLink, facts, trustCount, trustNames, accentColor = '#2232dd' }: Props) {
   return (
     <div className="sticky top-32 bg-white rounded-2xl border border-gray-100 shadow-lg overflow-hidden">
-      <div className="px-6 py-5 border-b border-gray-100" style={{ background: `${accentColor}0d` }}>
-        <p className="font-bold text-[#1E1B4B] text-base">{name}</p>
+      <div className="px-6 py-5 flex items-center gap-3" style={{ background: `linear-gradient(135deg, ${accentColor}14 0%, ${accentColor}05 100%)` }}>
+        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${accentColor}1a`, color: accentColor }}>
+          <Icon size={20} />
+        </div>
+        <p className="font-bold text-[#1E1B4B] text-base leading-snug">{name}</p>
       </div>
 
       <div className="px-6 py-5">
-        <div className="flex items-baseline gap-2 mb-1">
-          <p className="text-2xl font-extrabold tracking-tight" style={{ color: accentColor }}>{price}</p>
-          {originalPrice && <p className="text-sm text-[#9CA3AF] line-through">{originalPrice}</p>}
-        </div>
+        <p className="text-[28px] font-extrabold tracking-tight leading-none mb-1.5" style={{ color: accentColor }}>{price}</p>
         <p className="text-[#9CA3AF] text-xs mb-5">Pembayaran via QRIS · akses langsung ke dashboard</p>
 
-        <div className="flex flex-col gap-2.5 mb-5">
+        <div className="flex flex-col gap-3 mb-5 pb-5 border-b border-gray-100">
           {facts.map((f, i) => {
-            const Icon = f.icon
+            const FactIcon = f.icon
             return (
               <div key={i} className="flex items-center gap-2.5 text-sm">
-                <Icon size={15} style={{ color: accentColor }} className="flex-shrink-0" />
+                <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${accentColor}12`, color: accentColor }}>
+                  <FactIcon size={13} />
+                </span>
                 <span className="text-[#6B6B8A]">{f.label}:</span>
                 <span className="font-semibold text-[#1E1B4B]">{f.value}</span>
               </div>
@@ -50,7 +57,20 @@ export default function StickyPricingCard({ name, price, originalPrice, paymentL
           Daftar Sekarang
           <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
         </Link>
-        <p className="text-center text-[#9CA3AF] text-[11px] mt-3">{trustText}</p>
+
+        <div className="flex items-center justify-center gap-2.5 mt-4">
+          <div className="flex -space-x-2.5">
+            {trustNames.slice(0, 3).map((n, i) => (
+              <div key={i} className="w-7 h-7 rounded-full ring-2 ring-white flex items-center justify-center text-white text-[10px] font-bold"
+                style={{ background: `${accentColor}${['e6', 'b3', '80'][i] ?? 'e6'}` }}>
+                {initialsOf(n)}
+              </div>
+            ))}
+          </div>
+          <p className="text-[#6B6B8A] text-xs">
+            <span className="font-bold text-[#1E1B4B]">{trustCount}</span> alumni bergabung
+          </p>
+        </div>
       </div>
     </div>
   )

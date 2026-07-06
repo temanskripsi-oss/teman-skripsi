@@ -6,7 +6,7 @@ import StickyPricingCard from '@/components/program/StickyPricingCard'
 import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
-import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight, Users, Clock } from 'lucide-react'
+import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight, Users, Clock, FlaskConical } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Mentoring Privat Bab 4–5 | Teman Skripsi',
@@ -174,11 +174,13 @@ export default function MentoringPenelitianPage() {
 
           <div className="hidden lg:block">
             <StickyPricingCard
+              icon={FlaskConical}
               name="Mentoring Privat Bab 4–5"
               price="Rp 2.250.000"
               paymentLink="/daftar/penelitian"
               accentColor={ACCENT}
-              trustText="340+ alumni sudah bergabung"
+              trustCount="340+"
+              trustNames={['Bagas Saputra', 'Fitria Sari', 'Andi Kurniawan']}
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online + Offline' },
                 { icon: Clock, label: 'Durasi', value: '3 Bulan' },
