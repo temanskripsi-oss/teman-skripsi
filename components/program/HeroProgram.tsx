@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronRight, ArrowRight, Star } from 'lucide-react'
 
 interface HeroTestimonial {
@@ -18,9 +19,10 @@ interface Props {
   accentColor?: string
   lightBg?: string
   testimonial: HeroTestimonial
+  photo?: string
 }
 
-export default function HeroProgram({ badge, breadcrumb, headline, sub, price, paymentLink, trusts, accentColor = '#2232dd', lightBg = '#eff6ff', testimonial }: Props) {
+export default function HeroProgram({ badge, breadcrumb, headline, sub, price, paymentLink, trusts, accentColor = '#2232dd', lightBg = '#eff6ff', testimonial, photo }: Props) {
   const isLight = accentColor === '#9eff63' || accentColor === '#4DD9C0'
 
   return (
@@ -70,10 +72,16 @@ export default function HeroProgram({ badge, breadcrumb, headline, sub, price, p
           <div className="relative">
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xl"
               style={{ background: `linear-gradient(135deg, ${accentColor} 0%, #1E1B4B 100%)` }}>
-              <div className="absolute inset-0 grid-bg-dark opacity-30" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Star size={64} className="text-white/15" fill="currentColor" />
-              </div>
+              {photo ? (
+                <Image src={photo} alt={testimonial.name} fill className="object-cover object-top" sizes="(min-width: 1024px) 45vw, 100vw" priority />
+              ) : (
+                <>
+                  <div className="absolute inset-0 grid-bg-dark opacity-30" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Star size={64} className="text-white/15" fill="currentColor" />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="absolute -bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4">

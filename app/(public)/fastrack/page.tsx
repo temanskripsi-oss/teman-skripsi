@@ -67,6 +67,7 @@ export default function FastTrackPage() {
         accentColor={ACCENT}
         lightBg="#f0fdf4"
         testimonial={{ quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget.', name: 'Aulia Rahma', university: 'Universitas Lampung' }}
+        photo="/graduates/Diah Anggraini  Pendidikan Biologi Sempro.jpeg"
       />
 
       <QuickStats stats={[
