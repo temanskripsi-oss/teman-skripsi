@@ -68,7 +68,7 @@ export default function MentoringPenelitianPage() {
       <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
 
       <section className="py-16 px-4 bg-[#f4f8ff]">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_320px] gap-10 items-start">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_320px] gap-10">
           <div className="flex flex-col gap-16">
             <div id="overview" className="scroll-mt-32">
               <div className="text-center mb-10">

@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
+import { useHideOnScroll } from '@/hooks/useHideOnScroll'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const hidden = useHideOnScroll()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -16,7 +18,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`fixed z-50 left-0 right-0 transition-all duration-500 ${
+    <nav className={`fixed z-50 left-0 right-0 transition-all duration-500 ${hidden && !menuOpen ? '-translate-y-[calc(100%+2rem)]' : 'translate-y-0'} ${
       scrolled
         ? 'top-3 mx-4 sm:mx-8 rounded-2xl bg-[#1E1B4B]/95 backdrop-blur-xl shadow-2xl shadow-black/30 border border-white/10'
         : 'top-0 bg-transparent'
