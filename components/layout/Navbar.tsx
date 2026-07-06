@@ -18,10 +18,10 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`fixed z-50 left-0 right-0 transition-all duration-500 ${hidden && !menuOpen ? '-translate-y-[calc(100%+2rem)]' : 'translate-y-0'} ${
+    <nav className={`fixed z-50 left-0 right-0 transition-all duration-500 bg-[#1E1B4B]/95 backdrop-blur-xl ${hidden && !menuOpen ? '-translate-y-[calc(100%+2rem)]' : 'translate-y-0'} ${
       scrolled
-        ? 'top-3 mx-4 sm:mx-8 rounded-2xl bg-[#1E1B4B]/95 backdrop-blur-xl shadow-2xl shadow-black/30 border border-white/10'
-        : 'top-0 bg-transparent'
+        ? 'top-3 mx-4 sm:mx-8 rounded-2xl shadow-2xl shadow-black/30 border border-white/10'
+        : 'top-0 border-b border-white/5'
     }`}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex items-center justify-between h-16">
