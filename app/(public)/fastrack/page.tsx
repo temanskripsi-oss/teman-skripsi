@@ -1,13 +1,29 @@
 import type { Metadata } from 'next'
-import ProductHero from '@/components/product/ProductHero'
+import HeroProgram from '@/components/program/HeroProgram'
+import QuickStats from '@/components/program/QuickStats'
+import StickyNavTabs from '@/components/program/StickyNavTabs'
+import BenefitList from '@/components/program/BenefitList'
+import TimelineHybrid, { type TimelinePhase } from '@/components/program/TimelineHybrid'
+import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
-import { CheckCircle, Video, Users, FileText, Gift, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Fast Track Sempro 30 Hari | Teman Skripsi',
   description: 'Dari judul ke proposal siap seminar dalam 30 hari. Program intensif online se-Indonesia.',
 }
+
+const ACCENT = '#16a34a'
+
+const tabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'kurikulum', label: 'Kurikulum' },
+  { id: 'timeline', label: 'Timeline' },
+  { id: 'mentor', label: 'Mentor' },
+  { id: 'testimoni', label: 'Testimoni' },
+  { id: 'faq', label: 'FAQ' },
+]
 
 const faqs = [
   { q: 'Program ini cocok untuk jurusan apa?', a: 'Semua jurusan non-teknik — manajemen, ekonomi, hukum, psikologi, pendidikan, komunikasi, dan lainnya.' },
@@ -17,67 +33,82 @@ const faqs = [
   { q: 'Berapa peserta dalam satu batch?', a: 'Maksimal 20 orang per batch agar kualitas bimbingan tetap terjaga.' },
 ]
 
-const features = [
-  { icon: Video,       title: 'Video Learning Lengkap',       desc: 'Materi step by step yang bisa ditonton ulang kapan saja dan di mana saja' },
-  { icon: Users,       title: '4x Zoom Coaching Online',      desc: 'Sesi live bersama mentor, tanya jawab langsung, review proposal kamu' },
-  { icon: FileText,    title: '4x Written Feedback',          desc: 'Feedback tertulis detail dari mentor untuk setiap tahapan penulisan kamu' },
-  { icon: FileText,    title: 'Template Siap Pakai',          desc: 'Template proposal Bab 1-3, PPT Sempro, 100+ contoh judul ACC semua jurusan' },
-  { icon: Gift,        title: 'Bonus Eksklusif',              desc: 'Research gap framework, prompt AI untuk skripsi, script konsultasi ke dosen' },
-  { icon: CheckCircle, title: 'Dashboard Akses',              desc: 'Akses semua materi via dashboard pribadi selama masa aktif program' },
+const benefits = [
+  { text: 'Video learning lengkap' },
+  { text: '4× Zoom coaching online' },
+  { text: '4× Written feedback mentor' },
+  { text: 'Template proposal Bab 1–3 & PPT Sempro' },
+  { text: 'Bonus eksklusif: framework, prompt AI & script' },
+  { text: 'Akses grup komunitas alumni' },
+  { text: '1× Pertemuan tatap muka offline di Bandar Lampung', exclusive: true },
+]
+
+const phases: TimelinePhase[] = [
+  { dividerLabel: 'Fase Awal', days: '1–4', title: 'Orientasi & pemahaman materi', desc: 'Akses video panduan, kenali alur riset, diskusi langsung ke mentor.', tags: ['Video materi', 'Tanya jawab'], color: '#7C6FCD', bg: '#f5f3ff' },
+  { dividerLabel: 'Fase Penulisan', days: '5–8', title: 'Bab 1 — tulis, kumpul, review zoom', desc: 'Tulis Bab 1 dengan panduan mentor. Hari 7–8: written submission + sesi zoom.', tags: ['Written', 'Zoom review'], color: '#4DD9C0', bg: '#f0fdfa' },
+  { days: '9–15', title: 'Bab 2 — tulis, kumpul, review zoom', desc: 'Susun tinjauan literatur. Hari 14–15: written submission + zoom review.', tags: ['Written', 'Zoom review'], color: '#4DD9C0', bg: '#f0fdfa' },
+  { days: '16–22', title: 'Bab 3 — tulis, kumpul, review zoom', desc: 'Rancang metodologi penelitian. Hari 21–22: written + zoom review.', tags: ['Written', 'Zoom review'], color: '#7C6FCD', bg: '#f5f3ff' },
+  { dividerLabel: 'Fase Finalisasi', days: '23–24', title: 'Revisi menyeluruh Bab 1, 2, dan 3', desc: 'Perbaiki semua bab berdasarkan akumulasi feedback. Proposal jadi kohesif.', tags: ['Review menyeluruh'], color: '#2232dd', bg: '#eff6ff' },
+  { days: '25–26', title: 'Arahan konten & pembuatan slide sempro', desc: 'Terima panduan struktur dari mentor, buat slide yang ringkas dan meyakinkan.', tags: ['Written arahan', 'Slide PPT'], color: '#2232dd', bg: '#eff6ff' },
+  { days: '27–31', title: 'Pertemuan tatap muka & finalisasi', desc: 'Review akhir offline, simulasi presentasi, persiapan mental sebelum sempro.', tags: ['Tatap muka', 'Simulasi'], color: '#3D3DB4', bg: '#F0EEFF', offline: true },
 ]
 
 export default function FastTrackPage() {
   return (
     <div className="bg-white">
-      <ProductHero
-        badge="Program Intensif 30 Hari"
+      <HeroProgram
+        badge="Fast Track · 30 Hari"
         breadcrumb="Fast Track Sempro"
         headline="Dari Judul ke Proposal Siap Seminar — dalam 30 Hari"
-        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti."
+        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti membawa 340+ mahasiswa ACC proposal."
         price="Rp 500.000"
         paymentLink="/daftar"
         trusts={['340+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
-        accentColor="#16a34a"
+        accentColor={ACCENT}
         lightBg="#f0fdf4"
+        testimonial={{ quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget.', name: 'Aulia Rahma', university: 'Universitas Lampung' }}
       />
 
-      <section className="py-16 px-4 bg-white">
+      <QuickStats stats={[
+        { value: 30, label: 'Hari Program' },
+        { value: 4, suffix: '×', label: 'Zoom Coaching' },
+        { value: 3, label: 'Bab Selesai' },
+        { value: 1, suffix: '×', label: 'Pertemuan Offline' },
+      ]} />
+
+      <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
+
+      <section id="overview" className="py-16 px-4 bg-white scroll-mt-32">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Program ini untuk kamu yang...</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto mb-16">
             {['Baru mau mulai skripsi tapi bingung dari mana','Sudah punya judul tapi belum tahu cara kembangkan','Sering ditolak dosen dan tidak tahu kenapa','Butuh struktur dan sistem yang jelas','Mau hemat waktu dan langsung fokus yang penting','Bisa belajar online karena jauh dari kampus'].map((item, i) => (
               <div key={i} className="bg-[#f0fdf4] border border-green-100 rounded-xl px-4 py-3.5 flex items-center gap-3">
-                <CheckCircle size={16} className="text-[#16a34a] flex-shrink-0" />
+                <ArrowRight size={14} className="text-[#16a34a] flex-shrink-0" />
                 <p className="text-[#374151] text-sm">{item}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      <section className="py-16 px-4 bg-[#f4f8ff]">
-        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Yang kamu dapatkan</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {features.map((f, i) => {
-              const Icon = f.icon
-              return (
-                <div key={i} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all">
-                  <div className="p-2.5 bg-green-50 text-[#16a34a] rounded-xl w-fit mb-3"><Icon size={18} /></div>
-                  <h3 className="font-bold text-[#1E1B4B] text-sm mb-1">{f.title}</h3>
-                  <p className="text-[#9CA3AF] text-xs leading-relaxed">{f.desc}</p>
-                </div>
-              )
-            })}
-          </div>
+          <BenefitList items={benefits} accentColor={ACCENT} />
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-white">
+      <section id="timeline" className="py-16 px-4 bg-[#f4f8ff] scroll-mt-32">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Timeline 30 Hari</h2>
+          </div>
+          <TimelineHybrid phases={phases} />
+        </div>
+      </section>
+
+      <section id="kurikulum" className="py-16 px-4 bg-white scroll-mt-32">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Kurikulum 30 Hari</h2>
@@ -104,12 +135,21 @@ export default function FastTrackPage() {
         </div>
       </section>
 
-      <TestimonialSection accentColor="#16a34a" testimonials={[
-        { quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget, mentor fast responsenya. Highly recommended buat yang mau cepat selesai sempro.', name: 'Aulia Rahma', university: 'Universitas Lampung', initials: 'AR', accentColor: '#16a34a', lightBg: '#f0fdf4' },
-        { quote: 'Awalnya bingung mau mulai dari mana, tapi setelah ikut FastTrack semuanya jadi jelas. Judul di-ACC dosen di pertemuan kedua!', name: 'Rizky Maulana', university: 'UMITRA Lampung', initials: 'RM', accentColor: '#16a34a', lightBg: '#f0fdf4' },
-        { quote: 'Template dan materi videonya lengkap banget. Gue yang tadinya nol bisa nulis Bab 1–3 dalam 3 minggu. Worth every penny!', name: 'Sinta Dewi', university: 'UBL Lampung', initials: 'SD', accentColor: '#16a34a', lightBg: '#f0fdf4' },
-      ]} />
-      <FAQ items={faqs} />
+      <div id="mentor" className="scroll-mt-32">
+        <MentorSection accentColor={ACCENT} />
+      </div>
+
+      <div id="testimoni" className="scroll-mt-32">
+        <TestimonialSection accentColor={ACCENT} testimonials={[
+          { quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget, mentor fast responsenya. Highly recommended buat yang mau cepat selesai sempro.', name: 'Aulia Rahma', university: 'Universitas Lampung', initials: 'AR', accentColor: ACCENT, lightBg: '#f0fdf4' },
+          { quote: 'Awalnya bingung mau mulai dari mana, tapi setelah ikut FastTrack semuanya jadi jelas. Judul di-ACC dosen di pertemuan kedua!', name: 'Rizky Maulana', university: 'UMITRA Lampung', initials: 'RM', accentColor: ACCENT, lightBg: '#f0fdf4' },
+          { quote: 'Template dan materi videonya lengkap banget. Gue yang tadinya nol bisa nulis Bab 1–3 dalam 3 minggu. Worth every penny!', name: 'Sinta Dewi', university: 'UBL Lampung', initials: 'SD', accentColor: ACCENT, lightBg: '#f0fdf4' },
+        ]} />
+      </div>
+
+      <div id="faq" className="scroll-mt-32">
+        <FAQ items={faqs} />
+      </div>
 
       <section className="py-16 px-4 bg-[#1E1B4B] relative overflow-hidden text-center">
         <div className="absolute inset-0 grid-bg-dark pointer-events-none" />

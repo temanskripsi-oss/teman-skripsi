@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
-import ProductHero from '@/components/product/ProductHero'
+import HeroProgram from '@/components/program/HeroProgram'
+import QuickStats from '@/components/program/QuickStats'
+import StickyNavTabs from '@/components/program/StickyNavTabs'
+import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
 import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight } from 'lucide-react'
@@ -8,6 +11,16 @@ export const metadata: Metadata = {
   title: 'Mentoring Privat Sempro | Teman Skripsi',
   description: 'Bimbingan 1-on-1 dari judul sampai proposal ACC. 9 pertemuan, 3 bulan masa aktif.',
 }
+
+const ACCENT = '#2232dd'
+
+const tabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'program', label: 'Detail Program' },
+  { id: 'mentor', label: 'Mentor' },
+  { id: 'testimoni', label: 'Testimoni' },
+  { id: 'faq', label: 'FAQ' },
+]
 
 const faqs = [
   { q: 'Apakah bisa full online?', a: 'Untuk klien di luar Bandar Lampung, semua 9 pertemuan bisa dilakukan secara online via Zoom.' },
@@ -31,19 +44,29 @@ const includedFastTrack = [
 export default function MentoringSemproPage() {
   return (
     <div className="bg-white">
-      <ProductHero
-        badge="Bimbingan 1-on-1 Personal"
+      <HeroProgram
+        badge="Mentoring Privat · Sempro"
         breadcrumb="Mentoring Privat Sempro"
         headline="Bimbingan Privat dari Judul sampai Proposal ACC"
         sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai proposal ACC, step by step bareng mentor kamu."
         price="Rp 2.000.000"
         paymentLink="/daftar/sempro"
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
-        accentColor="#2232dd"
+        accentColor={ACCENT}
         lightBg="#eff6ff"
+        testimonial={{ quote: 'Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung' }}
       />
 
-      <section className="py-16 px-4 bg-white">
+      <QuickStats stats={[
+        { display: '1-on-1', label: 'Privat' },
+        { display: 'Zoom + Offline', label: 'Format Bimbingan' },
+        { display: 'Proposal ACC', label: 'Target Program' },
+        { value: 340, suffix: '+', label: 'Alumni' },
+      ]} />
+
+      <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
+
+      <section id="overview" className="py-16 px-4 bg-white scroll-mt-32">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Format bimbingan</h2>
@@ -97,7 +120,7 @@ export default function MentoringSemproPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-[#f4f8ff]">
+      <section id="program" className="py-16 px-4 bg-[#f4f8ff] scroll-mt-32">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Jadwal bimbingan</h2>
@@ -134,12 +157,21 @@ export default function MentoringSemproPage() {
         </div>
       </section>
 
-      <TestimonialSection accentColor="#2232dd" testimonials={[
-        { quote: 'Dari judul yang ditolak 3 kali, akhirnya ACC juga berkat bimbingan privat ini. Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung', initials: 'MP', accentColor: '#2232dd', lightBg: '#eff6ff' },
-        { quote: 'Bimbingan offline-nya sangat membantu, bisa tanya langsung dan dapat feedback real-time. Proposal gue selesai jauh lebih cepat dari yang gue kira.', name: 'Dimas Arya', university: 'UMITRA Lampung', initials: 'DA', accentColor: '#2232dd', lightBg: '#eff6ff' },
-        { quote: 'Mentor ngerti banget cara njelasin ke mahasiswa yang awam penelitian. Tiap sesi selalu ada progress yang nyata. Sangat worth it!', name: 'Nadia Putri', university: 'IBI Darmajaya', initials: 'NP', accentColor: '#2232dd', lightBg: '#eff6ff' },
-      ]} />
-      <FAQ items={faqs} />
+      <div id="mentor" className="scroll-mt-32">
+        <MentorSection accentColor={ACCENT} />
+      </div>
+
+      <div id="testimoni" className="scroll-mt-32">
+        <TestimonialSection accentColor={ACCENT} testimonials={[
+          { quote: 'Dari judul yang ditolak 3 kali, akhirnya ACC juga berkat bimbingan privat ini. Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung', initials: 'MP', accentColor: ACCENT, lightBg: '#eff6ff' },
+          { quote: 'Bimbingan offline-nya sangat membantu, bisa tanya langsung dan dapat feedback real-time. Proposal gue selesai jauh lebih cepat dari yang gue kira.', name: 'Dimas Arya', university: 'UMITRA Lampung', initials: 'DA', accentColor: ACCENT, lightBg: '#eff6ff' },
+          { quote: 'Mentor ngerti banget cara njelasin ke mahasiswa yang awam penelitian. Tiap sesi selalu ada progress yang nyata. Sangat worth it!', name: 'Nadia Putri', university: 'IBI Darmajaya', initials: 'NP', accentColor: ACCENT, lightBg: '#eff6ff' },
+        ]} />
+      </div>
+
+      <div id="faq" className="scroll-mt-32">
+        <FAQ items={faqs} />
+      </div>
 
       <section className="py-16 px-4 bg-[#1E1B4B] relative overflow-hidden text-center">
         <div className="absolute inset-0 grid-bg-dark pointer-events-none" />

@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
-import ProductHero from '@/components/product/ProductHero'
+import HeroProgram from '@/components/program/HeroProgram'
+import QuickStats from '@/components/program/QuickStats'
+import StickyNavTabs from '@/components/program/StickyNavTabs'
+import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
 import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight } from 'lucide-react'
@@ -8,6 +11,16 @@ export const metadata: Metadata = {
   title: 'Mentoring Privat Bab 4–5 | Teman Skripsi',
   description: 'Analisis data sampai sidang skripsi. 9 pertemuan privat, 3 bulan masa aktif.',
 }
+
+const ACCENT = '#0f766e'
+
+const tabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'program', label: 'Detail Program' },
+  { id: 'mentor', label: 'Mentor' },
+  { id: 'testimoni', label: 'Testimoni' },
+  { id: 'faq', label: 'FAQ' },
+]
 
 const faqs = [
   { q: 'Apakah perlu sudah punya data sebelum mulai?', a: 'Idealnya sudah punya data atau sedang dalam proses pengumpulan. Mentor akan membantu dari analisis hingga interpretasi.' },
@@ -31,19 +44,29 @@ const includedFastTrack = [
 export default function MentoringPenelitianPage() {
   return (
     <div className="bg-white">
-      <ProductHero
-        badge="Analisis Data sampai Sidang"
+      <HeroProgram
+        badge="Mentoring Privat · Bab 4–5"
         breadcrumb="Mentoring Privat Bab 4–5"
         headline="Udah Sempro? Sekarang Saatnya Kelar — Bab 4, 5, dan Sidang"
         sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis sampai kamu berdiri percaya diri di depan dewan penguji."
         price="Rp 2.250.000"
         paymentLink="/daftar/penelitian"
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '340+ Alumni']}
-        accentColor="#0f766e"
+        accentColor={ACCENT}
         lightBg="#f0fdfa"
+        testimonial={{ quote: 'Simulasi sidang bener-bener ngubah confidence gue. Pertanyaan penguji udah gue antisipasi semua.', name: 'Fitria Sari', university: 'UBL Lampung' }}
       />
 
-      <section className="py-16 px-4 bg-white">
+      <QuickStats stats={[
+        { display: '1-on-1', label: 'Privat' },
+        { display: 'Zoom + Offline', label: 'Format Bimbingan' },
+        { display: 'Bab 4–5 Tuntas', label: 'Target Program' },
+        { value: 340, suffix: '+', label: 'Alumni' },
+      ]} />
+
+      <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
+
+      <section id="overview" className="py-16 px-4 bg-white scroll-mt-32">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Format bimbingan</h2>
@@ -97,7 +120,7 @@ export default function MentoringPenelitianPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-[#f4f8ff]">
+      <section id="program" className="py-16 px-4 bg-[#f4f8ff] scroll-mt-32">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Jadwal bimbingan</h2>
@@ -134,12 +157,21 @@ export default function MentoringPenelitianPage() {
         </div>
       </section>
 
-      <TestimonialSection accentColor="#0f766e" testimonials={[
-        { quote: 'Data SPSS gue yang berantakan akhirnya bisa diinterpretasi dengan benar. Mentor bantu step by step sampai Bab 4 dan 5 selesai dalam 2 bulan.', name: 'Bagas Saputra', university: 'Universitas Lampung', initials: 'BS', accentColor: '#0f766e', lightBg: '#f0fdfa' },
-        { quote: 'Simulasi sidang di pertemuan terakhir bener-bener ngubah confidence gue. Pas sidang asli, pertanyaan penguji udah gue antisipasi semua.', name: 'Fitria Sari', university: 'UBL Lampung', initials: 'FS', accentColor: '#0f766e', lightBg: '#f0fdfa' },
-        { quote: 'SmartPLS gue error mulu dan gue hampir nyerah. Tapi mentor sabar bantu debug dan akhirnya hasil analisis gue valid. Alhamdulillah lulus!', name: 'Andi Kurniawan', university: 'UMITRA Lampung', initials: 'AK', accentColor: '#0f766e', lightBg: '#f0fdfa' },
-      ]} />
-      <FAQ items={faqs} />
+      <div id="mentor" className="scroll-mt-32">
+        <MentorSection accentColor={ACCENT} />
+      </div>
+
+      <div id="testimoni" className="scroll-mt-32">
+        <TestimonialSection accentColor={ACCENT} testimonials={[
+          { quote: 'Data SPSS gue yang berantakan akhirnya bisa diinterpretasi dengan benar. Mentor bantu step by step sampai Bab 4 dan 5 selesai dalam 2 bulan.', name: 'Bagas Saputra', university: 'Universitas Lampung', initials: 'BS', accentColor: ACCENT, lightBg: '#f0fdfa' },
+          { quote: 'Simulasi sidang di pertemuan terakhir bener-bener ngubah confidence gue. Pas sidang asli, pertanyaan penguji udah gue antisipasi semua.', name: 'Fitria Sari', university: 'UBL Lampung', initials: 'FS', accentColor: ACCENT, lightBg: '#f0fdfa' },
+          { quote: 'SmartPLS gue error mulu dan gue hampir nyerah. Tapi mentor sabar bantu debug dan akhirnya hasil analisis gue valid. Alhamdulillah lulus!', name: 'Andi Kurniawan', university: 'UMITRA Lampung', initials: 'AK', accentColor: ACCENT, lightBg: '#f0fdfa' },
+        ]} />
+      </div>
+
+      <div id="faq" className="scroll-mt-32">
+        <FAQ items={faqs} />
+      </div>
 
       <section className="py-16 px-4 bg-[#1E1B4B] relative overflow-hidden text-center">
         <div className="absolute inset-0 grid-bg-dark pointer-events-none" />
