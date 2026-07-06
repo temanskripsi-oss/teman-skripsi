@@ -16,12 +16,12 @@ export default function StickyNavTabs({ tabs, accentColor = '#2232dd' }: { tabs:
   return (
     <nav className="sticky top-16 z-40 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => handleClick(tab.id)}
-              className={`flex-shrink-0 px-4 py-3.5 text-sm font-medium border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
+              className={`flex-shrink-0 px-4 py-5 text-sm font-medium border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
                 active === tab.id
                   ? 'font-semibold'
                   : 'border-transparent text-[#636687] hover:text-[#1E1B4B]'
