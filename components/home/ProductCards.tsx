@@ -25,6 +25,7 @@ const products = [
       'Template proposal Bab 1–3 & PPT Sempro',
       'Bonus eksklusif: framework, prompt AI & script',
       'Akses grup komunitas alumni',
+      '1x Pertemuan tatap muka offline di Bandar Lampung',
     ],
   },
   {
