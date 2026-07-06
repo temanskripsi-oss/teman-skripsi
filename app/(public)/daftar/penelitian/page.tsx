@@ -127,7 +127,7 @@ export default function DaftarPenelitianPage() {
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4 flex flex-col items-center">
             <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-4 self-start">Scan QRIS</p>
-            <Image src="/images/Qris Code.JPG" alt="QRIS Teman Skripsi" width={280} height={280} className="rounded-xl border border-gray-100" />
+            <Image src="/images/QRIS.jpeg" alt="QRIS Teman Skripsi" width={280} height={280} className="rounded-xl border border-gray-100" />
             <p className="text-xs text-[#9CA3AF] mt-3 text-center">Buka aplikasi m-banking atau e-wallet → Pilih Scan QR</p>
           </div>
 
