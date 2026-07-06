@@ -2,12 +2,13 @@ import type { Metadata } from 'next'
 import HeroProgram from '@/components/program/HeroProgram'
 import QuickStats from '@/components/program/QuickStats'
 import StickyNavTabs from '@/components/program/StickyNavTabs'
+import StickyPricingCard from '@/components/program/StickyPricingCard'
 import BenefitList from '@/components/program/BenefitList'
 import TimelineHybrid, { type TimelinePhase } from '@/components/program/TimelineHybrid'
 import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Video, Clock, Users } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Fast Track Sempro 30 Hari | Teman Skripsi',
@@ -77,50 +78,80 @@ export default function FastTrackPage() {
 
       <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
 
-      <section id="overview" className="py-16 px-4 bg-white scroll-mt-32">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Program ini untuk kamu yang...</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto mb-16">
-            {['Baru mau mulai skripsi tapi bingung dari mana','Sudah punya judul tapi belum tahu cara kembangkan','Sering ditolak dosen dan tidak tahu kenapa','Butuh struktur dan sistem yang jelas','Mau hemat waktu dan langsung fokus yang penting','Bisa belajar online karena jauh dari kampus'].map((item, i) => (
-              <div key={i} className="bg-[#f0fdf4] border border-green-100 rounded-xl px-4 py-3.5 flex items-center gap-3">
-                <ArrowRight size={14} className="text-[#16a34a] flex-shrink-0" />
-                <p className="text-[#374151] text-sm">{item}</p>
+      <section className="py-16 px-4 bg-[#f4f8ff]">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_320px] gap-10 items-start">
+          {/* Konten utama */}
+          <div className="flex flex-col gap-16">
+            <div id="overview" className="scroll-mt-32">
+              <div className="text-center mb-10">
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Program ini untuk kamu yang...</h2>
               </div>
-            ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-16">
+                {['Baru mau mulai skripsi tapi bingung dari mana','Sudah punya judul tapi belum tahu cara kembangkan','Sering ditolak dosen dan tidak tahu kenapa','Butuh struktur dan sistem yang jelas','Mau hemat waktu dan langsung fokus yang penting','Bisa belajar online karena jauh dari kampus'].map((item, i) => (
+                  <div key={i} className="bg-white border border-green-100 rounded-xl px-4 py-3.5 flex items-center gap-3">
+                    <ArrowRight size={14} className="text-[#16a34a] flex-shrink-0" />
+                    <p className="text-[#374151] text-sm">{item}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center mb-10">
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Yang kamu dapatkan</h2>
+              </div>
+              <BenefitList items={benefits} accentColor={ACCENT} />
+            </div>
+
+            <div id="timeline" className="scroll-mt-32">
+              <div className="text-center mb-10">
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Timeline 30 Hari</h2>
+              </div>
+              <TimelineHybrid phases={phases} />
+            </div>
+
+            <div id="mentor" className="scroll-mt-32">
+              <MentorSection accentColor={ACCENT} embedded />
+            </div>
+
+            <div id="testimoni" className="scroll-mt-32">
+              <TestimonialSection accentColor={ACCENT} embedded testimonials={[
+                { quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget, mentor fast responsenya. Highly recommended buat yang mau cepat selesai sempro.', name: 'Aulia Rahma', university: 'Universitas Lampung', initials: 'AR', accentColor: ACCENT, lightBg: '#f0fdf4' },
+                { quote: 'Awalnya bingung mau mulai dari mana, tapi setelah ikut FastTrack semuanya jadi jelas. Judul di-ACC dosen di pertemuan kedua!', name: 'Rizky Maulana', university: 'UMITRA Lampung', initials: 'RM', accentColor: ACCENT, lightBg: '#f0fdf4' },
+                { quote: 'Template dan materi videonya lengkap banget. Gue yang tadinya nol bisa nulis Bab 1–3 dalam 3 minggu. Worth every penny!', name: 'Sinta Dewi', university: 'UBL Lampung', initials: 'SD', accentColor: ACCENT, lightBg: '#f0fdf4' },
+              ]} />
+            </div>
+
+            <div id="faq" className="scroll-mt-32">
+              <FAQ items={faqs} embedded />
+            </div>
           </div>
 
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Yang kamu dapatkan</h2>
+          {/* Sticky pricing sidebar */}
+          <div className="hidden lg:block">
+            <StickyPricingCard
+              name="Fast Track Sempro"
+              price="Rp 500.000"
+              paymentLink="/daftar"
+              accentColor={ACCENT}
+              trustText="340+ alumni sudah bergabung"
+              facts={[
+                { icon: Video, label: 'Metode', value: 'Online' },
+                { icon: Clock, label: 'Durasi', value: '30 Hari' },
+                { icon: Users, label: 'Kuota', value: 'Maks 20/batch' },
+              ]}
+            />
           </div>
-          <BenefitList items={benefits} accentColor={ACCENT} />
         </div>
       </section>
 
-      <section id="timeline" className="py-16 px-4 bg-[#f4f8ff] scroll-mt-32">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Timeline 30 Hari</h2>
-          </div>
-          <TimelineHybrid phases={phases} />
+      {/* Mobile sticky CTA bar */}
+      <div className="lg:hidden sticky bottom-0 z-40 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-4 py-3 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-[10px] text-[#9CA3AF] uppercase tracking-wider">Fast Track Sempro</p>
+          <p className="font-bold text-[#1E1B4B]">Rp 500.000</p>
         </div>
-      </section>
-
-      <div id="mentor" className="scroll-mt-32">
-        <MentorSection accentColor={ACCENT} />
-      </div>
-
-      <div id="testimoni" className="scroll-mt-32">
-        <TestimonialSection accentColor={ACCENT} testimonials={[
-          { quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget, mentor fast responsenya. Highly recommended buat yang mau cepat selesai sempro.', name: 'Aulia Rahma', university: 'Universitas Lampung', initials: 'AR', accentColor: ACCENT, lightBg: '#f0fdf4' },
-          { quote: 'Awalnya bingung mau mulai dari mana, tapi setelah ikut FastTrack semuanya jadi jelas. Judul di-ACC dosen di pertemuan kedua!', name: 'Rizky Maulana', university: 'UMITRA Lampung', initials: 'RM', accentColor: ACCENT, lightBg: '#f0fdf4' },
-          { quote: 'Template dan materi videonya lengkap banget. Gue yang tadinya nol bisa nulis Bab 1–3 dalam 3 minggu. Worth every penny!', name: 'Sinta Dewi', university: 'UBL Lampung', initials: 'SD', accentColor: ACCENT, lightBg: '#f0fdf4' },
-        ]} />
-      </div>
-
-      <div id="faq" className="scroll-mt-32">
-        <FAQ items={faqs} />
+        <a href="/daftar" className="flex-shrink-0 flex items-center gap-1.5 font-bold px-5 py-3 rounded-xl text-sm text-white cursor-pointer" style={{ background: ACCENT }}>
+          Daftar <ArrowRight size={15} />
+        </a>
       </div>
 
       <section className="py-16 px-4 bg-[#1E1B4B] relative overflow-hidden text-center">
