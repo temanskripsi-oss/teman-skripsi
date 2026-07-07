@@ -7,7 +7,7 @@ import { ChevronLeft, Mail, Phone, Users, GraduationCap, Video, ClipboardList } 
 const PRODUCT_CONFIG = {
   'fastrack':             { label: 'Fast Track Sempro',        color: '#2232dd', bg: '#eff6ff', border: '#2232dd20' },
   'mentoring-sempro':     { label: 'Mentoring Privat Sempro',  color: '#7C6FCD', bg: '#f5f3ff', border: '#7C6FCD20' },
-  'mentoring-penelitian': { label: 'Mentoring Privat Bab 4–5', color: '#0f766e', bg: '#f0fdfa', border: '#0f766e20' },
+  'mentoring-penelitian': { label: 'Mentoring Privat Sidang Akhir', color: '#0f766e', bg: '#f0fdfa', border: '#0f766e20' },
 } as const
 
 export default async function MentorDetailPage({ params }: { params: Promise<{ id: string }> }) {

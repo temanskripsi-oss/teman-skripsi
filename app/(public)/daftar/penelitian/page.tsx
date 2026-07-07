@@ -86,7 +86,7 @@ export default function DaftarPenelitianPage() {
   }
 
   const waMessage = encodeURIComponent(
-    `Halo admin, saya sudah transfer QRIS untuk Mentoring Privat Bab 4–5.\n\nNama: ${form.full_name}\nEmail: ${form.email}\nNominal: Rp ${finalPrice.toLocaleString('id-ID')}${appliedCode ? `\nKode Diskon: ${appliedCode.code}` : ''}\n\n*Mohon konfirmasi pembayarannya ya. Terima kasih!*`
+    `Halo admin, saya sudah transfer QRIS untuk Mentoring Privat Sidang Akhir.\n\nNama: ${form.full_name}\nEmail: ${form.email}\nNominal: Rp ${finalPrice.toLocaleString('id-ID')}${appliedCode ? `\nKode Diskon: ${appliedCode.code}` : ''}\n\n*Mohon konfirmasi pembayarannya ya. Terima kasih!*`
   )
 
   if (submitted) {
@@ -95,7 +95,7 @@ export default function DaftarPenelitianPage() {
         <div className="max-w-lg mx-auto">
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 bg-[#ccfbf1] border border-[#0f766e]/20 text-[#0f766e] text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
-              <FlaskConical size={13} /> Mentoring Privat Bab 4–5
+              <FlaskConical size={13} /> Mentoring Privat Sidang Akhir
             </div>
             <h1 className="text-2xl font-bold text-[#1E1B4B]">Selesaikan Pembayaran</h1>
             <p className="text-[#9CA3AF] text-sm mt-1">Scan QRIS di bawah, lalu konfirmasi ke admin</p>
@@ -122,7 +122,7 @@ export default function DaftarPenelitianPage() {
               </button>
             </div>
             {appliedCode && <p className="text-xs text-[#16a34a] mt-2 font-medium">🎉 Kamu hemat Rp {appliedCode.discount.toLocaleString('id-ID')}!</p>}
-            <p className="text-xs text-[#9CA3AF] mt-1">Mentoring Privat Bab 4–5 · 9 pertemuan</p>
+            <p className="text-xs text-[#9CA3AF] mt-1">Mentoring Privat Sidang Akhir (Bab 4–5) · 9 pertemuan</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4 flex flex-col items-center">
@@ -158,17 +158,17 @@ export default function DaftarPenelitianPage() {
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-[#ccfbf1] border border-[#0f766e]/20 text-[#0f766e] text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
-            <FlaskConical size={13} /> Mentoring Privat Bab 4–5
+            <FlaskConical size={13} /> Mentoring Privat Sidang Akhir
           </div>
-          <h1 className="text-3xl font-bold text-[#1E1B4B]">Daftar Mentoring<br />Bab 4–5</h1>
-          <p className="text-[#9CA3AF] text-sm mt-2">Dari analisis data sampai sidang. Isi form untuk lanjut bayar.</p>
+          <h1 className="text-3xl font-bold text-[#1E1B4B]">Daftar Mentoring<br />Sidang Akhir</h1>
+          <p className="text-[#9CA3AF] text-sm mt-2">Bab 4–5, dari analisis data sampai sidang. Isi form untuk lanjut bayar.</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
           <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Ringkasan Order</p>
           <div className="flex justify-between items-start gap-3">
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-[#1E1B4B] text-sm">Mentoring Privat Bab 4–5</p>
+              <p className="font-semibold text-[#1E1B4B] text-sm">Mentoring Privat Sidang Akhir</p>
               <p className="text-[#9CA3AF] text-xs">9 pertemuan privat · 3 bulan masa aktif</p>
             </div>
             <p className="font-bold text-[#1E1B4B] flex-shrink-0">Rp {BASE_PRICE.toLocaleString('id-ID')}</p>

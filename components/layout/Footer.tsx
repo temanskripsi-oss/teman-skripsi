@@ -35,7 +35,7 @@ export default function Footer() {
               {[
                 ['/fastrack', 'Fast Track Sempro'],
                 ['/mentoring-sempro', 'Mentoring Sempro'],
-                ['/mentoring-penelitian', 'Mentoring Bab 4–5'],
+                ['/mentoring-penelitian', 'Mentoring Sidang Akhir'],
               ].map(([href, label]) => (
                 <Link key={href} href={href}
                   className="text-white/40 hover:text-white text-sm transition-colors cursor-pointer">

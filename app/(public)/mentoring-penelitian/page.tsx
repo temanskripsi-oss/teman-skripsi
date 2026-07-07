@@ -9,7 +9,7 @@ import TestimonialSection from '@/components/product/TestimonialSection'
 import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight, Users, Clock, FlaskConical } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Mentoring Privat Bab 4–5 | Teman Skripsi',
+  title: 'Mentoring Privat Sidang Akhir (Bab 4–5) | Teman Skripsi',
   description: 'Analisis data sampai sidang skripsi. 9 pertemuan privat, 3 bulan masa aktif.',
 }
 
@@ -45,8 +45,8 @@ export default function MentoringPenelitianPage() {
   return (
     <div className="bg-white">
       <HeroProgram
-        badge="Mentoring Privat · Bab 4–5"
-        breadcrumb="Mentoring Privat Bab 4–5"
+        badge="Mentoring Privat · Sidang Akhir"
+        breadcrumb="Mentoring Privat Sidang Akhir"
         headline="Udah Sempro? Sekarang Saatnya Kelar — Bab 4, 5, dan Sidang"
         sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis sampai kamu berdiri percaya diri di depan dewan penguji."
         price="Rp 2.250.000"
@@ -140,7 +140,7 @@ export default function MentoringPenelitianPage() {
           <div className="hidden lg:block">
             <StickyPricingCard
               icon={FlaskConical}
-              name="Mentoring Privat Bab 4–5"
+              name="Mentoring Privat Sidang Akhir"
               price="Rp 2.250.000"
               paymentLink="/daftar/penelitian"
               accentColor={ACCENT}
@@ -158,7 +158,7 @@ export default function MentoringPenelitianPage() {
 
       <div className="lg:hidden sticky bottom-0 z-40 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-4 py-3 flex items-center justify-between gap-4">
         <div>
-          <p className="text-[10px] text-[#9CA3AF] uppercase tracking-wider">Mentoring Privat Bab 4–5</p>
+          <p className="text-[10px] text-[#9CA3AF] uppercase tracking-wider">Mentoring Privat Sidang Akhir</p>
           <p className="font-bold text-[#1E1B4B]">Rp 2.250.000</p>
         </div>
         <a href="/daftar/penelitian" className="flex-shrink-0 flex items-center gap-1.5 font-bold px-5 py-3 rounded-xl text-sm text-white cursor-pointer" style={{ background: ACCENT }}>

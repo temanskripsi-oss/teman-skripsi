@@ -6,7 +6,7 @@ import ProfilePhotoUpload from '@/components/profile/ProfilePhotoUpload'
 const productLabels: Record<string, string> = {
   'fastrack':             'Fast Track Sempro 30 Hari',
   'mentoring-sempro':     'Mentoring Privat Sempro',
-  'mentoring-penelitian': 'Mentoring Privat Bab 4–5',
+  'mentoring-penelitian': 'Mentoring Privat Sidang Akhir',
 }
 
 export default async function ProfilePage() {
