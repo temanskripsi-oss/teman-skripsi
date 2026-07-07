@@ -8,7 +8,7 @@ import { useHideOnScroll } from '@/hooks/useHideOnScroll'
 import { createClient } from '@/lib/supabase/client'
 
 const PROGRAM_LINKS = [
-  { href: '/fastrack', label: 'Fast Track Sempro', desc: 'Fastrack Proposal Skripsi', badge: 'Terlaris', badgeColor: '#16a34a', badgeBg: '#f0fdf4' },
+  { href: '/fastrack', label: 'Fast Track Proposal Skripsi', desc: '30 hari, dari judul ke proposal ACC', badge: 'Terlaris', badgeColor: '#16a34a', badgeBg: '#f0fdf4' },
   { href: '/mentoring-sempro', label: 'Mentoring Privat Sempro', desc: 'Bimbingan 1-on-1 sampai ACC Sempro', badge: 'Populer', badgeColor: '#2232dd', badgeBg: '#eff6ff' },
   { href: '/mentoring-penelitian', label: 'Mentoring Privat Bab 4–5', desc: 'Analisis data sampai sidang' },
 ]
