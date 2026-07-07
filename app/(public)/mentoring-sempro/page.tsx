@@ -47,8 +47,8 @@ export default function MentoringSemproPage() {
       <HeroProgram
         badge="Mentoring Privat · Sempro"
         breadcrumb="Mentoring Privat Sempro"
-        headline="Bimbingan Privat dari Judul sampai Proposal ACC"
-        sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai proposal ACC, step by step bareng mentor kamu."
+        headline="Bimbingan Privat dari Judul sampai ACC Seminar Proposal"
+        sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai ACC seminar proposal, step by step bareng mentor kamu."
         price="Rp 2.000.000"
         paymentLink="/daftar/sempro"
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '1.200+ Alumni']}
