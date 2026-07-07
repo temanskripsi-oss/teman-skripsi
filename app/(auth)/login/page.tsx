@@ -94,7 +94,7 @@ function LoginContent() {
         <div className="relative z-10">
           <div className="flex items-center gap-1 mb-6">
             {[1,2,3,4,5].map(s => <Star key={s} size={14} fill="#f59e0b" className="text-[#f59e0b]" />)}
-            <span className="text-white/50 text-sm ml-2">5.0 dari 340+ alumni</span>
+            <span className="text-white/50 text-sm ml-2">5.0 dari 1.200+ alumni</span>
           </div>
           <h2 className="text-5xl font-bold text-white leading-tight mb-4">
             Selamat datang<br />
@@ -113,7 +113,7 @@ function LoginContent() {
         </div>
 
         <div className="relative z-10 grid grid-cols-3 gap-3">
-          {[{v:'340+',l:'Alumni'},{v:'< 1 Bln',l:'Rekor Lulus'},{v:'5.0',l:'Rating'}].map((s,i) => (
+          {[{v:'1.200+',l:'Alumni'},{v:'< 1 Bln',l:'Rekor Lulus'},{v:'5.0',l:'Rating'}].map((s,i) => (
             <div key={i} className="bg-white/8 border border-white/10 rounded-xl p-3 text-center">
               <p className="text-[#9eff63] font-bold text-lg leading-none mb-0.5">{s.v}</p>
               <p className="text-white/35 text-[11px]">{s.l}</p>

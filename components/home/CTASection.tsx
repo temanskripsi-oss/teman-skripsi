@@ -31,7 +31,7 @@ export default function CTASection() {
             Konsultasi Dulu
           </a>
         </div>
-        <p className="text-white/25 text-sm mt-8">Sudah membantu 340+ mahasiswa se-Indonesia</p>
+        <p className="text-white/25 text-sm mt-8">Sudah membantu 1.200+ mahasiswa se-Indonesia</p>
       </div>
     </section>
   )

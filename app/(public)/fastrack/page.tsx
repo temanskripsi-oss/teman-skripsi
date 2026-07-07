@@ -60,10 +60,10 @@ export default function FastTrackPage() {
         badge="Fast Track · 30 Hari"
         breadcrumb="Fast Track Sempro"
         headline="Dari Judul ke Proposal Siap Seminar — dalam 30 Hari"
-        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti membawa 340+ mahasiswa ACC proposal."
+        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti membawa 1.200+ mahasiswa ACC proposal."
         price="Rp 500.000"
         paymentLink="/daftar"
-        trusts={['340+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
+        trusts={['1.200+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
         accentColor={ACCENT}
         lightBg="#f0fdf4"
         testimonial={{ quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget.', name: 'Aulia Rahma', university: 'Universitas Lampung' }}
@@ -134,7 +134,7 @@ export default function FastTrackPage() {
               price="Rp 500.000"
               paymentLink="/daftar"
               accentColor={ACCENT}
-              trustCount="340+"
+              trustCount="1.200+"
               trustNames={['Aulia Rahma', 'Rizky Maulana', 'Sinta Dewi']}
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online' },

@@ -51,7 +51,7 @@ export default function MentoringPenelitianPage() {
         sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis sampai kamu berdiri percaya diri di depan dewan penguji."
         price="Rp 2.250.000"
         paymentLink="/daftar/penelitian"
-        trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '340+ Alumni']}
+        trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '1.200+ Alumni']}
         accentColor={ACCENT}
         lightBg="#f0fdfa"
         testimonial={{ quote: 'Simulasi sidang bener-bener ngubah confidence gue. Pertanyaan penguji udah gue antisipasi semua.', name: 'Fitria Sari', university: 'UBL Lampung' }}
@@ -61,7 +61,7 @@ export default function MentoringPenelitianPage() {
         { display: '1-on-1', label: 'Privat' },
         { display: 'Zoom + Offline', label: 'Format Bimbingan' },
         { display: 'Bab 4–5 Tuntas', label: 'Target Program' },
-        { value: 340, suffix: '+', label: 'Alumni' },
+        { value: 1200, suffix: '+', label: 'Alumni' },
       ]} />
 
       <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
@@ -143,7 +143,7 @@ export default function MentoringPenelitianPage() {
               price="Rp 2.250.000"
               paymentLink="/daftar/penelitian"
               accentColor={ACCENT}
-              trustCount="340+"
+              trustCount="1.200+"
               trustNames={['Bagas Saputra', 'Fitria Sari', 'Andi Kurniawan']}
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online + Offline' },

@@ -16,7 +16,7 @@ export default function VideoSection() {
             Kenali <span className="gradient-text-navy">Teman Skripsi</span>
           </h2>
           <p className="text-[#6B6B8A] max-w-lg mx-auto">
-            Tonton cerita kami dan kenapa 340+ mahasiswa percayakan skripsinya kepada kami.
+            Tonton cerita kami dan kenapa 1.200+ mahasiswa percayakan skripsinya kepada kami.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function VideoSection() {
 
         <div className="grid grid-cols-3 gap-4 mt-5">
           {[
-            { v:'340+',   l:'Mahasiswa dibantu wisuda',     c:'#2232dd' },
+            { v:'1.200+',   l:'Mahasiswa dibantu wisuda',     c:'#2232dd' },
             { v:'< 1 bln', l:'Rekor tercepat lulus',        c:'#16a34a' },
             { v:'3 thn',  l:'Pengalaman mendampingi',       c:'#7C6FCD' },
           ].map((s, i) => (

@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 const stats = [
-  { value: '340+',         label: 'Mahasiswa Dibantu',        color: '#2232dd' },
+  { value: '1.200+',         label: 'Mahasiswa Dibantu',        color: '#2232dd' },
   { value: '< 1 Bulan',   label: 'Rekor Tercepat Lulus',     color: '#16a34a' },
   { value: '3 Bulan',     label: 'Dari Nunda → Selesai',     color: '#7C6FCD' },
   { value: 'Se-Indonesia', label: 'Jangkauan',                color: '#0f766e' },

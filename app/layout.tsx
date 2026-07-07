@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "Teman Skripsi | Skripsi itu gampang. Asal sama orang yang tepat.",
-  description: "340+ mahasiswa se-Indonesia sudah buktiin. Bimbingan skripsi online terpercaya dengan mentor berpengalaman.",
+  description: "1.200+ mahasiswa se-Indonesia sudah buktiin. Bimbingan skripsi online terpercaya dengan mentor berpengalaman.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

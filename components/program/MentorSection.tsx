@@ -17,11 +17,11 @@ function Content({ accentColor = '#2232dd' }: { accentColor?: string }) {
           <p className="font-bold text-[#1E1B4B] text-lg">Gelar Rista</p>
           <p className="text-sm mb-3" style={{ color: accentColor }}>Mentor &amp; Co-Founder Teman Skripsi</p>
           <p className="text-[#6B6B8A] text-sm leading-relaxed mb-4">
-            Sudah membimbing 340+ mahasiswa dari berbagai jurusan hingga lulus. Aktif sebagai narasumber di program akademik internasional, termasuk kolaborasi dengan UiTM Malaysia.
+            Sudah membimbing 1.200+ mahasiswa dari berbagai jurusan hingga lulus. Aktif sebagai narasumber di program akademik internasional, termasuk kolaborasi dengan UiTM Malaysia.
           </p>
           <div className="flex flex-wrap justify-center sm:justify-start gap-2">
             <span className="flex items-center gap-1.5 text-xs font-medium text-[#6B6B8A] bg-white border border-gray-200 px-3 py-1.5 rounded-full">
-              <GraduationCap size={13} /> 340+ Mahasiswa Lulus
+              <GraduationCap size={13} /> 1.200+ Mahasiswa Lulus
             </span>
             <span className="flex items-center gap-1.5 text-xs font-medium text-[#6B6B8A] bg-white border border-gray-200 px-3 py-1.5 rounded-full">
               <Globe size={13} /> Kolaborasi Akademik Internasional

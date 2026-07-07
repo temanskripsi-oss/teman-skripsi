@@ -26,7 +26,7 @@ const faqs = [
   { q: 'Apakah bisa full online?', a: 'Untuk klien di luar Bandar Lampung, semua 9 pertemuan bisa dilakukan secara online via Zoom.' },
   { q: 'Bagaimana jadwal offline-nya?', a: 'Untuk klien di Bandar Lampung, 3 pertemuan offline dilakukan di lokasi yang disepakati bersama mentor.' },
   { q: 'Apa yang terjadi kalau belum selesai dalam 3 bulan?', a: 'Tim kami akan evaluasi progres dan memberikan solusi terbaik sesuai kondisi.' },
-  { q: 'Siapa mentornya?', a: 'Mentor kami adalah alumni berprestasi yang sudah membantu 340+ mahasiswa lulus.' },
+  { q: 'Siapa mentornya?', a: 'Mentor kami adalah alumni berprestasi yang sudah membantu 1.200+ mahasiswa lulus.' },
   { q: 'Boleh ganti topik di tengah program?', a: 'Boleh, selama masih dalam masa aktif 3 bulan dan progres dapat dikejar.' },
 ]
 
@@ -51,7 +51,7 @@ export default function MentoringSemproPage() {
         sub="Bukan cuma ngajarin — kami menemani. Dari yang bingung judul sampai proposal ACC, step by step bareng mentor kamu."
         price="Rp 2.000.000"
         paymentLink="/daftar/sempro"
-        trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '340+ Alumni']}
+        trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '1.200+ Alumni']}
         accentColor={ACCENT}
         lightBg="#eff6ff"
         testimonial={{ quote: 'Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung' }}
@@ -61,7 +61,7 @@ export default function MentoringSemproPage() {
         { display: '1-on-1', label: 'Privat' },
         { display: 'Zoom + Offline', label: 'Format Bimbingan' },
         { display: 'Proposal ACC', label: 'Target Program' },
-        { value: 340, suffix: '+', label: 'Alumni' },
+        { value: 1200, suffix: '+', label: 'Alumni' },
       ]} />
 
       <StickyNavTabs tabs={tabs} accentColor={ACCENT} />
@@ -143,7 +143,7 @@ export default function MentoringSemproPage() {
               price="Rp 2.000.000"
               paymentLink="/daftar/sempro"
               accentColor={ACCENT}
-              trustCount="340+"
+              trustCount="1.200+"
               trustNames={['Mega Pratiwi', 'Dimas Arya', 'Nadia Putri']}
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online + Offline' },

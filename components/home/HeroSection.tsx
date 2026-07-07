@@ -32,7 +32,7 @@ export default function HeroSection() {
             <div className="animate-fade-in-left" data-delay="0">
               <span className="inline-flex items-center gap-2 bg-[#9eff63]/10 border border-[#9eff63]/25 text-[#9eff63] px-4 py-1.5 rounded-full text-xs font-semibold mb-7 uppercase tracking-widest">
                 <span className="w-1.5 h-1.5 bg-[#9eff63] rounded-full animate-pulse" />
-                340+ Alumni Wisuda Se-Indonesia
+                1.200+ Alumni Wisuda Se-Indonesia
               </span>
             </div>
 
@@ -45,7 +45,7 @@ export default function HeroSection() {
 
             <p className="animate-fade-in-left text-white/55 text-base sm:text-lg leading-relaxed mb-10 max-w-md" data-delay="0.2">
               Dari yang baru mulai sampai yang hampir DO — kami sudah bantu{' '}
-              <strong className="text-white/90 font-semibold">340+ mahasiswa</strong>{' '}
+              <strong className="text-white/90 font-semibold">1.200+ mahasiswa</strong>{' '}
               dari Sabang sampai Merauke lulus tepat waktu.
             </p>
 
@@ -76,7 +76,7 @@ export default function HeroSection() {
                   {[1,2,3,4,5].map(s => <Star key={s} size={11} fill="#9eff63" className="text-[#9eff63]" />)}
                   <span className="text-white font-bold text-sm ml-1">5.0</span>
                 </div>
-                <p className="text-white/40 text-xs">dari 340+ alumni terpercaya</p>
+                <p className="text-white/40 text-xs">dari 1.200+ alumni terpercaya</p>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@ export default function HeroSection() {
                     <TrendingUp size={16} className="text-[#4DD9C0]" />
                   </div>
                   <div>
-                    <p className="text-white font-bold text-lg leading-none">340+</p>
+                    <p className="text-white font-bold text-lg leading-none">1.200+</p>
                     <p className="text-white/40 text-[11px] mt-0.5">Alumni Wisuda</p>
                   </div>
                 </div>

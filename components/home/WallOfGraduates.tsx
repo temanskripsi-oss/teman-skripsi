@@ -72,7 +72,7 @@ export default function WallOfGraduates() {
       {/* Header */}
       <div className="text-center mb-12 px-4">
         <div className="inline-flex items-center gap-2 bg-[#eff6ff] border border-[#2232dd]/20 text-[#2232dd] text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
-          <GraduationCap size={13} /> 340+ Mahasiswa Berhasil
+          <GraduationCap size={13} /> 1.200+ Mahasiswa Berhasil
         </div>
         <h2 className="text-4xl sm:text-5xl font-bold text-[#1E1B4B] mb-4 leading-tight">
           The Wall of <span className="gradient-text-navy">Graduates</span>

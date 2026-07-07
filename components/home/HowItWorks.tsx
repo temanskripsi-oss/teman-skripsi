@@ -1,8 +1,8 @@
 export default function HowItWorks() {
   const steps = [
     { num: '01', color: '#2232dd', bg: '#eff6ff', title: 'Pilih program yang sesuai', desc: 'Fast Track untuk yang baru mulai, Mentoring Privat untuk pendampingan 1-on-1 yang intensif dan personal.' },
-    { num: '02', color: '#7C6FCD', bg: '#f5f3ff', title: 'Bimbingan personal bersama mentor', desc: 'Didampingi step by step dari judul sampai selesai oleh mentor yang sudah bantu 340+ mahasiswa.' },
-    { num: '03', color: '#16a34a', bg: '#f0fdf4', title: 'Selesai dan wisuda tepat waktu', desc: '340+ alumni sudah membuktikannya. Ada yang dari hampir DO jadi lulus dalam waktu kurang dari 1 bulan.' },
+    { num: '02', color: '#7C6FCD', bg: '#f5f3ff', title: 'Bimbingan personal bersama mentor', desc: 'Didampingi step by step dari judul sampai selesai oleh mentor yang sudah bantu 1.200+ mahasiswa.' },
+    { num: '03', color: '#16a34a', bg: '#f0fdf4', title: 'Selesai dan wisuda tepat waktu', desc: '1.200+ alumni sudah membuktikannya. Ada yang dari hampir DO jadi lulus dalam waktu kurang dari 1 bulan.' },
   ]
 
   return (

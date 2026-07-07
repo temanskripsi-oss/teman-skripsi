@@ -20,7 +20,7 @@ function Content({ testimonials }: { testimonials: Testimonial[] }) {
     <>
       <div className="text-center mb-10">
         <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Kata mereka yang sudah lulus</h2>
-        <p className="text-[#9CA3AF] text-sm mt-2">340+ mahasiswa dari seluruh Indonesia berhasil bersama TemanSkripsi</p>
+        <p className="text-[#9CA3AF] text-sm mt-2">1.200+ mahasiswa dari seluruh Indonesia berhasil bersama TemanSkripsi</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

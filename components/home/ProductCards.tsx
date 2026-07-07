@@ -98,7 +98,7 @@ export default function ProductCards() {
             <span className="text-[#2232dd]">sesuai perjalananmu</span>
           </h2>
           <p className="text-[#6B6B8A] max-w-lg mx-auto text-base">
-            Dari yang baru mulai sampai yang siap sidang. Semua program sudah terbukti bantu 340+ mahasiswa wisuda.
+            Dari yang baru mulai sampai yang siap sidang. Semua program sudah terbukti bantu 1.200+ mahasiswa wisuda.
           </p>
         </div>
 
