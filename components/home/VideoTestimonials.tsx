@@ -8,7 +8,7 @@ const VIDEO_TESTIMONIALS = [
     name: 'Heppy Salma',
     description: 'Alumni Mentoring Privat · Bab 4–5 · Sidang Akhir ACC',
     university: 'Polinela Lampung',
-    quote: 'Bab 4 dan 5 itu yang paling bikin pusing — ngolah data, nulis pembahasan, takut salah. Sama TemanSkripsi semuanya jadi lebih jelas. Mentor nemenin dari awal sampai akhirnya sidang ACC. Alhamdulillah, nggak nyangka bisa secepet ini.',
+    quote: 'Bab 4 dan 5 itu yang paling bikin pusing — ngolah data, nulis pembahasan, takut salah. Sama Teman Skripsi semuanya jadi lebih jelas. Mentor nemenin dari awal sampai akhirnya sidang ACC. Alhamdulillah, nggak nyangka bisa secepet ini.',
     videoId: 'z8_bcAJV4hY',
     thumbnail: '/images/testimonial-heppy-salma.jpg',
   },
@@ -36,7 +36,7 @@ const CARD_TESTIMONIALS = [
   {
     name: 'Mitha Aulia',
     university: 'UIN Raden Intan Lampung',
-    quote: 'Bab 1–3 selesai dalam 3 minggu. Yang biasanya makan waktu berbulan-bulan. Mentor TemanSkripsi beneran tahu cara bikin skripsi jadi tidak seseram yang gua bayangin.',
+    quote: 'Bab 1–3 selesai dalam 3 minggu. Yang biasanya makan waktu berbulan-bulan. Mentor Teman Skripsi beneran tahu cara bikin skripsi jadi tidak seseram yang gua bayangin.',
     initials: 'MA',
   },
   {

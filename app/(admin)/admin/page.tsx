@@ -62,7 +62,7 @@ export default async function AdminOverview() {
       <div className="mb-8">
         <p className="text-[#9CA3AF] text-sm mb-1">Admin Panel</p>
         <h1 className="text-3xl font-bold text-[#1E1B4B]">Overview</h1>
-        <p className="text-[#9CA3AF] text-sm mt-1">Ringkasan aktivitas TemanSkripsi</p>
+        <p className="text-[#9CA3AF] text-sm mt-1">Ringkasan aktivitas Teman Skripsi</p>
       </div>
 
       {/* Stats */}

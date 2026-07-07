@@ -40,9 +40,9 @@ export default function Sidebar({ product }: { product: Product }) {
     <>
       <div className="px-5 py-5 border-b border-gray-100">
         <Link href="/" onClick={() => setMobileOpen(false)} className="inline-flex items-center gap-2.5 cursor-pointer">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
+          <Image src="/images/logo.png" alt="Teman Skripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
           <span className="font-bold text-base tracking-tight text-[#1E1B4B]">
-            Teman<span className="text-[#2232dd]">Skripsi</span>
+            Teman <span className="text-[#2232dd]">Skripsi</span>
           </span>
         </Link>
       </div>
@@ -79,8 +79,8 @@ export default function Sidebar({ product }: { product: Product }) {
       {/* Mobile Top Bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between shadow-sm">
         <Link href="/" className="inline-flex items-center gap-2 cursor-pointer">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={28} height={28} className="rounded-lg" />
-          <span className="font-bold text-sm text-[#1E1B4B]">Teman<span className="text-[#2232dd]">Skripsi</span></span>
+          <Image src="/images/logo.png" alt="Teman Skripsi" width={28} height={28} className="rounded-lg" />
+          <span className="font-bold text-sm text-[#1E1B4B]">Teman <span className="text-[#2232dd]">Skripsi</span></span>
         </Link>
         <button onClick={() => setMobileOpen(true)} className="p-2 rounded-xl hover:bg-gray-100 cursor-pointer">
           <Menu size={20} className="text-[#1E1B4B]" />
@@ -94,8 +94,8 @@ export default function Sidebar({ product }: { product: Product }) {
           <aside className="relative w-72 max-w-[85vw] bg-white h-full flex flex-col shadow-2xl">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <Link href="/" onClick={() => setMobileOpen(false)} className="inline-flex items-center gap-2">
-                <Image src="/images/logo.png" alt="TemanSkripsi" width={28} height={28} className="rounded-lg" />
-                <span className="font-bold text-sm text-[#1E1B4B]">Teman<span className="text-[#2232dd]">Skripsi</span></span>
+                <Image src="/images/logo.png" alt="Teman Skripsi" width={28} height={28} className="rounded-lg" />
+                <span className="font-bold text-sm text-[#1E1B4B]">Teman <span className="text-[#2232dd]">Skripsi</span></span>
               </Link>
               <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer">
                 <X size={18} className="text-[#9CA3AF]" />

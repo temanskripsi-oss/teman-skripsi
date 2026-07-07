@@ -65,7 +65,7 @@ export default function LeaderboardLoginPage() {
             </button>
           </form>
           <div className="mt-4 pt-4 border-t border-gray-100 flex justify-center">
-            <Image src="/images/logo.png" alt="TemanSkripsi" width={24} height={24} className="rounded-lg opacity-40" />
+            <Image src="/images/logo.png" alt="Teman Skripsi" width={24} height={24} className="rounded-lg opacity-40" />
           </div>
         </div>
       </div>

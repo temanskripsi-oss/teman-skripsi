@@ -34,7 +34,7 @@ export default function UpdatePasswordPage() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2232dd] to-[#7C6FCD] flex items-center justify-center">
             <GraduationCap size={17} className="text-white" />
           </div>
-          <span className="text-[#1E1B4B] font-bold text-xl">Teman<span className="text-[#2232dd]">Skripsi</span></span>
+          <span className="text-[#1E1B4B] font-bold text-xl">Teman <span className="text-[#2232dd]">Skripsi</span></span>
         </div>
 
         <div className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">

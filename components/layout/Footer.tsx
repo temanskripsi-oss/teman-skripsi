@@ -9,9 +9,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
+              <Image src="/images/logo.png" alt="Teman Skripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
               <span className="text-white font-bold text-lg tracking-tight">
-                Teman<span className="text-[#9eff63]">Skripsi</span>
+                Teman <span className="text-[#9eff63]">Skripsi</span>
               </span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">

@@ -6,7 +6,7 @@ import { ChevronDown, CheckCircle } from 'lucide-react'
 const FAQS = [
   {
     q: 'Apakah bimbingan bisa dilakukan secara offline?',
-    a: 'Ya! TemanSkripsi adalah satu-satunya layanan bimbingan skripsi di Bandar Lampung yang menyediakan sesi tatap muka langsung. Kamu bisa bertemu mentor secara offline untuk berdiskusi, review dokumen, dan konsultasi secara real-time.',
+    a: 'Ya! Teman Skripsi adalah satu-satunya layanan bimbingan skripsi di Bandar Lampung yang menyediakan sesi tatap muka langsung. Kamu bisa bertemu mentor secara offline untuk berdiskusi, review dokumen, dan konsultasi secara real-time.',
   },
   {
     q: 'Berapa lama waktu yang dibutuhkan untuk menyelesaikan skripsi?',
@@ -42,7 +42,7 @@ export default function FAQ() {
           <div className="flex-1 min-w-0">
             <h2 className="text-3xl md:text-4xl font-bold text-[#1E1B4B] leading-tight mb-10">
               Kenapa Pilih<br />
-              <span className="text-[#2232dd]">TemanSkripsi?</span>
+              <span className="text-[#2232dd]">Teman Skripsi?</span>
             </h2>
 
             <div className="flex flex-col divide-y divide-gray-100">
@@ -80,7 +80,7 @@ export default function FAQ() {
             <div className="relative rounded-3xl overflow-hidden aspect-[4/5] bg-gradient-to-br from-[#1E1B4B] to-[#2232dd]">
               <Image
                 src="/images/faq-mentor.jpeg"
-                alt="Sesi bimbingan TemanSkripsi"
+                alt="Sesi bimbingan Teman Skripsi"
                 fill
                 className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 44vw"

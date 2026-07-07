@@ -46,7 +46,7 @@ export default function MentorActivity() {
             Mentor Kami Aktif di <span className="gradient-text-navy">Tingkat Internasional</span>
           </h2>
           <p className="text-[#9CA3AF] text-base max-w-2xl mx-auto leading-relaxed">
-            Gelar Rista, mentor dan co-founder TemanSkripsi, tampil sebagai narasumber dalam program akademik internasional di UiTM Malaysia — Juni 2026.
+            Gelar Rista, mentor dan co-founder Teman Skripsi, tampil sebagai narasumber dalam program akademik internasional di UiTM Malaysia — Juni 2026.
           </p>
         </div>
 
@@ -136,7 +136,7 @@ export default function MentorActivity() {
           <p className="text-lg font-medium leading-relaxed max-w-3xl mx-auto">
             "Melalui kegiatan ini, kami tidak hanya berbagi hasil penelitian, tetapi juga membangun ruang kolaborasi dan pertukaran pengalaman akademik yang dapat mendorong pengembangan pendidikan sains di tingkat global."
           </p>
-          <p className="mt-4 text-white/70 text-sm font-semibold">— Gelar Rista, M.Pd. · Mentor & Co-founder TemanSkripsi</p>
+          <p className="mt-4 text-white/70 text-sm font-semibold">— Gelar Rista, M.Pd. · Mentor & Co-founder Teman Skripsi</p>
         </div>
 
       </div>

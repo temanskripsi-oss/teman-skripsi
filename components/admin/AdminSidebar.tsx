@@ -52,9 +52,9 @@ export default function AdminSidebar() {
       <aside className="hidden md:flex w-60 flex-shrink-0 bg-[#1E1B4B] min-h-screen flex-col">
         <div className="px-5 py-5 border-b border-white/10">
           <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-            <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
+            <Image src="/images/logo.png" alt="Teman Skripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
             <div>
-              <p className="font-bold text-base tracking-tight text-white leading-none">Teman<span className="text-[#4DD9C0]">Skripsi</span></p>
+              <p className="font-bold text-base tracking-tight text-white leading-none">Teman <span className="text-[#4DD9C0]">Skripsi</span></p>
               <p className="text-[10px] text-white/40 mt-0.5">Admin Panel</p>
             </div>
           </Link>
@@ -78,9 +78,9 @@ export default function AdminSidebar() {
       {/* Mobile Top Bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#1E1B4B] px-4 py-3 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={28} height={28} className="rounded-lg" />
+          <Image src="/images/logo.png" alt="Teman Skripsi" width={28} height={28} className="rounded-lg" />
           <div>
-            <p className="font-bold text-sm text-white leading-none">Teman<span className="text-[#4DD9C0]">Skripsi</span></p>
+            <p className="font-bold text-sm text-white leading-none">Teman <span className="text-[#4DD9C0]">Skripsi</span></p>
             <p className="text-[9px] text-white/40">Admin Panel</p>
           </div>
         </div>
@@ -96,8 +96,8 @@ export default function AdminSidebar() {
           <aside className="relative w-72 max-w-[85vw] bg-[#1E1B4B] h-full flex flex-col shadow-2xl">
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Image src="/images/logo.png" alt="TemanSkripsi" width={28} height={28} className="rounded-lg" />
-                <p className="font-bold text-sm text-white">Teman<span className="text-[#4DD9C0]">Skripsi</span></p>
+                <Image src="/images/logo.png" alt="Teman Skripsi" width={28} height={28} className="rounded-lg" />
+                <p className="font-bold text-sm text-white">Teman <span className="text-[#4DD9C0]">Skripsi</span></p>
               </div>
               <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
                 <X size={18} className="text-white/60" />

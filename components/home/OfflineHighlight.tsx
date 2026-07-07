@@ -19,7 +19,7 @@ export default function OfflineHighlight() {
           <div className="relative w-full md:w-2/5 min-h-[280px] md:min-h-[360px] bg-gradient-to-br from-[#1E1B4B] to-[#2232dd] flex items-center justify-center">
             <Image
               src="/images/offline-mentoring.jpeg"
-              alt="Sesi mentoring offline TemanSkripsi di Bandar Lampung"
+              alt="Sesi mentoring offline Teman Skripsi di Bandar Lampung"
               fill
               className="object-cover object-center"
               sizes="(max-width: 768px) 100vw, 40vw"
@@ -32,11 +32,11 @@ export default function OfflineHighlight() {
             <p className="text-[#1E1B4B] text-lg md:text-xl leading-relaxed mb-6">
               "Skripsi bukan cuma soal nulis — kadang kamu butuh{' '}
               <span className="font-bold">duduk bareng mentor, nunjuk langsung ke laptopmu,</span>{' '}
-              dan bahas satu-satu sampai beneran paham. Di TemanSkripsi,{' '}
+              dan bahas satu-satu sampai beneran paham. Di Teman Skripsi,{' '}
               <span className="font-bold text-[#2232dd]">itu bisa kamu lakuin secara offline di Bandar Lampung.</span>"
             </p>
             <div>
-              <p className="font-bold text-[#1E1B4B] text-sm">Bimbingan Offline TemanSkripsi</p>
+              <p className="font-bold text-[#1E1B4B] text-sm">Bimbingan Offline Teman Skripsi</p>
               <p className="text-[#6B6B8A] text-sm mt-0.5">Bandar Lampung, Lampung · Tatap Muka Langsung dengan Mentor</p>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">

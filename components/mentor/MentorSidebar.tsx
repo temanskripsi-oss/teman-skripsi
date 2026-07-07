@@ -46,8 +46,8 @@ export default function MentorSidebar() {
       <aside className="hidden md:flex w-60 flex-shrink-0 bg-white border-r border-gray-100 min-h-screen flex-col shadow-sm">
         <div className="px-5 py-5 border-b border-gray-100">
           <Link href="/" className="inline-flex items-center gap-2.5 cursor-pointer">
-            <Image src="/images/logo.png" alt="TemanSkripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
-            <span className="font-bold text-base tracking-tight text-[#1E1B4B]">Teman<span className="text-[#2232dd]">Skripsi</span></span>
+            <Image src="/images/logo.png" alt="Teman Skripsi" width={32} height={32} className="flex-shrink-0 rounded-xl" />
+            <span className="font-bold text-base tracking-tight text-[#1E1B4B]">Teman <span className="text-[#2232dd]">Skripsi</span></span>
           </Link>
           <p className="text-[10px] text-[#9CA3AF] font-semibold uppercase tracking-widest mt-2 px-0.5">Mentor Panel</p>
         </div>
@@ -66,9 +66,9 @@ export default function MentorSidebar() {
       {/* Mobile Top Bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt="TemanSkripsi" width={28} height={28} className="rounded-lg" />
+          <Image src="/images/logo.png" alt="Teman Skripsi" width={28} height={28} className="rounded-lg" />
           <div>
-            <p className="font-bold text-sm text-[#1E1B4B] leading-none">Teman<span className="text-[#2232dd]">Skripsi</span></p>
+            <p className="font-bold text-sm text-[#1E1B4B] leading-none">Teman <span className="text-[#2232dd]">Skripsi</span></p>
             <p className="text-[9px] text-[#9CA3AF]">Mentor Panel</p>
           </div>
         </div>
@@ -84,8 +84,8 @@ export default function MentorSidebar() {
           <aside className="relative w-72 max-w-[85vw] bg-white h-full flex flex-col shadow-2xl">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <Image src="/images/logo.png" alt="TemanSkripsi" width={28} height={28} className="rounded-lg" />
-                <span className="font-bold text-sm text-[#1E1B4B]">Teman<span className="text-[#2232dd]">Skripsi</span></span>
+                <Image src="/images/logo.png" alt="Teman Skripsi" width={28} height={28} className="rounded-lg" />
+                <span className="font-bold text-sm text-[#1E1B4B]">Teman <span className="text-[#2232dd]">Skripsi</span></span>
               </div>
               <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer">
                 <X size={18} className="text-[#9CA3AF]" />

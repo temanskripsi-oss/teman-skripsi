@@ -25,7 +25,7 @@ export default async function AdminClientsPage() {
       <div className="mb-8">
         <p className="text-[#9CA3AF] text-sm mb-1">Admin Panel</p>
         <h1 className="text-3xl font-bold text-[#1E1B4B]">Klien</h1>
-        <p className="text-[#9CA3AF] text-sm mt-1">Kelola semua klien TemanSkripsi</p>
+        <p className="text-[#9CA3AF] text-sm mt-1">Kelola semua klien Teman Skripsi</p>
       </div>
       {ghostAccounts.length > 0 && (
         <GhostAccountsCleaner ghosts={ghostAccounts} />
