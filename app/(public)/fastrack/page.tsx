@@ -66,7 +66,7 @@ export default function FastTrackPage() {
         trusts={['1.200+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
         accentColor={ACCENT}
         lightBg="#f0fdf4"
-        testimonial={{ quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget.', name: 'Aulia Rahma', university: 'Universitas Lampung' }}
+        testimonial={{ quote: 'Dalam 30 hari proposal aku ACC! Materinya terstruktur banget.', name: 'Diah Anggraini', university: 'UIN Raden Intan Lampung' }}
         photo="/graduates/Hero Fastrack.jpg"
       />
 
