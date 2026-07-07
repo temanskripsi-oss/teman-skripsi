@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef } from 'react'
 import Image from 'next/image'
-import { Camera, Loader2 } from 'lucide-react'
+import { Camera, Loader2, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface Props {
@@ -54,6 +54,29 @@ export default function ProfilePhotoUpload({ userId, currentUrl, name, onUpdated
     }
   }
 
+  const handleDelete = async () => {
+    if (!url) return
+    setError('')
+    setLoading(true)
+
+    try {
+      const supabase = createClient()
+      const { data: files } = await supabase.storage.from('avatars').list(userId)
+      if (files && files.length > 0) {
+        await supabase.storage.from('avatars').remove(files.map(f => `${userId}/${f.name}`))
+      }
+
+      await supabase.from('profiles').update({ avatar_url: null }).eq('id', userId)
+
+      setUrl(null)
+      onUpdated?.('')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Gagal menghapus foto')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="relative group cursor-pointer" onClick={() => !loading && inputRef.current?.click()}>
@@ -73,11 +96,20 @@ export default function ProfilePhotoUpload({ userId, currentUrl, name, onUpdated
         </div>
       </div>
 
-      <button type="button" onClick={() => !loading && inputRef.current?.click()}
-        className="text-xs text-[#2232dd] hover:underline font-medium cursor-pointer disabled:opacity-50"
-        disabled={loading}>
-        {loading ? 'Mengupload...' : 'Ganti foto'}
-      </button>
+      <div className="flex items-center gap-3">
+        <button type="button" onClick={() => !loading && inputRef.current?.click()}
+          className="text-xs text-[#2232dd] hover:underline font-medium cursor-pointer disabled:opacity-50"
+          disabled={loading}>
+          {loading ? 'Memproses...' : 'Ganti foto'}
+        </button>
+        {url && (
+          <button type="button" onClick={handleDelete}
+            className="text-xs text-red-500 hover:underline font-medium cursor-pointer disabled:opacity-50 flex items-center gap-1"
+            disabled={loading}>
+            <Trash2 size={11} /> Hapus foto
+          </button>
+        )}
+      </div>
 
       {error && <p className="text-xs text-red-500">{error}</p>}
 
