@@ -20,7 +20,7 @@ const products = [
     checkColor: '#16a34a',
     features: [
       'Video learning lengkap',
-      '4x Zoom coaching online',
+      '3x Zoom coaching online',
       '4x written feedback mentor',
       'Template proposal Bab 1–3 & PPT Sempro',
       'Bonus eksklusif: framework, prompt AI & script',

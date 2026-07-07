@@ -35,7 +35,7 @@ const faqs = [
 
 const benefits = [
   { text: 'Video learning lengkap' },
-  { text: '4× Zoom coaching online' },
+  { text: '3× Zoom coaching online' },
   { text: '4× Written feedback mentor' },
   { text: 'Template proposal Bab 1–3 & PPT Sempro' },
   { text: 'Bonus eksklusif: framework, prompt AI & script' },
