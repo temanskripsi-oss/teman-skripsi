@@ -17,7 +17,6 @@ const ACCENT = '#2232dd'
 
 const tabs = [
   { id: 'overview', label: 'Overview' },
-  { id: 'program', label: 'Detail Program' },
   { id: 'mentor', label: 'Mentor' },
   { id: 'testimoni', label: 'Testimoni' },
   { id: 'faq', label: 'FAQ' },
@@ -117,41 +116,6 @@ export default function MentoringSemproPage() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            <div id="program" className="scroll-mt-32">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Jadwal bimbingan</h2>
-                <p className="text-[#9CA3AF] text-sm mt-2">6x Online via Zoom · 3x Offline tatap muka (Bandar Lampung)</p>
-              </div>
-              <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
-                <table className="w-full text-sm bg-white">
-                  <thead>
-                    <tr className="bg-[#eff6ff] border-b border-gray-100">
-                      <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Pertemuan</th>
-                      <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Materi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { no:'1', materi:'Orientasi, diskusi topik, penentuan judul' },
-                      { no:'2', materi:'Review & finalisasi judul, mulai Bab 1' },
-                      { no:'3', materi:'Review Bab 1, mulai Bab 2 kajian pustaka' },
-                      { no:'4', materi:'Review Bab 2, mulai Bab 3 metodologi' },
-                      { no:'5', materi:'Review Bab 3, finalisasi proposal' },
-                      { no:'6', materi:'Simulasi seminar proposal (sesi 1)' },
-                      { no:'7', materi:'Simulasi seminar proposal (sesi 2) + evaluasi' },
-                      { no:'8', materi:'Revisi pasca simulasi, finishing proposal' },
-                      { no:'9', materi:'Review akhir, persiapan sempro' },
-                    ].map((row, i) => (
-                      <tr key={i} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                        <td className="px-5 py-3.5 text-[#2232dd] font-semibold text-xs whitespace-nowrap">Pertemuan {row.no}</td>
-                        <td className="px-5 py-3.5 text-[#374151] text-xs">{row.materi}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             </div>
 

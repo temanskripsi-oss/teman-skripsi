@@ -17,7 +17,6 @@ const ACCENT = '#0f766e'
 
 const tabs = [
   { id: 'overview', label: 'Overview' },
-  { id: 'program', label: 'Detail Program' },
   { id: 'mentor', label: 'Mentor' },
   { id: 'testimoni', label: 'Testimoni' },
   { id: 'faq', label: 'FAQ' },
@@ -117,41 +116,6 @@ export default function MentoringPenelitianPage() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            <div id="program" className="scroll-mt-32">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Jadwal bimbingan</h2>
-                <p className="text-[#9CA3AF] text-sm mt-2">6x Online via Zoom · 3x Offline tatap muka (Bandar Lampung)</p>
-              </div>
-              <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
-                <table className="w-full text-sm bg-white">
-                  <thead>
-                    <tr className="bg-[#f0fdfa] border-b border-gray-100">
-                      <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Pertemuan</th>
-                      <th className="px-5 py-3.5 text-left text-[#6B6B8A] font-semibold text-xs uppercase tracking-wider">Materi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { no:'1', materi:'Orientasi, review proposal & strategi pengumpulan data' },
-                      { no:'2', materi:'Input & pengolahan data (SPSS / SmartPLS / tools lain)' },
-                      { no:'3', materi:'Interpretasi hasil analisis, mulai penulisan Bab 4' },
-                      { no:'4', materi:'Review Bab 4, mulai penulisan Bab 5' },
-                      { no:'5', materi:'Finalisasi Bab 5 — kesimpulan, saran & implikasi' },
-                      { no:'6', materi:'Review keseluruhan skripsi, perbaikan formatting' },
-                      { no:'7', materi:'Simulasi sidang sesi 1 — latihan presentasi' },
-                      { no:'8', materi:'Simulasi sidang sesi 2 — latihan Q&A dosen penguji' },
-                      { no:'9', materi:'Evaluasi & finalisasi persiapan sidang' },
-                    ].map((row, i) => (
-                      <tr key={i} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                        <td className="px-5 py-3.5 text-[#0f766e] font-semibold text-xs whitespace-nowrap">Pertemuan {row.no}</td>
-                        <td className="px-5 py-3.5 text-[#374151] text-xs">{row.materi}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             </div>
 
