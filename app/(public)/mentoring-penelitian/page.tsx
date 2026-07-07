@@ -48,7 +48,7 @@ export default function MentoringPenelitianPage() {
         badge="Mentoring Privat · Sidang Akhir"
         breadcrumb="Mentoring Privat Sidang Akhir"
         headline="Udah Sempro? Sekarang Saatnya Selesaiin Bab 4-5 sampai ACC Sidang Akhir"
-        sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis data, penulisan Bab 4-5, sampai kamu berdiri percaya diri di depan dewan penguji dan resmi ACC Sidang Akhir."
+        sub="Data sudah ada, tapi bingung ngolahnya? Kami bantu dari analisis data, penulisan Bab 4-5, sampai kamu siap sidang akhir dan resmi ACC di depan dewan penguji."
         price="Rp 2.250.000"
         paymentLink="/daftar/penelitian"
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '1.200+ Alumni']}
