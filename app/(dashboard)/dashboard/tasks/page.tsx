@@ -27,8 +27,8 @@ export default async function TasksPage() {
     <div className="p-8 max-w-4xl">
       <div className="mb-8">
         <p className="text-[#9CA3AF] text-sm mb-1">Dashboard</p>
-        <h1 className="text-3xl font-bold text-[#1E1B4B]">Tugas Mingguan</h1>
-        <p className="text-[#9CA3AF] text-sm mt-1">Kumpulkan output tugas setiap minggu untuk dicek mentor.</p>
+        <h1 className="text-3xl font-bold text-[#1E1B4B]">Tugas Checkpoint</h1>
+        <p className="text-[#9CA3AF] text-sm mt-1">Kumpulkan output tugas tiap checkpoint untuk dicek mentor.</p>
       </div>
       <TasksClient
         tasks={(tasks ?? []) as Task[]}
