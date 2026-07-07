@@ -8,8 +8,8 @@ import { useHideOnScroll } from '@/hooks/useHideOnScroll'
 import { createClient } from '@/lib/supabase/client'
 
 const PROGRAM_LINKS = [
-  { href: '/fastrack', label: 'Fast Track Sempro', desc: '30 hari, dari judul ke proposal ACC' },
-  { href: '/mentoring-sempro', label: 'Mentoring Privat Sempro', desc: 'Bimbingan 1-on-1 sampai proposal ACC' },
+  { href: '/fastrack', label: 'Fast Track Sempro', desc: 'Fastrack Proposal Skripsi', badge: 'Terlaris', badgeColor: '#16a34a', badgeBg: '#f0fdf4' },
+  { href: '/mentoring-sempro', label: 'Mentoring Privat Sempro', desc: 'Bimbingan 1-on-1 sampai ACC Sempro', badge: 'Populer', badgeColor: '#2232dd', badgeBg: '#eff6ff' },
   { href: '/mentoring-penelitian', label: 'Mentoring Privat Bab 4–5', desc: 'Analisis data sampai sidang' },
 ]
 
@@ -43,7 +43,15 @@ function Dropdown({ label, items, onNavigate }: { label: string; items: typeof P
           {items.map(item => (
             <Link key={item.href} href={item.href} onClick={() => { setOpen(false); onNavigate?.() }}
               className="block px-4 py-3 rounded-xl hover:bg-[#f4f8ff] transition-colors cursor-pointer">
-              <p className="text-[#1E1B4B] text-sm font-semibold">{item.label}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-[#1E1B4B] text-sm font-semibold">{item.label}</p>
+                {'badge' in item && item.badge && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ color: item.badgeColor, background: item.badgeBg }}>
+                    {item.badge}
+                  </span>
+                )}
+              </div>
               <p className="text-[#9CA3AF] text-xs mt-0.5">{item.desc}</p>
             </Link>
           ))}
