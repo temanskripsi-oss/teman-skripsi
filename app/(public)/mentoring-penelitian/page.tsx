@@ -61,7 +61,7 @@ export default function MentoringPenelitianPage() {
       <QuickStats stats={[
         { display: '1-on-1', label: 'Privat' },
         { display: 'Zoom + Offline', label: 'Format Bimbingan' },
-        { display: 'Bab 4–5 Tuntas', label: 'Target Program' },
+        { display: 'ACC Sidang Akhir', label: 'Target Program' },
         { value: 1200, suffix: '+', label: 'Alumni' },
       ]} />
 
