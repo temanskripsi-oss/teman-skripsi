@@ -115,7 +115,7 @@ export default function FastTrackPage() {
 
             <div id="testimoni" className="scroll-mt-32">
               <TestimonialSection accentColor={ACCENT} embedded testimonials={[
-                { quote: 'Dalam 30 hari proposal gue ACC! Materinya terstruktur banget, mentor fast responsenya. Highly recommended buat yang mau cepat selesai sempro.', name: 'Aulia Rahma', university: 'Universitas Lampung', initials: 'AR', accentColor: ACCENT, lightBg: '#f0fdf4' },
+                { quote: 'Dalam 30 hari proposal aku ACC! Materinya terstruktur banget, mentor fast responsenya. Highly recommended buat yang mau cepat selesai sempro.', name: 'Aulia Rahma', university: 'Universitas Lampung', initials: 'AR', accentColor: ACCENT, lightBg: '#f0fdf4' },
                 { quote: 'Awalnya bingung mau mulai dari mana, tapi setelah ikut FastTrack semuanya jadi jelas. Judul di-ACC dosen di pertemuan kedua!', name: 'Rizky Maulana', university: 'UMITRA Lampung', initials: 'RM', accentColor: ACCENT, lightBg: '#f0fdf4' },
                 { quote: 'Template dan materi videonya lengkap banget. Gue yang tadinya nol bisa nulis Bab 1–3 dalam 3 minggu. Worth every penny!', name: 'Sinta Dewi', university: 'UBL Lampung', initials: 'SD', accentColor: ACCENT, lightBg: '#f0fdf4' },
               ]} />
