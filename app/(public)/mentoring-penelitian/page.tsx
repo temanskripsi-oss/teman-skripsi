@@ -54,7 +54,8 @@ export default function MentoringPenelitianPage() {
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Simulasi Sidang', '1.200+ Alumni']}
         accentColor={ACCENT}
         lightBg="#f0fdfa"
-        testimonial={{ quote: 'Simulasi sidang bener-bener ngubah confidence gue. Pertanyaan penguji udah gue antisipasi semua.', name: 'Fitria Sari', university: 'UBL Lampung' }}
+        testimonial={{ quote: 'Simulasi sidang bener-bener ngubah confidence aku. Pertanyaan penguji udah aku antisipasi semua.', name: 'Fijira Pasya', university: 'Universitas Lampung' }}
+        photo="/graduates/Hero Bimbingan penelitian.jpeg"
       />
 
       <QuickStats stats={[
@@ -126,7 +127,7 @@ export default function MentoringPenelitianPage() {
             <div id="testimoni" className="scroll-mt-32">
               <TestimonialSection accentColor={ACCENT} embedded testimonials={[
                 { quote: 'Data SPSS gue yang berantakan akhirnya bisa diinterpretasi dengan benar. Mentor bantu step by step sampai Bab 4 dan 5 selesai dalam 2 bulan.', name: 'Bagas Saputra', university: 'Universitas Lampung', initials: 'BS', accentColor: ACCENT, lightBg: '#f0fdfa' },
-                { quote: 'Simulasi sidang di pertemuan terakhir bener-bener ngubah confidence gue. Pas sidang asli, pertanyaan penguji udah gue antisipasi semua.', name: 'Fitria Sari', university: 'UBL Lampung', initials: 'FS', accentColor: ACCENT, lightBg: '#f0fdfa' },
+                { quote: 'Mentor bantu aku ngolah data yang tadinya berantakan jadi hasil analisis yang rapi dan siap dibahas di Bab 4.', name: 'Fitria Sari', university: 'UBL Lampung', initials: 'FS', accentColor: ACCENT, lightBg: '#f0fdfa' },
                 { quote: 'SmartPLS gue error mulu dan gue hampir nyerah. Tapi mentor sabar bantu debug dan akhirnya hasil analisis gue valid. Alhamdulillah lulus!', name: 'Andi Kurniawan', university: 'UMITRA Lampung', initials: 'AK', accentColor: ACCENT, lightBg: '#f0fdfa' },
               ]} />
             </div>

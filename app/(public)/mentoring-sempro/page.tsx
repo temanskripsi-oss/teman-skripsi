@@ -54,7 +54,8 @@ export default function MentoringSemproPage() {
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '1.200+ Alumni']}
         accentColor={ACCENT}
         lightBg="#eff6ff"
-        testimonial={{ quote: 'Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung' }}
+        testimonial={{ quote: 'Mentor sabar banget nemanin revisi sampai proposal aku benar-benar siap.', name: 'Ela Joevira', university: 'UIN Raden Intan Lampung' }}
+        photo="/graduates/Hero Bimbingan bab 1-3.jpeg"
       />
 
       <QuickStats stats={[
@@ -125,7 +126,7 @@ export default function MentoringSemproPage() {
 
             <div id="testimoni" className="scroll-mt-32">
               <TestimonialSection accentColor={ACCENT} embedded testimonials={[
-                { quote: 'Dari judul yang ditolak 3 kali, akhirnya ACC juga berkat bimbingan privat ini. Mentor sabar banget nemanin revisi sampai proposal benar-benar siap.', name: 'Mega Pratiwi', university: 'Universitas Lampung', initials: 'MP', accentColor: ACCENT, lightBg: '#eff6ff' },
+                { quote: 'Dari judul yang ditolak 3 kali, akhirnya ACC juga berkat bimbingan privat ini. Sesi offline-nya bikin aku lebih paham dibanding baca sendiri.', name: 'Mega Pratiwi', university: 'Universitas Lampung', initials: 'MP', accentColor: ACCENT, lightBg: '#eff6ff' },
                 { quote: 'Bimbingan offline-nya sangat membantu, bisa tanya langsung dan dapat feedback real-time. Proposal gue selesai jauh lebih cepat dari yang gue kira.', name: 'Dimas Arya', university: 'UMITRA Lampung', initials: 'DA', accentColor: ACCENT, lightBg: '#eff6ff' },
                 { quote: 'Mentor ngerti banget cara njelasin ke mahasiswa yang awam penelitian. Tiap sesi selalu ada progress yang nyata. Sangat worth it!', name: 'Nadia Putri', university: 'IBI Darmajaya', initials: 'NP', accentColor: ACCENT, lightBg: '#eff6ff' },
               ]} />
