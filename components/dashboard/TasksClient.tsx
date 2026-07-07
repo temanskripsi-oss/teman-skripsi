@@ -10,11 +10,14 @@ const STATUS = {
   revision:  { label: 'Revisi',      icon: RotateCcw,   color: 'text-[#ea580c]', bg: 'bg-orange-50', border: 'border-orange-100' },
 } as const
 
-function getDeadlineInfo(startDate: string | null, weekNumber: number) {
+const FASTRACK_CHECKPOINT_DAY: Record<number, number> = { 1: 4, 2: 8, 3: 15, 4: 22, 5: 24, 6: 26, 7: 31 }
+
+function getDeadlineInfo(startDate: string | null, weekNumber: number, product: string) {
   if (!startDate) return null
+  const targetDay = product === 'fastrack' ? (FASTRACK_CHECKPOINT_DAY[weekNumber] ?? weekNumber * 7) : weekNumber * 7
   const start = new Date(startDate)
   const deadline = new Date(start)
-  deadline.setDate(deadline.getDate() + weekNumber * 7 - 1)
+  deadline.setDate(deadline.getDate() + targetDay - 1)
 
   const now = new Date()
   now.setHours(0, 0, 0, 0)
@@ -87,7 +90,8 @@ export default function TasksClient({ tasks, submissionsMap: initialMap, startDa
     )
   }
 
-  const weekDeadlines = Object.fromEntries(weeks.map(w => [w, getDeadlineInfo(startDate, w)]))
+  const product = tasks[0]?.product ?? 'fastrack'
+  const weekDeadlines = Object.fromEntries(weeks.map(w => [w, getDeadlineInfo(startDate, w, product)]))
 
   return (
     <>
@@ -96,7 +100,7 @@ export default function TasksClient({ tasks, submissionsMap: initialMap, startDa
           <div key={week}>
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <span className="bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 text-xs font-bold px-3 py-1.5 rounded-full">
-                Minggu {week}
+                Checkpoint {week}
               </span>
               {weekDeadlines[week] && (
                 <span className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${weekDeadlines[week]!.color} ${weekDeadlines[week]!.bg} ${weekDeadlines[week]!.border}`}>

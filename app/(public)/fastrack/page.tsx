@@ -72,7 +72,7 @@ export default function FastTrackPage() {
 
       <QuickStats stats={[
         { value: 30, label: 'Hari Program' },
-        { value: 4, suffix: '×', label: 'Zoom Coaching' },
+        { value: 3, suffix: '×', label: 'Zoom Coaching' },
         { value: 3, label: 'Bab Selesai' },
         { value: 1, suffix: '×', label: 'Pertemuan Offline' },
       ]} />

@@ -298,7 +298,7 @@ export default function ContentManager({ videos, freebies, tasks, weekConfigs }:
               <div key={week} className="mb-6">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 text-xs font-bold px-3 py-1.5 rounded-full flex-shrink-0">
-                    Minggu {week}
+                    Checkpoint {week}
                   </span>
                   {isEditing ? (
                     <div className="flex items-center gap-2 flex-1">
@@ -396,7 +396,7 @@ export default function ContentManager({ videos, freebies, tasks, weekConfigs }:
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Minggu</label>
+                  <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Checkpoint</label>
                   <input type="number" min={1} value={taskForm.week_number}
                     onChange={e => setTaskForm(f => ({ ...f, week_number: Number(e.target.value) }))} className={INPUT} />
                 </div>
