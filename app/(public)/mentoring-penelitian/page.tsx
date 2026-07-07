@@ -94,7 +94,7 @@ export default function MentoringPenelitianPage() {
               </div>
               <div className="bg-white border border-[#0f766e]/15 rounded-xl px-5 py-3.5 flex items-center gap-3">
                 <Video size={16} className="text-[#0f766e] flex-shrink-0" />
-                <p className="text-[#374151] text-sm">Termasuk akses video learning + semua template & freebies via dashboard</p>
+                <p className="text-[#374151] text-sm">Termasuk akses video E-Learning + semua template & freebies via dashboard</p>
               </div>
 
               {/* FREE FastTrack */}
