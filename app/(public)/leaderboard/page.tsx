@@ -4,15 +4,16 @@ import { useRouter } from 'next/navigation'
 import { Trophy, LogOut, RefreshCw, TrendingUp, DollarSign, Medal } from 'lucide-react'
 
 interface LeaderboardEntry {
-  code: string
+  sales_email: string
   sales_name: string
+  codes: string[]
   total_sales: number
   total_commission: number
 }
 
 interface LeaderboardData {
   leaderboard: LeaderboardEntry[]
-  myCode: string
+  myEmail: string
   myName: string
   pendingCommission: number
 }
@@ -64,9 +65,9 @@ export default function LeaderboardPage() {
 
   if (!data) return null
 
-  const { leaderboard, myCode, myName, pendingCommission } = data
-  const myRank = leaderboard.findIndex(e => e.code === myCode) + 1
-  const myData = leaderboard.find(e => e.code === myCode)
+  const { leaderboard, myEmail, myName, pendingCommission } = data
+  const myRank = leaderboard.findIndex(e => e.sales_email === myEmail) + 1
+  const myData = leaderboard.find(e => e.sales_email === myEmail)
   const aboveMe = myRank > 1 ? leaderboard[myRank - 2] : null
   const gapToNext = aboveMe ? aboveMe.total_sales - (myData?.total_sales ?? 0) : 0
 
@@ -130,7 +131,7 @@ export default function LeaderboardPage() {
               {[1, 0, 2].map(i => {
                 const entry = top3[i]
                 if (!entry) return <div key={i} className="flex-1" />
-                const isMe = entry.code === myCode
+                const isMe = entry.sales_email === myEmail
                 return (
                   <div key={i} className={`flex-1 flex flex-col items-center ${i === 0 ? 'order-2' : i === 1 ? 'order-1' : 'order-3'}`}>
                     <p className="text-2xl mb-1">{MEDAL[i]}</p>
@@ -139,7 +140,7 @@ export default function LeaderboardPage() {
                       <p className={`font-bold text-sm text-[#1E1B4B] ${isMe ? 'underline decoration-dotted' : ''}`}>
                         {entry.sales_name.split(' ')[0]}{isMe ? ' (Kamu)' : ''}
                       </p>
-                      <p className={`text-xs font-semibold mt-0.5 ${PODIUM_TEXT[i]}`}>{entry.code}</p>
+                      <p className={`text-xs font-semibold mt-0.5 ${PODIUM_TEXT[i]}`}>{entry.codes.join(' · ')}</p>
                       <p className="text-2xl font-bold text-[#1E1B4B] mt-1">{entry.total_sales}</p>
                       <p className="text-[10px] text-[#9CA3AF]">closing</p>
                     </div>
@@ -159,9 +160,9 @@ export default function LeaderboardPage() {
           </div>
           <div className="divide-y divide-gray-50">
             {leaderboard.map((entry, idx) => {
-              const isMe = entry.code === myCode
+              const isMe = entry.sales_email === myEmail
               return (
-                <div key={entry.code}
+                <div key={entry.sales_email}
                   className={`flex items-center gap-4 px-5 py-3.5 transition-colors ${isMe ? 'bg-[#eff6ff]' : 'hover:bg-gray-50'}`}>
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${idx < 3 ? 'bg-[#1E1B4B] text-white' : 'bg-gray-100 text-[#9CA3AF]'}`}>
                     {idx < 3 ? MEDAL[idx] : idx + 1}
@@ -170,7 +171,7 @@ export default function LeaderboardPage() {
                     <p className={`font-semibold text-sm truncate ${isMe ? 'text-[#2232dd]' : 'text-[#1E1B4B]'}`}>
                       {entry.sales_name}{isMe ? ' 👈' : ''}
                     </p>
-                    <p className="text-[#9CA3AF] text-xs">{entry.code}</p>
+                    <p className="text-[#9CA3AF] text-xs">{entry.codes.join(' · ')}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
                     <p className="font-bold text-[#1E1B4B] text-sm">{entry.total_sales} closing</p>

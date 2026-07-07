@@ -33,7 +33,7 @@ export default function DaftarPage() {
       const res = await fetch('/api/validate-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: codeInput }),
+        body: JSON.stringify({ code: codeInput, product: 'fastrack' }),
       })
       const data = await res.json()
       if (data.valid) {

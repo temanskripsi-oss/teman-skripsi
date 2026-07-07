@@ -123,6 +123,7 @@ export interface Registration {
 export interface AffiliateCode {
   id: string
   code: string
+  product: 'fastrack' | 'mentoring'
   sales_name: string
   sales_email: string
   sales_password: string

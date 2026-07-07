@@ -1,11 +1,22 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Users, TrendingUp, DollarSign, Trophy, Plus, Edit2, ToggleLeft, ToggleRight, Loader2, X, CheckCircle, Clock, Trash2 } from 'lucide-react'
 import type { AffiliateCode, AffiliateTransaction } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
 
+const PRODUCT_LABEL: Record<string, string> = { fastrack: 'Fastrack', mentoring: 'Mentoring' }
+
 type Tab = 'sales' | 'komisi'
+
+interface SalesGroup {
+  sales_email: string
+  sales_name: string
+  sales_whatsapp: string | null
+  codes: AffiliateCode[]
+  total_sales: number
+  total_commission: number
+}
 
 export default function SalesTeamPage() {
   const [tab, setTab] = useState<Tab>('sales')
@@ -13,12 +24,12 @@ export default function SalesTeamPage() {
   const [transactions, setTransactions] = useState<AffiliateTransaction[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [editTarget, setEditTarget] = useState<AffiliateCode | null>(null)
+  const [editTarget, setEditTarget] = useState<SalesGroup | null>(null)
   const [saving, setSaving] = useState(false)
   const [togglingId, setTogglingId] = useState<string | null>(null)
   const [markingId, setMarkingId] = useState<string | null>(null)
 
-  const [form, setForm] = useState({ sales_name: '', code: '', sales_email: '', sales_password: '', sales_whatsapp: '' })
+  const [form, setForm] = useState({ sales_name: '', sales_email: '', sales_password: '', sales_whatsapp: '' })
 
   const fetchSales = useCallback(async () => {
     const [s, t] = await Promise.all([
@@ -32,20 +43,37 @@ export default function SalesTeamPage() {
 
   useEffect(() => { fetchSales() }, [fetchSales])
 
-  const autoCode = (name: string) => {
-    const first = name.trim().split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '')
-    return first ? `${first}50` : ''
-  }
+  const salesGroups = useMemo<SalesGroup[]>(() => {
+    const map = new Map<string, SalesGroup>()
+    for (const s of salesList) {
+      const existing = map.get(s.sales_email)
+      if (existing) {
+        existing.codes.push(s)
+        existing.total_sales += s.total_sales
+        existing.total_commission += s.total_commission
+      } else {
+        map.set(s.sales_email, {
+          sales_email: s.sales_email,
+          sales_name: s.sales_name,
+          sales_whatsapp: s.sales_whatsapp,
+          codes: [s],
+          total_sales: s.total_sales,
+          total_commission: s.total_commission,
+        })
+      }
+    }
+    return Array.from(map.values()).sort((a, b) => b.total_sales - a.total_sales)
+  }, [salesList])
 
   const openAdd = () => {
     setEditTarget(null)
-    setForm({ sales_name: '', code: '', sales_email: '', sales_password: '', sales_whatsapp: '' })
+    setForm({ sales_name: '', sales_email: '', sales_password: '', sales_whatsapp: '' })
     setShowModal(true)
   }
 
-  const openEdit = (s: AffiliateCode) => {
-    setEditTarget(s)
-    setForm({ sales_name: s.sales_name, code: s.code, sales_email: s.sales_email, sales_password: '', sales_whatsapp: s.sales_whatsapp ?? '' })
+  const openEdit = (g: SalesGroup) => {
+    setEditTarget(g)
+    setForm({ sales_name: g.sales_name, sales_email: g.sales_email, sales_password: '', sales_whatsapp: g.sales_whatsapp ?? '' })
     setShowModal(true)
   }
 
@@ -55,7 +83,7 @@ export default function SalesTeamPage() {
       await fetch('/api/admin/sales-team', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: editTarget.id, ...form }),
+        body: JSON.stringify({ original_email: editTarget.sales_email, ...form }),
       })
     } else {
       const res = await fetch('/api/admin/sales-team', {
@@ -93,18 +121,18 @@ export default function SalesTeamPage() {
     setMarkingId(null)
   }
 
-  const deleteSales = async (s: AffiliateCode) => {
-    if (!confirm(`Hapus sales "${s.sales_name}"? Kode ${s.code} tidak bisa dipakai lagi.`)) return
+  const deleteSales = async (g: SalesGroup) => {
+    if (!confirm(`Hapus sales "${g.sales_name}"? Kedua kode (${g.codes.map(c => c.code).join(', ')}) tidak bisa dipakai lagi.`)) return
     await fetch('/api/admin/sales-team', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: s.id }),
+      body: JSON.stringify({ sales_email: g.sales_email }),
     })
     await fetchSales()
   }
 
-  const topSales = salesList[0]
-  const totalClosing = salesList.reduce((s, a) => s + a.total_sales, 0)
+  const topSales = salesGroups[0]
+  const totalClosing = salesGroups.reduce((s, a) => s + a.total_sales, 0)
   const totalCommissionPending = transactions.filter(t => t.status === 'pending').reduce((s, t) => s + t.commission_amount, 0)
 
   return (
@@ -124,7 +152,7 @@ export default function SalesTeamPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: 'Total Sales', value: salesList.length, icon: Users, color: '#2232dd', bg: '#eff6ff' },
+          { label: 'Total Sales', value: salesGroups.length, icon: Users, color: '#2232dd', bg: '#eff6ff' },
           { label: 'Total Closing', value: totalClosing, icon: TrendingUp, color: '#16a34a', bg: '#f0fdf4' },
           { label: 'Komisi Pending', value: `Rp ${(totalCommissionPending/1000).toFixed(0)}rb`, icon: DollarSign, color: '#ea580c', bg: '#fff7ed' },
           { label: 'Top Performer', value: topSales?.sales_name.split(' ')[0] ?? '-', icon: Trophy, color: '#7C6FCD', bg: '#f5f3ff' },
@@ -160,7 +188,7 @@ export default function SalesTeamPage() {
         </div>
       ) : tab === 'sales' ? (
         /* Sales Table */
-        salesList.length === 0 ? (
+        salesGroups.length === 0 ? (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-14 text-center">
             <p className="text-[#9CA3AF] text-sm">Belum ada sales team. Tambah sales pertama!</p>
           </div>
@@ -170,36 +198,38 @@ export default function SalesTeamPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 bg-[#fafafa]">
-                    {['Nama', 'Kode', 'Email', 'WhatsApp', 'Closing', 'Komisi', 'Status', 'Aksi'].map(h => (
+                    {['Nama', 'Kode Diskon', 'Email', 'WhatsApp', 'Closing', 'Komisi', 'Aksi'].map(h => (
                       <th key={h} className="text-left px-5 py-3.5 text-[#9CA3AF] text-xs font-semibold whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {salesList.map(s => (
-                    <tr key={s.id} className="hover:bg-[#fafafa] transition-colors">
-                      <td className="px-5 py-3.5 font-semibold text-[#1E1B4B]">{s.sales_name}</td>
+                  {salesGroups.map(g => (
+                    <tr key={g.sales_email} className="hover:bg-[#fafafa] transition-colors align-top">
+                      <td className="px-5 py-3.5 font-semibold text-[#1E1B4B]">{g.sales_name}</td>
                       <td className="px-5 py-3.5">
-                        <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-bold">{s.code}</span>
+                        <div className="flex flex-col gap-1.5">
+                          {g.codes.map(c => (
+                            <div key={c.id} className="flex items-center gap-1.5">
+                              <span className="text-xs bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-bold whitespace-nowrap">{c.code}</span>
+                              <span className="text-[10px] text-[#9CA3AF]">{PRODUCT_LABEL[c.product] ?? c.product}</span>
+                              <button onClick={() => toggleActive(c)} disabled={togglingId === c.id} className="p-1 rounded hover:bg-gray-100 text-[#9CA3AF] transition-colors" title={c.is_active ? 'Nonaktifkan' : 'Aktifkan'}>
+                                {togglingId === c.id ? <Loader2 size={12} className="animate-spin" /> : c.is_active ? <ToggleRight size={12} className="text-[#16a34a]" /> : <ToggleLeft size={12} />}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </td>
-                      <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{s.sales_email}</td>
-                      <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{s.sales_whatsapp ?? '-'}</td>
-                      <td className="px-5 py-3.5 font-bold text-[#1E1B4B]">{s.total_sales}</td>
-                      <td className="px-5 py-3.5 text-[#1E1B4B] text-xs font-medium">Rp {s.total_commission.toLocaleString('id-ID')}</td>
-                      <td className="px-5 py-3.5">
-                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap ${s.is_active ? 'text-[#16a34a] bg-green-50 border-green-100' : 'text-[#9CA3AF] bg-gray-50 border-gray-100'}`}>
-                          {s.is_active ? 'Aktif' : 'Nonaktif'}
-                        </span>
-                      </td>
+                      <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{g.sales_email}</td>
+                      <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{g.sales_whatsapp ?? '-'}</td>
+                      <td className="px-5 py-3.5 font-bold text-[#1E1B4B]">{g.total_sales}</td>
+                      <td className="px-5 py-3.5 text-[#1E1B4B] text-xs font-medium">Rp {g.total_commission.toLocaleString('id-ID')}</td>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-1.5">
-                          <button onClick={() => openEdit(s)} className="p-1.5 rounded-lg hover:bg-[#eff6ff] text-[#2232dd] transition-colors" title="Edit">
+                          <button onClick={() => openEdit(g)} className="p-1.5 rounded-lg hover:bg-[#eff6ff] text-[#2232dd] transition-colors" title="Edit">
                             <Edit2 size={13} />
                           </button>
-                          <button onClick={() => toggleActive(s)} disabled={togglingId === s.id} className="p-1.5 rounded-lg hover:bg-gray-100 text-[#9CA3AF] transition-colors" title={s.is_active ? 'Nonaktifkan' : 'Aktifkan'}>
-                            {togglingId === s.id ? <Loader2 size={13} className="animate-spin" /> : s.is_active ? <ToggleRight size={13} className="text-[#16a34a]" /> : <ToggleLeft size={13} />}
-                          </button>
-                          <button onClick={() => deleteSales(s)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 transition-colors" title="Hapus">
+                          <button onClick={() => deleteSales(g)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 transition-colors" title="Hapus">
                             <Trash2 size={13} />
                           </button>
                         </div>
@@ -289,19 +319,29 @@ export default function SalesTeamPage() {
               <div>
                 <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Nama Lengkap *</label>
                 <input className={INPUT} placeholder="Andi Rahmat" value={form.sales_name}
-                  onChange={e => setForm(f => ({
-                    ...f,
-                    sales_name: e.target.value,
-                    code: editTarget ? f.code : autoCode(e.target.value),
-                  }))} />
+                  onChange={e => setForm(f => ({ ...f, sales_name: e.target.value }))} />
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Kode Diskon Unik *</label>
-                <input className={INPUT} placeholder="ANDI50" value={form.code}
-                  onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))}
-                  disabled={!!editTarget} />
-                {!editTarget && <p className="text-[10px] text-[#9CA3AF] mt-1">Auto-generate dari nama · bisa diubah manual</p>}
-              </div>
+
+              {editTarget ? (
+                <div>
+                  <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Kode Diskon</label>
+                  <div className="flex flex-col gap-1.5">
+                    {editTarget.codes.map(c => (
+                      <div key={c.id} className="flex items-center gap-2 border border-gray-100 bg-gray-50 rounded-xl px-3 py-2">
+                        <span className="text-xs bg-white text-[#2232dd] border border-[#2232dd]/20 px-2.5 py-1 rounded-full font-bold">{c.code}</span>
+                        <span className="text-[11px] text-[#9CA3AF]">{PRODUCT_LABEL[c.product] ?? c.product} · Rp {c.discount_amount.toLocaleString('id-ID')}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-[#eff6ff] border border-[#2232dd]/15 rounded-xl px-3.5 py-3">
+                  <p className="text-xs text-[#2232dd] font-semibold mb-1">2 kode diskon otomatis dibuat:</p>
+                  <p className="text-[11px] text-[#6B6B8A]">Fastrack: <span className="font-mono font-semibold">FT{(form.sales_name.trim().split(' ')[0] || 'NAMA').toUpperCase().replace(/[^A-Z]/g, '')}50</span> · Rp 50.000</p>
+                  <p className="text-[11px] text-[#6B6B8A]">Mentoring Privat: <span className="font-mono font-semibold">MP{(form.sales_name.trim().split(' ')[0] || 'NAMA').toUpperCase().replace(/[^A-Z]/g, '')}100</span> · Rp 100.000</p>
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Email *</label>
                 <input className={INPUT} type="email" placeholder="andi@gmail.com" value={form.sales_email}
@@ -326,7 +366,7 @@ export default function SalesTeamPage() {
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-[#9CA3AF] hover:bg-gray-50 transition-colors">
                 Batal
               </button>
-              <button onClick={handleSave} disabled={saving || !form.sales_name || !form.code || !form.sales_email || (!editTarget && !form.sales_password)}
+              <button onClick={handleSave} disabled={saving || !form.sales_name || !form.sales_email || (!editTarget && !form.sales_password)}
                 className="flex-1 py-2.5 rounded-xl bg-[#2232dd] text-white text-sm font-bold hover:bg-[#1a28b8] disabled:opacity-60 transition-colors flex items-center justify-center gap-2">
                 {saving ? <Loader2 size={14} className="animate-spin" /> : null}
                 {editTarget ? 'Simpan' : 'Tambah Sales'}
