@@ -61,7 +61,7 @@ export default function MentoringSemproPage() {
       <QuickStats stats={[
         { display: '1-on-1', label: 'Privat' },
         { display: 'Zoom + Offline', label: 'Format Bimbingan' },
-        { display: 'Proposal ACC', label: 'Target Program' },
+        { display: 'ACC Sempro', label: 'Target Program' },
         { value: 1200, suffix: '+', label: 'Alumni' },
       ]} />
 
