@@ -34,7 +34,7 @@ const products = [
     tagBg: 'bg-[#2232dd] text-white',
     name: 'Mentoring Privat',
     sub: 'Paket Sempro',
-    desc: 'Bimbingan personal 1-on-1 dengan mentor berpengalaman dari judul sampai proposal ACC.',
+    desc: 'Bimbingan personal 1-on-1 dengan mentor berpengalaman dari judul sampai ACC Sempro.',
     price: 'Rp 2.000.000',
     href: '/mentoring-sempro',
     accentBg: '#eff6ff',
