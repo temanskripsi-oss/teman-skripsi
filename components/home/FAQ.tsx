@@ -34,7 +34,7 @@ export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section id="faq" className="py-20 px-4 bg-white scroll-mt-24">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row gap-12 items-start">
 

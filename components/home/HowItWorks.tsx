@@ -6,7 +6,7 @@ export default function HowItWorks() {
   ]
 
   return (
-    <section className="py-20 px-4 bg-[#f4f8ff] relative">
+    <section id="cara-kerja" className="py-20 px-4 bg-[#f4f8ff] relative scroll-mt-24">
       <div className="absolute inset-0 grid-bg-light pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-14">

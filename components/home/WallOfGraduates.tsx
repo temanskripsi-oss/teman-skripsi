@@ -68,7 +68,7 @@ function GradCard({ g }: { g: Graduate }) {
 
 export default function WallOfGraduates() {
   return (
-    <section className="py-20 bg-[#f4f8ff] overflow-hidden">
+    <section id="alumni" className="py-20 bg-[#f4f8ff] overflow-hidden scroll-mt-24">
       {/* Header */}
       <div className="text-center mb-12 px-4">
         <div className="inline-flex items-center gap-2 bg-[#eff6ff] border border-[#2232dd]/20 text-[#2232dd] text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
