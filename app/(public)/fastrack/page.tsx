@@ -60,7 +60,7 @@ export default function FastTrackPage() {
         badge="Fast Track · 30 Hari"
         breadcrumb="Fast Track Sempro"
         headline="Dari Judul ke Proposal Siap Seminar cuma 30 Hari"
-        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti membawa 1.200+ mahasiswa ACC proposal."
+        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti membawa ratusan mahasiswa ACC proposal."
         price="Rp 500.000"
         paymentLink="/daftar"
         trusts={['1.200+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
