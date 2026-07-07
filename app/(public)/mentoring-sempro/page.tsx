@@ -54,7 +54,7 @@ export default function MentoringSemproPage() {
         trusts={['9 Pertemuan Privat', '3 Bulan Masa Aktif', 'Offline + Online', '1.200+ Alumni']}
         accentColor={ACCENT}
         lightBg="#eff6ff"
-        testimonial={{ quote: 'Mentor sabar banget nemanin revisi sampai proposal aku benar-benar siap.', name: 'Ela Joevira', university: 'UIN Raden Intan Lampung' }}
+        testimonial={{ quote: 'Mentor sabar banget nemenin revisi sampai proposal aku benar-benar siap.', name: 'Ela Joevira', university: 'UIN Raden Intan Lampung' }}
         photo="/graduates/Hero Bimbingan bab 1-3.jpeg"
       />
 
