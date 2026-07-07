@@ -21,7 +21,7 @@ export default function Sidebar({ product }: { product: Product }) {
     { href: '/dashboard/videos',     icon: Video,         label: 'Video Materi',        show: true },
     { href: '/dashboard/freebies',   icon: Gift,          label: 'Template & Freebies', show: true },
     { href: '/dashboard/schedule',   icon: Calendar,      label: 'Jadwal Bimbingan',    show: true },
-    { href: '/dashboard/tasks',      icon: ClipboardList, label: 'Tugas Mingguan',      show: !isPrivat },
+    { href: '/dashboard/tasks',      icon: ClipboardList, label: 'Tugas Checkpoint',    show: !isPrivat },
     { href: '/dashboard/feedback',   icon: FileText,      label: 'Written Feedback',    show: !isPrivat },
     { href: '/dashboard/progress',   icon: BookOpen,      label: 'Progress Bimbingan',  show: isPrivat },
     { href: '/dashboard/profile',    icon: User,          label: 'Profil',              show: true },
