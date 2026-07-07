@@ -28,7 +28,7 @@ const tabs = [
 const faqs = [
   { q: 'Program ini cocok untuk jurusan apa?', a: 'Semua jurusan non-teknik — manajemen, ekonomi, hukum, psikologi, pendidikan, komunikasi, dan lainnya.' },
   { q: 'Apakah bisa diikuti sambil kuliah/kerja?', a: 'Bisa! Materi video bisa ditonton kapan saja. Sesi zoom coaching dijadwalkan di waktu yang fleksibel.' },
-  { q: 'Bagaimana cara daftar?', a: 'Klik tombol Daftar Sekarang, lakukan pembayaran via Mayar.id, lalu admin akan konfirmasi dan buat akun dashboard kamu.' },
+  { q: 'Bagaimana cara daftar?', a: 'Klik tombol Daftar Sekarang, lakukan pembayaran via QRIS, lalu admin akan konfirmasi dan buat akun dashboard kamu.' },
   { q: 'Apakah ada garansi?', a: 'Kami berkomitmen mendampingi kamu sampai proposal selesai selama masa aktif program.' },
   { q: 'Berapa peserta dalam satu batch?', a: 'Maksimal 20 orang per batch agar kualitas bimbingan tetap terjaga.' },
 ]
