@@ -30,7 +30,7 @@ const faqs = [
   { q: 'Apakah bisa diikuti sambil kuliah/kerja?', a: 'Bisa! Materi video bisa ditonton kapan saja. Sesi zoom coaching dijadwalkan di waktu yang fleksibel.' },
   { q: 'Bagaimana cara daftar?', a: 'Klik tombol Daftar Sekarang, lakukan pembayaran via QRIS, lalu admin akan konfirmasi dan buat akun dashboard kamu.' },
   { q: 'Apakah ada garansi?', a: 'Kami berkomitmen mendampingi kamu sampai proposal selesai selama masa aktif program.' },
-  { q: 'Berapa peserta dalam satu batch?', a: 'Maksimal 20 orang per batch agar kualitas bimbingan tetap terjaga.' },
+  { q: 'Berapa peserta dalam satu batch?', a: 'Maksimal 50 orang per batch agar kualitas bimbingan tetap terjaga.' },
 ]
 
 const benefits = [
@@ -144,7 +144,7 @@ export default function FastTrackPage() {
               facts={[
                 { icon: Video, label: 'Metode', value: 'Online' },
                 { icon: Clock, label: 'Durasi', value: '30 Hari' },
-                { icon: Users, label: 'Kuota', value: 'Maks 20/batch' },
+                { icon: Users, label: 'Kuota', value: 'Maks 50/batch' },
               ]}
             />
           </div>
