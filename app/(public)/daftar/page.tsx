@@ -93,7 +93,7 @@ export default function DaftarPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#f4f8ff] py-12 px-4">
+      <div className="min-h-screen bg-[#f4f8ff] pt-28 pb-12 px-4">
         <div className="max-w-lg mx-auto">
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 bg-[#eff6ff] border border-[#2232dd]/20 text-[#2232dd] text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
@@ -161,7 +161,7 @@ export default function DaftarPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f8ff] py-12 px-4">
+    <div className="min-h-screen bg-[#f4f8ff] pt-28 pb-12 px-4">
       <div className="max-w-lg mx-auto">
 
         <div className="text-center mb-8">
