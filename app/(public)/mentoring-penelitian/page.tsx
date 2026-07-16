@@ -3,7 +3,6 @@ import HeroProgram from '@/components/program/HeroProgram'
 import QuickStats from '@/components/program/QuickStats'
 import StickyNavTabs from '@/components/program/StickyNavTabs'
 import StickyPricingCard from '@/components/program/StickyPricingCard'
-import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
 import { MapPin, Wifi, FileText, Video, Check, Gift, ArrowRight, Users, Clock, FlaskConical } from 'lucide-react'
@@ -17,7 +16,6 @@ const ACCENT = '#0f766e'
 
 const tabs = [
   { id: 'overview', label: 'Overview' },
-  { id: 'mentor', label: 'Mentor' },
   { id: 'testimoni', label: 'Testimoni' },
   { id: 'faq', label: 'FAQ' },
 ]
@@ -118,10 +116,6 @@ export default function MentoringPenelitianPage() {
                   ))}
                 </div>
               </div>
-            </div>
-
-            <div id="mentor" className="scroll-mt-32">
-              <MentorSection accentColor={ACCENT} embedded />
             </div>
 
             <div id="testimoni" className="scroll-mt-32">

@@ -5,7 +5,6 @@ import StickyNavTabs from '@/components/program/StickyNavTabs'
 import StickyPricingCard from '@/components/program/StickyPricingCard'
 import BenefitList from '@/components/program/BenefitList'
 import TimelineHybrid, { type TimelinePhase } from '@/components/program/TimelineHybrid'
-import MentorSection from '@/components/program/MentorSection'
 import FAQ from '@/components/product/FAQ'
 import TestimonialSection from '@/components/product/TestimonialSection'
 import { ArrowRight, Video, Clock, Users, Zap } from 'lucide-react'
@@ -20,7 +19,6 @@ const ACCENT = '#16a34a'
 const tabs = [
   { id: 'overview', label: 'Overview' },
   { id: 'timeline', label: 'Timeline' },
-  { id: 'mentor', label: 'Mentor' },
   { id: 'testimoni', label: 'Testimoni' },
   { id: 'faq', label: 'FAQ' },
 ]
@@ -110,10 +108,6 @@ export default function FastTrackPage() {
                 <h2 className="text-3xl sm:text-4xl font-bold text-[#1E1B4B]">Timeline 30 Hari</h2>
               </div>
               <TimelineHybrid phases={phases} />
-            </div>
-
-            <div id="mentor" className="scroll-mt-32">
-              <MentorSection accentColor={ACCENT} embedded />
             </div>
 
             <div id="testimoni" className="scroll-mt-32">
