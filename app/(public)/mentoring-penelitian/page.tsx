@@ -105,7 +105,7 @@ export default function MentoringPenelitianPage() {
                   <h3 className="text-xl sm:text-2xl font-bold text-[#1E1B4B] mb-2">
                     Selain 9 pertemuan privat, kamu juga dapat:
                   </h3>
-                  <p className="text-[#6B6B8A] text-sm">Senilai Rp 500.000 — GRATIS untuk kamu</p>
+                  <p className="text-[#6B6B8A] text-sm">Senilai Rp 1.000.000 — GRATIS untuk kamu</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {includedFastTrack.map((item, i) => (
