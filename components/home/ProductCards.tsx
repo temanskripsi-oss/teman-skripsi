@@ -11,6 +11,9 @@ const products = [
     sub: '30 Hari',
     desc: 'Sistem terstruktur 30 hari yang sudah terbukti bantu ratusan mahasiswa dari bingung jadi proposal ACC.',
     price: 'Rp 500.000',
+    originalPrice: 'Rp 1.000.000',
+    discountBadge: 'Diskon 50%',
+    quotaNote: 'Kuota terbatas — cuma buat 50 orang bulan ini.',
     href: '/fastrack',
     accentBg: '#f0fdf4',
     accentBtn: '#1E1B4B',
@@ -134,6 +137,10 @@ export default function ProductCards() {
                   </div>
                   <p className="text-[#6B6B8A] text-sm leading-relaxed mt-2">{p.desc}</p>
 
+                  {p.quotaNote && (
+                    <p className="text-[#B45309] text-xs font-semibold mt-3">{p.quotaNote}</p>
+                  )}
+
                   {p.freeTag && (
                     <div className="mt-4 inline-flex items-center gap-1.5 bg-[#9eff63]/20 border border-[#9eff63]/40 text-[#1E1B4B] text-xs font-bold px-3 py-1.5 rounded-full">
                       <Gift size={12} className="text-[#16a34a]" />
@@ -170,6 +177,14 @@ export default function ProductCards() {
 
                 {/* Price + CTA */}
                 <div className="px-7 pb-7 pt-4 border-t border-gray-100">
+                  {p.originalPrice && (
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-[#9CA3AF] text-sm line-through decoration-[#9CA3AF]/70">{p.originalPrice}</span>
+                      <span className="inline-flex items-center bg-[#FEF3C7] text-[#92400E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#FDE68A]">
+                        {p.discountBadge}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-baseline gap-1 mb-4">
                     <p className="text-3xl font-bold text-[#1E1B4B] tracking-tight">{p.price}</p>
                     <p className="text-[#9CA3AF] text-sm">/program</p>

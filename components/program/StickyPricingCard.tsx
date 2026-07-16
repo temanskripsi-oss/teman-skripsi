@@ -11,6 +11,8 @@ interface Props {
   icon: LucideIcon
   name: string
   price: string
+  originalPrice?: string
+  discountBadge?: string
   paymentLink: string
   facts: PricingFact[]
   trustCount: string
@@ -22,7 +24,7 @@ function initialsOf(name: string) {
   return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
 }
 
-export default function StickyPricingCard({ icon: Icon, name, price, paymentLink, facts, trustCount, trustNames, accentColor = '#2232dd' }: Props) {
+export default function StickyPricingCard({ icon: Icon, name, price, originalPrice, discountBadge, paymentLink, facts, trustCount, trustNames, accentColor = '#2232dd' }: Props) {
   return (
     <div className="sticky top-32 bg-white rounded-2xl border border-gray-100 shadow-lg overflow-hidden">
       <div className="px-6 py-5 flex items-center gap-3" style={{ background: `linear-gradient(135deg, ${accentColor}14 0%, ${accentColor}05 100%)` }}>
@@ -33,6 +35,16 @@ export default function StickyPricingCard({ icon: Icon, name, price, paymentLink
       </div>
 
       <div className="px-6 py-5">
+        {originalPrice && (
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[#9CA3AF] text-sm line-through decoration-[#9CA3AF]/70">{originalPrice}</span>
+            {discountBadge && (
+              <span className="inline-flex items-center bg-[#FEF3C7] text-[#92400E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#FDE68A]">
+                {discountBadge}
+              </span>
+            )}
+          </div>
+        )}
         <p className="text-[28px] font-extrabold tracking-tight leading-none mb-1.5" style={{ color: accentColor }}>{price}</p>
         <p className="text-[#9CA3AF] text-xs mb-5">Pembayaran via QRIS · akses langsung ke dashboard</p>
 

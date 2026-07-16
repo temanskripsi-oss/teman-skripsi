@@ -60,8 +60,11 @@ export default function FastTrackPage() {
         badge="Fast Track · 30 Hari"
         breadcrumb="Fast Track Sempro"
         headline="Dari Judul ke Proposal Siap Seminar cuma 30 Hari"
-        sub="Cocok untuk kamu yang baru mulai atau yang sudah nunda terlalu lama. Sistem terstruktur yang terbukti membawa ratusan mahasiswa ACC proposal."
+        sub="Bulan ini, investasi Fast Track Sempro turun jadi Rp500rb dari harga normal Rp1jt — kuota dibatasi 50 orang agar pendampingan mentor tetap maksimal untuk setiap peserta."
         price="Rp 500.000"
+        originalPrice="Rp 1.000.000"
+        discountBadge="Diskon 50%"
+        priceNote="Diskon berlaku 1–25 Juli 2026. Tanggal 26–31 kembali ke harga normal, jika kuota masih tersedia."
         paymentLink="/daftar"
         trusts={['1.200+ Alumni', 'Online Se-Indonesia', 'Terbukti ACC', 'Mulai Kapan Saja']}
         accentColor={ACCENT}
@@ -132,6 +135,8 @@ export default function FastTrackPage() {
               icon={Zap}
               name="Fast Track Sempro"
               price="Rp 500.000"
+              originalPrice="Rp 1.000.000"
+              discountBadge="Diskon 50%"
               paymentLink="/daftar"
               accentColor={ACCENT}
               trustCount="1.200+"
@@ -150,7 +155,10 @@ export default function FastTrackPage() {
       <div className="lg:hidden sticky bottom-0 z-40 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-4 py-3 flex items-center justify-between gap-4">
         <div>
           <p className="text-[10px] text-[#9CA3AF] uppercase tracking-wider">Fast Track Sempro</p>
-          <p className="font-bold text-[#1E1B4B]">Rp 500.000</p>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[#9CA3AF] text-xs line-through">Rp 1.000.000</span>
+            <p className="font-bold text-[#1E1B4B]">Rp 500.000</p>
+          </div>
         </div>
         <a href="/daftar" className="flex-shrink-0 flex items-center gap-1.5 font-bold px-5 py-3 rounded-xl text-sm text-white cursor-pointer" style={{ background: ACCENT }}>
           Daftar <ArrowRight size={15} />
@@ -162,9 +170,12 @@ export default function FastTrackPage() {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#16a34a] rounded-full blur-[140px] opacity-10 pointer-events-none" />
         <div className="relative z-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Siap mulai perjalananmu?</h2>
-          <p className="text-white/50 mb-8">30 hari dari sekarang, proposal kamu bisa sudah ACC.</p>
+          <p className="text-white/50 mb-8">Diskon 50% berlaku sampai 25 Juli — kuota terbatas untuk 50 orang.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <p className="text-2xl font-bold text-white">Rp 500.000</p>
+            <div className="flex items-center gap-2.5">
+              <span className="text-white/40 text-lg line-through">Rp 1.000.000</span>
+              <p className="text-2xl font-bold text-white">Rp 500.000</p>
+            </div>
             <a href="/daftar" className="group inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-[#1E1B4B] font-bold px-8 py-4 rounded-2xl transition-all hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
               Daftar Sekarang <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>

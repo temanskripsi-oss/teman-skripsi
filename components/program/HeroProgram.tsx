@@ -14,6 +14,9 @@ interface Props {
   headline: string
   sub: string
   price: string
+  originalPrice?: string
+  discountBadge?: string
+  priceNote?: string
   paymentLink: string
   trusts: string[]
   accentColor?: string
@@ -22,7 +25,7 @@ interface Props {
   photo?: string
 }
 
-export default function HeroProgram({ badge, breadcrumb, headline, sub, price, paymentLink, trusts, accentColor = '#2232dd', lightBg = '#eff6ff', testimonial, photo }: Props) {
+export default function HeroProgram({ badge, breadcrumb, headline, sub, price, originalPrice, discountBadge, priceNote, paymentLink, trusts, accentColor = '#2232dd', lightBg = '#eff6ff', testimonial, photo }: Props) {
   const isLight = accentColor === '#9eff63' || accentColor === '#4DD9C0'
 
   return (
@@ -50,6 +53,16 @@ export default function HeroProgram({ badge, breadcrumb, headline, sub, price, p
             </h1>
             <p className="text-[#636687] text-lg mb-8 max-w-[520px] leading-relaxed">{sub}</p>
 
+            {originalPrice && (
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[#9CA3AF] text-base line-through decoration-[#9CA3AF]/70">{originalPrice}</span>
+                {discountBadge && (
+                  <span className="inline-flex items-center bg-[#FEF3C7] text-[#92400E] text-xs font-bold px-2.5 py-1 rounded-full border border-[#FDE68A]">
+                    {discountBadge}
+                  </span>
+                )}
+              </div>
+            )}
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
               <p className="text-3xl sm:text-4xl font-bold text-[#1E1B4B] tracking-tight">{price}</p>
               <Link href={paymentLink}
@@ -59,7 +72,11 @@ export default function HeroProgram({ badge, breadcrumb, headline, sub, price, p
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <p className="text-[#6B6B8A] text-xs mb-8">Pembayaran via QRIS · Akses langsung ke dashboard</p>
+            {priceNote ? (
+              <p className="text-[#B45309] text-xs font-semibold mb-8">{priceNote}</p>
+            ) : (
+              <p className="text-[#6B6B8A] text-xs mb-8">Pembayaran via QRIS · Akses langsung ke dashboard</p>
+            )}
 
             <div className="flex flex-wrap gap-2.5">
               {trusts.map((t, i) => (
