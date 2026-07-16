@@ -7,6 +7,7 @@ import { getNextBatch } from '@/lib/mayar'
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
 
 const BASE_PRICE = 500_000
+const PROMO_ORIGINAL_PRICE = 1_000_000
 const ADMIN_WA = '6289524785477'
 
 export default function DaftarPage() {
@@ -179,7 +180,15 @@ export default function DaftarPage() {
               <p className="font-semibold text-[#1E1B4B] text-sm">Fast Track Sempro</p>
               <p className="text-[#9CA3AF] text-xs">Batch {batchLabel} · Akses 30 hari</p>
             </div>
-            <p className="font-bold text-[#1E1B4B]">Rp {BASE_PRICE.toLocaleString('id-ID')}</p>
+            <div className="text-right">
+              <div className="flex items-center gap-1.5 justify-end mb-0.5">
+                <span className="text-[#9CA3AF] text-xs line-through">Rp {PROMO_ORIGINAL_PRICE.toLocaleString('id-ID')}</span>
+                <span className="inline-flex items-center bg-[#FEF3C7] text-[#92400E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#FDE68A]">
+                  Diskon 50%
+                </span>
+              </div>
+              <p className="font-bold text-[#1E1B4B]">Rp {BASE_PRICE.toLocaleString('id-ID')}</p>
+            </div>
           </div>
           <div className="mt-4 pt-4 border-t border-gray-100">
             {appliedCode ? (
@@ -212,6 +221,7 @@ export default function DaftarPage() {
               </span>
             ))}
           </div>
+          <p className="text-[#B45309] text-[11px] font-semibold mt-3">Diskon berlaku 1–25 Juli 2026. Tanggal 26–31 kembali ke harga normal, jika kuota masih tersedia.</p>
         </div>
 
         {/* Kode Diskon */}
