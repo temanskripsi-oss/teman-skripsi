@@ -77,7 +77,7 @@ export default function LeaderboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1E1B4B] via-[#2232dd] to-[#1E1B4B]">
       {/* Header */}
-      <div className="px-4 pt-10 pb-6 text-center relative">
+      <div className="px-4 pt-28 pb-6 text-center relative">
         <button onClick={logout} className="absolute right-4 top-4 flex items-center gap-1.5 text-white/40 hover:text-white/80 text-xs transition-colors">
           <LogOut size={13} /> Keluar
         </button>
@@ -135,12 +135,12 @@ export default function LeaderboardPage() {
                 return (
                   <div key={i} className={`flex-1 flex flex-col items-center ${i === 0 ? 'order-2' : i === 1 ? 'order-1' : 'order-3'}`}>
                     <p className="text-2xl mb-1">{MEDAL[i]}</p>
-                    <div className={`w-full border rounded-2xl p-3 text-center ${PODIUM_BG[i]} ${isMe ? 'ring-2 ring-white/60' : ''}`}
-                      style={{ minHeight: i === 0 ? '120px' : i === 1 ? '100px' : '85px' }}>
-                      <p className={`font-bold text-sm text-[#1E1B4B] ${isMe ? 'underline decoration-dotted' : ''}`}>
+                    <div className={`w-full border rounded-2xl p-3 text-center flex flex-col justify-center overflow-hidden ${PODIUM_BG[i]} ${isMe ? 'ring-2 ring-white/60' : ''}`}
+                      style={{ height: i === 0 ? '120px' : i === 1 ? '100px' : '85px' }}>
+                      <p className={`font-bold text-sm text-[#1E1B4B] truncate ${isMe ? 'underline decoration-dotted' : ''}`}>
                         {entry.sales_name.split(' ')[0]}{isMe ? ' (Kamu)' : ''}
                       </p>
-                      <p className={`text-xs font-semibold mt-0.5 ${PODIUM_TEXT[i]}`}>{entry.codes.join(' · ')}</p>
+                      <p className={`text-xs font-semibold mt-0.5 truncate ${PODIUM_TEXT[i]}`}>{entry.codes.join(' · ')}</p>
                       <p className="text-2xl font-bold text-[#1E1B4B] mt-1">{entry.total_sales}</p>
                       <p className="text-[10px] text-[#9CA3AF]">closing</p>
                     </div>
