@@ -123,11 +123,16 @@ export default function SalesTeamPage() {
 
   const deleteSales = async (g: SalesGroup) => {
     if (!confirm(`Hapus sales "${g.sales_name}"? Kedua kode (${g.codes.map(c => c.code).join(', ')}) tidak bisa dipakai lagi.`)) return
-    await fetch('/api/admin/sales-team', {
+    const res = await fetch('/api/admin/sales-team', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sales_email: g.sales_email }),
     })
+    if (!res.ok) {
+      const data = await res.json()
+      alert(data.error)
+      return
+    }
     await fetchSales()
   }
 

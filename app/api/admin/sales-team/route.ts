@@ -79,6 +79,12 @@ export async function DELETE(req: NextRequest) {
   const { sales_email } = await req.json()
   if (!sales_email) return NextResponse.json({ error: 'sales_email required' }, { status: 400 })
   const supabase = createServiceClient()
-  await supabase.from('affiliate_codes').delete().eq('sales_email', sales_email)
+  const { error } = await supabase.from('affiliate_codes').delete().eq('sales_email', sales_email)
+  if (error) {
+    const msg = error.code === '23503'
+      ? 'Sales ini tidak bisa dihapus karena sudah punya transaksi/pendaftaran. Nonaktifkan saja kodenya.'
+      : error.message
+    return NextResponse.json({ error: msg }, { status: 400 })
+  }
   return NextResponse.json({ ok: true })
 }
