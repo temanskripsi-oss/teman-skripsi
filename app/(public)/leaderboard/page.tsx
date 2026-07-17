@@ -135,8 +135,8 @@ export default function LeaderboardPage() {
                 return (
                   <div key={i} className={`flex-1 flex flex-col items-center ${i === 0 ? 'order-2' : i === 1 ? 'order-1' : 'order-3'}`}>
                     <p className="text-2xl mb-1">{MEDAL[i]}</p>
-                    <div className={`w-full border rounded-2xl p-3 text-center flex flex-col justify-center overflow-hidden ${PODIUM_BG[i]} ${isMe ? 'ring-2 ring-white/60' : ''}`}
-                      style={{ height: i === 0 ? '120px' : i === 1 ? '100px' : '85px' }}>
+                    <div className={`w-full border rounded-2xl p-3 text-center flex flex-col justify-center ${PODIUM_BG[i]} ${isMe ? 'ring-2 ring-white/60' : ''}`}
+                      style={{ minHeight: i === 0 ? '150px' : i === 1 ? '130px' : '115px' }}>
                       <p className={`font-bold text-sm text-[#1E1B4B] truncate ${isMe ? 'underline decoration-dotted' : ''}`}>
                         {entry.sales_name.split(' ')[0]}{isMe ? ' (Kamu)' : ''}
                       </p>
