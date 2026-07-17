@@ -175,15 +175,15 @@ export default function DaftarPage() {
         {/* Order Summary */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
           <p className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider mb-3">Ringkasan Order</p>
-          <div className="flex justify-between items-center">
-            <div>
+          <div className="flex justify-between items-start gap-3">
+            <div className="min-w-0">
               <p className="font-semibold text-[#1E1B4B] text-sm">Fast Track Sempro</p>
               <p className="text-[#9CA3AF] text-xs">Batch {batchLabel} · Akses 30 hari</p>
             </div>
-            <div className="text-right">
-              <div className="flex items-center gap-1.5 justify-end mb-0.5">
+            <div className="text-right shrink-0">
+              <div className="flex items-center justify-end gap-1.5 mb-1">
                 <span className="text-[#9CA3AF] text-xs line-through">Rp {PROMO_ORIGINAL_PRICE.toLocaleString('id-ID')}</span>
-                <span className="inline-flex items-center bg-[#FEF3C7] text-[#92400E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#FDE68A]">
+                <span className="inline-flex items-center bg-[#FEF3C7] text-[#92400E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] whitespace-nowrap">
                   Diskon 50%
                 </span>
               </div>
