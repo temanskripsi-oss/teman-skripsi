@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink } from 'lucide-react'
-import type { CollabsProspect, ProspectStatus, FormatCollab } from '@/types'
+import type { CollabsProspect, ProspectStatus, FormatCollab, DmStatus } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
 
@@ -16,6 +16,13 @@ const STATUS_BADGE: Record<ProspectStatus, string> = {
   rejected: 'text-red-700 bg-red-100 border-red-200',
 }
 const FORMAT_LABEL: Record<FormatCollab, string> = { sg_statis: 'SG Statis', video_promosi: 'Video Promosi' }
+
+const DM_STATUS_LABEL: Record<DmStatus, string> = {
+  belum_dm: 'Belum DM', terkirim: 'Terkirim', balas: 'Balas', pindah_wa: 'Pindah WA', closing: 'Closing', ghosting: 'Ghosting',
+}
+const DM_STATUS_TEXT: Record<DmStatus, string> = {
+  belum_dm: 'text-gray-500', terkirim: 'text-[#2232dd]', balas: 'text-[#16a34a]', pindah_wa: 'text-[#7C6FCD]', closing: 'text-[#16a34a] font-bold', ghosting: 'text-red-500',
+}
 
 function formatFollowers(n: number) {
   if (n >= 1000) return `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k`
@@ -101,6 +108,15 @@ export default function CollabsHunterPage() {
       body: JSON.stringify({ id: p.id, status }),
     })
     await fetchProspects()
+  }
+
+  const updateDmStatus = async (p: CollabsProspect, dm_status: DmStatus) => {
+    setProspects(prev => prev.map(x => x.id === p.id ? { ...x, dm_status } : x))
+    await fetch('/api/admin/collabs-hunter', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: p.id, dm_status }),
+    })
   }
 
   const confirmDeal = async () => {
@@ -203,7 +219,7 @@ export default function CollabsHunterPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-[#fafafa]">
-                  {['Username', 'Followers', 'Kampus', 'Status', 'Format', 'Kode', 'Sales', 'Aksi'].map(h => (
+                  {['Username', 'Followers', 'Kampus', 'Status', 'Status DM', 'Format', 'Kode', 'Sales', 'Aksi'].map(h => (
                     <th key={h} className="text-left px-5 py-3.5 text-[#9CA3AF] text-xs font-semibold whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -222,6 +238,14 @@ export default function CollabsHunterPage() {
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap w-fit inline-block ${STATUS_BADGE[p.status]}`}>
                         {STATUS_LABEL[p.status]}
                       </span>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <select value={p.dm_status} onChange={e => updateDmStatus(p, e.target.value as DmStatus)}
+                        className={`text-xs font-medium bg-transparent border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 cursor-pointer ${DM_STATUS_TEXT[p.dm_status]}`}>
+                        {(Object.keys(DM_STATUS_LABEL) as DmStatus[]).map(s => (
+                          <option key={s} value={s} className="text-[#1E1B4B]">{DM_STATUS_LABEL[s]}</option>
+                        ))}
+                      </select>
                     </td>
                     <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{p.format_collab ? FORMAT_LABEL[p.format_collab] : '-'}</td>
                     <td className="px-5 py-3.5">

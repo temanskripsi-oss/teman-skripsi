@@ -71,18 +71,19 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json()
-  const { id, status, format_collab, username_ig, followers_count, kampus, notes } = body
+  const { id, status, dm_status, format_collab, username_ig, followers_count, kampus, notes } = body
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
   const supabase = createServiceClient()
 
-  // Edit form fields, no status change
+  // Edit form fields / dm_status, no main status change
   if (!status) {
     const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
     if (username_ig !== undefined) updates.username_ig = username_ig.trim().replace(/^@/, '')
     if (followers_count !== undefined) updates.followers_count = followers_count
     if (kampus !== undefined) updates.kampus = kampus || null
     if (notes !== undefined) updates.notes = notes || null
+    if (dm_status !== undefined) updates.dm_status = dm_status
     const { error } = await supabase.from('collabs_prospects').update(updates).eq('id', id)
     if (error) return NextResponse.json({ error: error.message }, { status: 400 })
     return NextResponse.json({ ok: true })

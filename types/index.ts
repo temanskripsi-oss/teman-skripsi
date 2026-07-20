@@ -139,6 +139,7 @@ export interface AffiliateCode {
 
 export type ProspectStatus = 'target' | 'dm_sent' | 'deal' | 'live' | 'rejected'
 export type FormatCollab = 'sg_statis' | 'video_promosi'
+export type DmStatus = 'belum_dm' | 'terkirim' | 'balas' | 'pindah_wa' | 'closing' | 'ghosting'
 
 export interface CollabsProspect {
   id: string
@@ -146,6 +147,7 @@ export interface CollabsProspect {
   followers_count: number
   kampus: string | null
   status: ProspectStatus
+  dm_status: DmStatus
   format_collab: FormatCollab | null
   affiliate_code_ft: string | null
   affiliate_code_mp: string | null
