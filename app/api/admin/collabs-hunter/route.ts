@@ -1,0 +1,151 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import bcrypt from 'bcryptjs'
+import { randomBytes } from 'crypto'
+
+const PRODUCT_CONFIG = {
+  fastrack: { suffix: '50', amount: 50_000 },
+  mentoring: { suffix: '100', amount: 100_000 },
+} as const
+
+function tierPrefix(followers: number) {
+  if (followers >= 10_000) return 'KOL'
+  if (followers >= 5_000) return 'MC'
+  return ''
+}
+
+function sanitizeUsername(username: string) {
+  return username.replace(/[._\-\s]/g, '').toUpperCase()
+}
+
+export async function GET() {
+  const supabase = createServiceClient()
+  const { data: prospects, error } = await supabase
+    .from('collabs_prospects')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+
+  const codes = (prospects ?? []).flatMap(p => [p.affiliate_code_ft, p.affiliate_code_mp]).filter(Boolean) as string[]
+
+  let salesByCode = new Map<string, number>()
+  if (codes.length > 0) {
+    const { data: affiliateCodes } = await supabase
+      .from('affiliate_codes')
+      .select('code, total_sales')
+      .in('code', codes)
+    salesByCode = new Map((affiliateCodes ?? []).map(a => [a.code, a.total_sales]))
+  }
+
+  const result = (prospects ?? []).map(p => ({
+    ...p,
+    sales_ft: p.affiliate_code_ft ? (salesByCode.get(p.affiliate_code_ft) ?? 0) : 0,
+    sales_mp: p.affiliate_code_mp ? (salesByCode.get(p.affiliate_code_mp) ?? 0) : 0,
+  }))
+
+  return NextResponse.json(result)
+}
+
+export async function POST(req: NextRequest) {
+  const { username_ig, followers_count, kampus, notes } = await req.json()
+  if (!username_ig || followers_count === undefined || followers_count === null) {
+    return NextResponse.json({ error: 'Username IG dan followers count wajib diisi' }, { status: 400 })
+  }
+
+  const supabase = createServiceClient()
+  const { error } = await supabase.from('collabs_prospects').insert({
+    username_ig: username_ig.trim().replace(/^@/, ''),
+    followers_count,
+    kampus: kampus || null,
+    notes: notes || null,
+  })
+
+  if (error) {
+    const msg = error.message.includes('unique') ? 'Username IG ini sudah ada di daftar prospect.' : error.message
+    return NextResponse.json({ error: msg }, { status: 400 })
+  }
+
+  return NextResponse.json({ ok: true })
+}
+
+export async function PATCH(req: NextRequest) {
+  const body = await req.json()
+  const { id, status, format_collab, username_ig, followers_count, kampus, notes } = body
+  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+
+  const supabase = createServiceClient()
+
+  // Edit form fields, no status change
+  if (!status) {
+    const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
+    if (username_ig !== undefined) updates.username_ig = username_ig.trim().replace(/^@/, '')
+    if (followers_count !== undefined) updates.followers_count = followers_count
+    if (kampus !== undefined) updates.kampus = kampus || null
+    if (notes !== undefined) updates.notes = notes || null
+    const { error } = await supabase.from('collabs_prospects').update(updates).eq('id', id)
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+    return NextResponse.json({ ok: true })
+  }
+
+  if (status === 'deal') {
+    if (!format_collab) return NextResponse.json({ error: 'Format collabs wajib dipilih' }, { status: 400 })
+
+    const { data: prospect } = await supabase.from('collabs_prospects').select('*').eq('id', id).single()
+    if (!prospect) return NextResponse.json({ error: 'Prospect tidak ditemukan' }, { status: 404 })
+
+    const prefix = tierPrefix(prospect.followers_count)
+    const sanitized = sanitizeUsername(prospect.username_ig)
+    const randomPass = await bcrypt.hash(randomBytes(16).toString('hex'), 10)
+
+    const rows = (['fastrack', 'mentoring'] as const).map(product => ({
+      sales_name: prospect.username_ig,
+      code: `${prefix}${sanitized}${PRODUCT_CONFIG[product].suffix}`,
+      product,
+      sales_email: `${sanitized.toLowerCase()}.${product}@collabs.temanskripsi.local`,
+      sales_password: randomPass,
+      discount_amount: PRODUCT_CONFIG[product].amount,
+      commission_per_sale: PRODUCT_CONFIG[product].amount,
+      source: 'collabs_hunter',
+    }))
+
+    const { data: inserted, error: affError } = await supabase.from('affiliate_codes').insert(rows).select()
+    if (affError) {
+      const msg = affError.message.includes('unique') ? 'Kode diskon untuk username ini sudah pernah dibuat.' : affError.message
+      return NextResponse.json({ error: msg }, { status: 400 })
+    }
+
+    const codeFt = inserted?.find(r => r.product === 'fastrack')?.code ?? null
+    const codeMp = inserted?.find(r => r.product === 'mentoring')?.code ?? null
+
+    const { error: updError } = await supabase.from('collabs_prospects').update({
+      status: 'deal',
+      format_collab,
+      affiliate_code_ft: codeFt,
+      affiliate_code_mp: codeMp,
+      deal_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }).eq('id', id)
+
+    if (updError) return NextResponse.json({ error: updError.message }, { status: 400 })
+
+    return NextResponse.json({ ok: true, code_ft: codeFt, code_mp: codeMp })
+  }
+
+  const timestampField = status === 'dm_sent' ? 'dm_sent_at' : status === 'live' ? 'live_at' : null
+  const updates: Record<string, unknown> = { status, updated_at: new Date().toISOString() }
+  if (timestampField) updates[timestampField] = new Date().toISOString()
+
+  const { error } = await supabase.from('collabs_prospects').update(updates).eq('id', id)
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+  return NextResponse.json({ ok: true })
+}
+
+export async function DELETE(req: NextRequest) {
+  const { id } = await req.json()
+  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+  const supabase = createServiceClient()
+  const { error } = await supabase.from('collabs_prospects').delete().eq('id', id)
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+  return NextResponse.json({ ok: true })
+}

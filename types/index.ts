@@ -133,7 +133,30 @@ export interface AffiliateCode {
   total_sales: number
   total_commission: number
   is_active: boolean
+  source: string
   created_at: string
+}
+
+export type ProspectStatus = 'target' | 'dm_sent' | 'deal' | 'live' | 'rejected'
+export type FormatCollab = 'sg_statis' | 'video_promosi'
+
+export interface CollabsProspect {
+  id: string
+  username_ig: string
+  followers_count: number
+  kampus: string | null
+  status: ProspectStatus
+  format_collab: FormatCollab | null
+  affiliate_code_ft: string | null
+  affiliate_code_mp: string | null
+  notes: string | null
+  dm_sent_at: string | null
+  deal_at: string | null
+  live_at: string | null
+  created_at: string
+  updated_at: string
+  sales_ft?: number
+  sales_mp?: number
 }
 
 export interface AffiliateTransaction {
