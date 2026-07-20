@@ -34,6 +34,7 @@ export default function CollabsHunterPage() {
   const [filter, setFilter] = useState<ProspectStatus | 'all'>('all')
   const [search, setSearch] = useState('')
   const [menuId, setMenuId] = useState<string | null>(null)
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null)
 
   const [showAddModal, setShowAddModal] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -241,27 +242,14 @@ export default function CollabsHunterPage() {
                     </td>
                     <td className="px-5 py-3.5 font-bold text-[#1E1B4B]">{(p.sales_ft ?? 0) + (p.sales_mp ?? 0)}</td>
                     <td className="px-5 py-3.5 relative">
-                      <button onClick={() => setMenuId(menuId === p.id ? null : p.id)} className="p-1.5 rounded-lg hover:bg-gray-100 text-[#9CA3AF] transition-colors">
+                      <button onClick={e => {
+                        if (menuId === p.id) { setMenuId(null); return }
+                        const rect = e.currentTarget.getBoundingClientRect()
+                        setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right })
+                        setMenuId(p.id)
+                      }} className="p-1.5 rounded-lg hover:bg-gray-100 text-[#9CA3AF] transition-colors">
                         <MoreVertical size={14} />
                       </button>
-                      {menuId === p.id && (
-                        <>
-                          <div className="fixed inset-0 z-10" onClick={() => setMenuId(null)} />
-                          <div className="absolute right-5 top-11 z-20 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 w-44">
-                            {(Object.keys(STATUS_LABEL) as ProspectStatus[]).filter(s => s !== p.status).map(s => (
-                              <button key={s} onClick={() => updateStatus(p, s)}
-                                className="w-full text-left px-4 py-2 text-xs text-[#1E1B4B] hover:bg-gray-50 transition-colors">
-                                Jadikan {STATUS_LABEL[s]}
-                              </button>
-                            ))}
-                            <div className="border-t border-gray-100 my-1.5" />
-                            <button onClick={() => deleteProspect(p)}
-                              className="w-full text-left px-4 py-2 text-xs text-red-500 hover:bg-red-50 transition-colors flex items-center gap-1.5">
-                              <Trash2 size={12} /> Hapus
-                            </button>
-                          </div>
-                        </>
-                      )}
                     </td>
                   </tr>
                 ))}
@@ -270,6 +258,30 @@ export default function CollabsHunterPage() {
           </div>
         </div>
       )}
+
+      {/* Action menu dropdown (fixed positioned, escapes table's overflow clipping) */}
+      {menuId && menuPos && (() => {
+        const p = prospects.find(x => x.id === menuId)
+        if (!p) return null
+        return (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setMenuId(null)} />
+            <div className="fixed z-50 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 w-44" style={{ top: menuPos.top, right: menuPos.right }}>
+              {(Object.keys(STATUS_LABEL) as ProspectStatus[]).filter(s => s !== p.status).map(s => (
+                <button key={s} onClick={() => updateStatus(p, s)}
+                  className="w-full text-left px-4 py-2 text-xs text-[#1E1B4B] hover:bg-gray-50 transition-colors">
+                  Jadikan {STATUS_LABEL[s]}
+                </button>
+              ))}
+              <div className="border-t border-gray-100 my-1.5" />
+              <button onClick={() => deleteProspect(p)}
+                className="w-full text-left px-4 py-2 text-xs text-red-500 hover:bg-red-50 transition-colors flex items-center gap-1.5">
+                <Trash2 size={12} /> Hapus
+              </button>
+            </div>
+          </>
+        )
+      })()}
 
       {/* Modal Tambah Prospect */}
       {showAddModal && (
