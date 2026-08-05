@@ -26,6 +26,19 @@ interface SalesGroup {
   collab_followers: number | null
 }
 
+/** Samain sama sanitizeCode/tierPrefix di API */
+function sanitizeCode(v: string) {
+  return v.toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+function tierPrefix(followers: number) {
+  if (followers >= 10_000) return 'KOL'
+  if (followers >= 5_000) return 'MC'
+  return ''
+}
+
+const CODE_MAX = 20
+
 function formatFollowers(n: number) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace('.0', '')}jt`
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace('.0', '')}rb`
@@ -45,6 +58,8 @@ export default function SalesTeamPage() {
   const [markingId, setMarkingId] = useState<string | null>(null)
 
   const [form, setForm] = useState({ sales_name: '', sales_email: '', sales_password: '', sales_whatsapp: '' })
+  // Khusus mode tambah KOL — ikut kebikin sebagai prospect deal di Collabs Hunter
+  const [kolForm, setKolForm] = useState({ is_kol: false, username_ig: '', followers_count: '', format_collab: 'sg_statis', code_base: '' })
 
   const fetchSales = useCallback(async () => {
     const [s, t] = await Promise.all([
@@ -91,6 +106,7 @@ export default function SalesTeamPage() {
   const openAdd = () => {
     setEditTarget(null)
     setForm({ sales_name: '', sales_email: '', sales_password: '', sales_whatsapp: '' })
+    setKolForm({ is_kol: false, username_ig: '', followers_count: '', format_collab: 'sg_statis', code_base: '' })
     setShowModal(true)
   }
 
@@ -99,6 +115,10 @@ export default function SalesTeamPage() {
     setForm({ sales_name: g.sales_name, sales_email: g.sales_email, sales_password: '', sales_whatsapp: g.sales_whatsapp ?? '' })
     setShowModal(true)
   }
+
+  // Basis kode default ngikutin username IG, tapi bisa dipendekin manual
+  const kolCodeBase = sanitizeCode(kolForm.code_base || kolForm.username_ig).slice(0, CODE_MAX)
+  const kolPrefix = tierPrefix(Number(kolForm.followers_count) || 0)
 
   const handleSave = async () => {
     setSaving(true)
@@ -112,7 +132,9 @@ export default function SalesTeamPage() {
       const res = await fetch('/api/admin/sales-team', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(kolForm.is_kol
+          ? { ...form, ...kolForm, followers_count: Number(kolForm.followers_count), code_base: kolCodeBase }
+          : form),
       })
       const data = await res.json()
       if (!res.ok) { alert(data.error); setSaving(false); return }
@@ -389,11 +411,66 @@ export default function SalesTeamPage() {
             </div>
 
             <div className="flex flex-col gap-3">
+              {!editTarget && (
+                <div>
+                  <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Tipe *</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {([[false, 'Sales Internal'], [true, 'KOL / Collabs']] as [boolean, string][]).map(([val, label]) => (
+                      <button key={label} onClick={() => setKolForm(f => ({ ...f, is_kol: val }))}
+                        className={`border rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${kolForm.is_kol === val ? 'border-[#2232dd] bg-[#eff6ff] text-[#2232dd]' : 'border-gray-200 text-[#6B6B8A] hover:bg-gray-50'}`}>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Nama Lengkap *</label>
                 <input className={INPUT} placeholder="Andi Rahmat" value={form.sales_name}
                   onChange={e => setForm(f => ({ ...f, sales_name: e.target.value }))} />
               </div>
+
+              {!editTarget && kolForm.is_kol && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Username IG *</label>
+                      <input className={INPUT} placeholder="tanpa @" value={kolForm.username_ig}
+                        onChange={e => setKolForm(f => ({ ...f, username_ig: e.target.value.replace(/^@/, '') }))} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Followers *</label>
+                      <input className={INPUT} type="number" placeholder="12000" value={kolForm.followers_count}
+                        onChange={e => setKolForm(f => ({ ...f, followers_count: e.target.value }))} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Format Collabs *</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(['sg_statis', 'video_promosi']).map(f => (
+                        <button key={f} onClick={() => setKolForm(k => ({ ...k, format_collab: f }))}
+                          className={`border rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${kolForm.format_collab === f ? 'border-[#2232dd] bg-[#eff6ff] text-[#2232dd]' : 'border-gray-200 text-[#6B6B8A] hover:bg-gray-50'}`}>
+                          {FORMAT_LABEL[f]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1B4B] mb-1.5">Basis kode diskon</label>
+                    <div className="flex items-center gap-1.5">
+                      {kolPrefix && <span className="font-mono text-sm font-bold text-[#9CA3AF] flex-shrink-0">{kolPrefix}</span>}
+                      <input className={`${INPUT} font-mono font-bold tracking-wide`} maxLength={CODE_MAX}
+                        placeholder={sanitizeCode(kolForm.username_ig) || 'MISAL: FARIZ'}
+                        value={kolForm.code_base}
+                        onChange={e => setKolForm(f => ({ ...f, code_base: sanitizeCode(e.target.value).slice(0, CODE_MAX) }))} />
+                    </div>
+                    <p className="text-[10px] text-[#9CA3AF] mt-1">Kosongin buat ikut username IG. Prefix tier & suffix 50/100 otomatis.</p>
+                  </div>
+                </>
+              )}
 
               {editTarget ? (
                 <div>
@@ -410,8 +487,18 @@ export default function SalesTeamPage() {
               ) : (
                 <div className="bg-[#eff6ff] border border-[#2232dd]/15 rounded-xl px-3.5 py-3">
                   <p className="text-xs text-[#2232dd] font-semibold mb-1">2 kode diskon otomatis dibuat:</p>
-                  <p className="text-[11px] text-[#6B6B8A]">Fastrack: <span className="font-mono font-semibold">FT{(form.sales_name.trim().split(' ')[0] || 'NAMA').toUpperCase().replace(/[^A-Z]/g, '')}50</span> · Rp 50.000</p>
-                  <p className="text-[11px] text-[#6B6B8A]">Mentoring Privat: <span className="font-mono font-semibold">MP{(form.sales_name.trim().split(' ')[0] || 'NAMA').toUpperCase().replace(/[^A-Z]/g, '')}100</span> · Rp 100.000</p>
+                  {kolForm.is_kol ? (
+                    <>
+                      <p className="text-[11px] text-[#6B6B8A]">Fastrack: <span className="font-mono font-semibold">{kolPrefix}{kolCodeBase || 'NAMA'}50</span> · Rp 50.000</p>
+                      <p className="text-[11px] text-[#6B6B8A]">Mentoring Privat: <span className="font-mono font-semibold">{kolPrefix}{kolCodeBase || 'NAMA'}100</span> · Rp 100.000</p>
+                      <p className="text-[10px] text-[#7C6FCD] mt-1.5">KOL ini juga otomatis kecatat di Collabs Hunter sebagai deal.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-[11px] text-[#6B6B8A]">Fastrack: <span className="font-mono font-semibold">FT{(form.sales_name.trim().split(' ')[0] || 'NAMA').toUpperCase().replace(/[^A-Z]/g, '')}50</span> · Rp 50.000</p>
+                      <p className="text-[11px] text-[#6B6B8A]">Mentoring Privat: <span className="font-mono font-semibold">MP{(form.sales_name.trim().split(' ')[0] || 'NAMA').toUpperCase().replace(/[^A-Z]/g, '')}100</span> · Rp 100.000</p>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -439,7 +526,9 @@ export default function SalesTeamPage() {
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-[#9CA3AF] hover:bg-gray-50 transition-colors">
                 Batal
               </button>
-              <button onClick={handleSave} disabled={saving || !form.sales_name || !form.sales_email || (!editTarget && !form.sales_password)}
+              <button onClick={handleSave}
+                disabled={saving || !form.sales_name || !form.sales_email || (!editTarget && !form.sales_password)
+                  || (!editTarget && kolForm.is_kol && (!kolForm.username_ig || !kolForm.followers_count || !kolCodeBase))}
                 className="flex-1 py-2.5 rounded-xl bg-[#2232dd] text-white text-sm font-bold hover:bg-[#1a28b8] disabled:opacity-60 transition-colors flex items-center justify-center gap-2">
                 {saving ? <Loader2 size={14} className="animate-spin" /> : null}
                 {editTarget ? 'Simpan' : 'Tambah Sales'}
