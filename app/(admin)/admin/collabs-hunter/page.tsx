@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink } from 'lucide-react'
+import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink, Clock } from 'lucide-react'
 import type { CollabsProspect, ProspectStatus, FormatCollab, DmStatus } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
@@ -35,6 +35,26 @@ function tierPrefix(followers: number) {
   return ''
 }
 
+// Target harian yang dikontrol penuh (activity), dipisah dari target deal mingguan (outcome)
+const DAILY_DM_TARGET = 20
+const WEEKLY_DEAL_MIN = 2
+const WEEKLY_DEAL_MAX = 5
+const DAY_LABELS = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+
+/** YYYY-MM-DD di timezone lokal (bukan UTC, biar ga geser sehari) */
+function localDay(d: Date | string) {
+  const date = typeof d === 'string' ? new Date(d) : d
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+/** Senin dari minggu berjalan */
+function startOfWeek(base = new Date()) {
+  const d = new Date(base)
+  d.setHours(0, 0, 0, 0)
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7))
+  return d
+}
+
 export default function CollabsHunterPage() {
   const [prospects, setProspects] = useState<CollabsProspect[]>([])
   const [loading, setLoading] = useState(true)
@@ -66,6 +86,49 @@ export default function CollabsHunterPage() {
     const counts: Record<ProspectStatus, number> = { target: 0, dm_sent: 0, deal: 0, live: 0, rejected: 0 }
     for (const p of prospects) counts[p.status]++
     return counts
+  }, [prospects])
+
+  // Counter harian & mingguan diturunin dari dm_sent_at/deal_at — ga ada input manual,
+  // jadi angkanya selalu nyambung ke prospect beneran.
+  const tracker = useMemo(() => {
+    const today = localDay(new Date())
+    const monday = startOfWeek()
+
+    const week = DAY_LABELS.map((label, i) => {
+      const d = new Date(monday)
+      d.setDate(monday.getDate() + i)
+      const key = localDay(d)
+      return {
+        label,
+        key,
+        isToday: key === today,
+        isFuture: key > today,
+        count: prospects.filter(p => p.dm_sent_at && localDay(p.dm_sent_at) === key).length,
+      }
+    })
+
+    const mondayKey = localDay(monday)
+    const weekDeals = prospects.filter(p => p.deal_at && localDay(p.deal_at) >= mondayKey).length
+    const weekDm = week.reduce((s, d) => s + d.count, 0)
+    const weekReplies = prospects.filter(
+      p => p.dm_sent_at && localDay(p.dm_sent_at) >= mondayKey && ['balas', 'pindah_wa', 'closing'].includes(p.dm_status)
+    ).length
+
+    return {
+      today: week.find(d => d.isToday)?.count ?? 0,
+      week,
+      weekDm,
+      weekDeals,
+      weekReplies,
+      replyRate: weekDm > 0 ? (weekReplies / weekDm) * 100 : 0,
+    }
+  }, [prospects])
+
+  const followups = useMemo(() => {
+    const today = localDay(new Date())
+    return prospects
+      .filter(p => p.next_followup_at && p.next_followup_at <= today)
+      .sort((a, b) => (a.next_followup_at! < b.next_followup_at! ? -1 : 1))
   }, [prospects])
 
   const filtered = useMemo(() => {
@@ -117,6 +180,26 @@ export default function CollabsHunterPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: p.id, dm_status }),
     })
+    // Server ikut nge-set dm_sent_at/status/next_followup_at, jadi counter harian
+    // & panel follow-up baru bener kalau di-refetch
+    await fetchProspects()
+  }
+
+  /** Geser jadwal follow-up: +n hari, atau null buat nyeleseiin */
+  const rescheduleFollowup = async (p: CollabsProspect, days: number | null) => {
+    let next: string | null = null
+    if (days !== null) {
+      const d = new Date()
+      d.setDate(d.getDate() + days)
+      next = localDay(d)
+    }
+    setProspects(prev => prev.map(x => x.id === p.id ? { ...x, next_followup_at: next } : x))
+    await fetch('/api/admin/collabs-hunter', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: p.id, next_followup_at: next }),
+    })
+    await fetchProspects()
   }
 
   const confirmDeal = async () => {
@@ -166,6 +249,86 @@ export default function CollabsHunterPage() {
           <Plus size={15} /> Tambah Prospect
         </button>
       </div>
+
+      {/* Daily DM tracker */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
+        <div className="flex items-center justify-between mb-2.5">
+          <p className="text-sm font-semibold text-[#1E1B4B]">DM Terkirim Hari Ini</p>
+          <p className="text-sm font-bold text-[#1E1B4B]">
+            {tracker.today}<span className="text-[#9CA3AF] font-medium">/{DAILY_DM_TARGET}</span>
+          </p>
+        </div>
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-5">
+          <div className="h-full bg-[#2232dd] rounded-full transition-all"
+            style={{ width: `${Math.min(100, (tracker.today / DAILY_DM_TARGET) * 100)}%` }} />
+        </div>
+
+        <div className="grid grid-cols-7 gap-2">
+          {tracker.week.map(d => (
+            <div key={d.key}
+              className={`rounded-xl border py-2.5 text-center ${d.isToday ? 'border-[#2232dd] ring-1 ring-[#2232dd]/20 bg-[#f8f9ff]' : 'border-gray-100 bg-[#fafafa]'}`}>
+              <p className="text-[11px] text-[#9CA3AF] mb-0.5">{d.label}</p>
+              <p className={`text-sm font-bold ${d.isFuture ? 'text-gray-300' : d.count >= DAILY_DM_TARGET ? 'text-[#16a34a]' : 'text-[#1E1B4B]'}`}>
+                {d.isFuture ? '–' : d.count}
+                {!d.isFuture && <span className="text-[10px] text-[#9CA3AF] font-medium">/{DAILY_DM_TARGET}</span>}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Ringkasan minggu berjalan */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        {[
+          { label: 'DM Minggu Ini', value: `${tracker.weekDm}`, sub: `target ${DAILY_DM_TARGET * 5}/minggu` },
+          { label: 'Balas', value: `${tracker.weekReplies}`, sub: `${tracker.replyRate.toFixed(1)}% reply rate` },
+          { label: 'Deal Minggu Ini', value: `${tracker.weekDeals}`, sub: `target ${WEEKLY_DEAL_MIN}–${WEEKLY_DEAL_MAX}/minggu`, highlight: tracker.weekDeals >= WEEKLY_DEAL_MIN },
+          { label: 'Perlu Follow-up', value: `${followups.length}`, sub: 'udah waktunya di-chat', warn: followups.length > 0 },
+        ].map(c => (
+          <div key={c.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            <p className="text-[#9CA3AF] text-xs mb-1">{c.label}</p>
+            <p className={`text-2xl font-bold ${c.highlight ? 'text-[#16a34a]' : c.warn ? 'text-[#ca8a04]' : 'text-[#1E1B4B]'}`}>{c.value}</p>
+            <p className="text-[#9CA3AF] text-[11px] mt-0.5">{c.sub}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Follow-up hari ini */}
+      {followups.length > 0 && (
+        <div className="bg-[#fffbeb] border border-[#fbbf24]/40 rounded-2xl p-5 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Clock size={15} className="text-[#b45309]" />
+            <p className="text-sm font-bold text-[#b45309]">Follow-up Hari Ini ({followups.length})</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            {followups.map(p => (
+              <div key={p.id} className="bg-white border border-[#fbbf24]/30 rounded-xl px-3.5 py-2.5 flex items-center gap-3 flex-wrap">
+                <a href={`https://instagram.com/${p.username_ig}`} target="_blank" rel="noopener noreferrer"
+                  className="font-semibold text-sm text-[#1E1B4B] hover:text-[#2232dd] flex items-center gap-1">
+                  @{p.username_ig} <ExternalLink size={11} />
+                </a>
+                <span className="text-xs text-[#9CA3AF]">{formatFollowers(p.followers_count)}</span>
+                <span className={`text-xs font-medium ${DM_STATUS_TEXT[p.dm_status]}`}>{DM_STATUS_LABEL[p.dm_status]}</span>
+                {p.next_followup_at! < localDay(new Date()) && (
+                  <span className="text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
+                    telat {Math.round((Date.now() - new Date(p.next_followup_at!).getTime()) / 86_400_000)}h
+                  </span>
+                )}
+                <div className="ml-auto flex items-center gap-1.5">
+                  <button onClick={() => rescheduleFollowup(p, 3)}
+                    className="text-[11px] font-semibold text-[#6B6B8A] border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors">
+                    Tunda 3h
+                  </button>
+                  <button onClick={() => rescheduleFollowup(p, null)}
+                    className="text-[11px] font-semibold text-[#16a34a] border border-[#16a34a]/30 rounded-lg px-2.5 py-1 hover:bg-[#f0fdf4] transition-colors">
+                    Selesai
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -219,7 +382,7 @@ export default function CollabsHunterPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-[#fafafa]">
-                  {['Username', 'Followers', 'Kampus', 'Status', 'Status DM', 'Format', 'Kode', 'Sales', 'Aksi'].map(h => (
+                  {['Username', 'Followers', 'Kampus', 'Status', 'Status DM', 'Follow-up', 'Format', 'Kode', 'Sales', 'Aksi'].map(h => (
                     <th key={h} className="text-left px-5 py-3.5 text-[#9CA3AF] text-xs font-semibold whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -246,6 +409,13 @@ export default function CollabsHunterPage() {
                           <option key={s} value={s} className="text-[#1E1B4B]">{DM_STATUS_LABEL[s]}</option>
                         ))}
                       </select>
+                    </td>
+                    <td className="px-5 py-3.5 text-xs whitespace-nowrap">
+                      {p.next_followup_at ? (
+                        <span className={p.next_followup_at <= localDay(new Date()) ? 'text-[#b45309] font-semibold' : 'text-[#6B6B8A]'}>
+                          {new Date(p.next_followup_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                        </span>
+                      ) : <span className="text-[#9CA3AF]">-</span>}
                     </td>
                     <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{p.format_collab ? FORMAT_LABEL[p.format_collab] : '-'}</td>
                     <td className="px-5 py-3.5">
@@ -420,6 +590,8 @@ export default function CollabsHunterPage() {
             <div className="flex flex-col gap-3 mb-4">
               <TimelineRow label="Created" date={detailTarget.created_at} />
               <TimelineRow label="DM Sent" date={detailTarget.dm_sent_at} />
+              <TimelineRow label="Kontak Terakhir" date={detailTarget.last_contact_at} />
+              <TimelineRow label="Follow-up Berikutnya" date={detailTarget.next_followup_at} />
               <TimelineRow label="Deal" date={detailTarget.deal_at} />
               <TimelineRow label="Live" date={detailTarget.live_at} />
             </div>

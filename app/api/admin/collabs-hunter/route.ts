@@ -18,6 +18,21 @@ function sanitizeUsername(username: string) {
   return username.replace(/[._\-\s]/g, '').toUpperCase()
 }
 
+const FOLLOWUP_DAYS = 3
+
+function followupDate(days = FOLLOWUP_DAYS) {
+  const d = new Date()
+  d.setDate(d.getDate() + days)
+  return d.toISOString().slice(0, 10)
+}
+
+// dm_status yang masih butuh dikejar → dijadwalin follow-up otomatis.
+// closing & ghosting nutup thread-nya, jadi jadwalnya dikosongin.
+const NEEDS_FOLLOWUP: Record<string, boolean> = {
+  terkirim: true, balas: true, pindah_wa: true,
+  belum_dm: false, closing: false, ghosting: false,
+}
+
 export async function GET() {
   const supabase = createServiceClient()
   const { data: prospects, error } = await supabase
@@ -71,7 +86,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json()
-  const { id, status, dm_status, format_collab, username_ig, followers_count, kampus, notes } = body
+  const { id, status, dm_status, format_collab, username_ig, followers_count, kampus, notes, next_followup_at } = body
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
   const supabase = createServiceClient()
@@ -83,7 +98,25 @@ export async function PATCH(req: NextRequest) {
     if (followers_count !== undefined) updates.followers_count = followers_count
     if (kampus !== undefined) updates.kampus = kampus || null
     if (notes !== undefined) updates.notes = notes || null
-    if (dm_status !== undefined) updates.dm_status = dm_status
+    if (next_followup_at !== undefined) updates.next_followup_at = next_followup_at || null
+
+    if (dm_status !== undefined) {
+      updates.dm_status = dm_status
+      updates.last_contact_at = new Date().toISOString()
+      // Jadwal follow-up auto-geser tiap ada progres chat, kecuali di-override manual
+      if (next_followup_at === undefined) {
+        updates.next_followup_at = NEEDS_FOLLOWUP[dm_status] ? followupDate() : null
+      }
+      // dm_sent_at nyetir counter harian, jadi diisi begitu DM-nya kekirim.
+      // Status utama ikut naik dari target biar angka kartu funnel nyambung sama counter.
+      if (dm_status !== 'belum_dm') {
+        const { data: current } = await supabase
+          .from('collabs_prospects').select('dm_sent_at, status').eq('id', id).single()
+        if (!current?.dm_sent_at) updates.dm_sent_at = new Date().toISOString()
+        if (current?.status === 'target') updates.status = 'dm_sent'
+      }
+    }
+
     const { error } = await supabase.from('collabs_prospects').update(updates).eq('id', id)
     if (error) return NextResponse.json({ error: error.message }, { status: 400 })
     return NextResponse.json({ ok: true })
@@ -125,6 +158,8 @@ export async function PATCH(req: NextRequest) {
       affiliate_code_ft: codeFt,
       affiliate_code_mp: codeMp,
       deal_at: new Date().toISOString(),
+      last_contact_at: new Date().toISOString(),
+      next_followup_at: null,
       updated_at: new Date().toISOString(),
     }).eq('id', id)
 
@@ -136,6 +171,13 @@ export async function PATCH(req: NextRequest) {
   const timestampField = status === 'dm_sent' ? 'dm_sent_at' : status === 'live' ? 'live_at' : null
   const updates: Record<string, unknown> = { status, updated_at: new Date().toISOString() }
   if (timestampField) updates[timestampField] = new Date().toISOString()
+
+  if (status === 'dm_sent') {
+    updates.last_contact_at = new Date().toISOString()
+    updates.next_followup_at = followupDate()
+  } else if (status === 'live' || status === 'rejected') {
+    updates.next_followup_at = null
+  }
 
   const { error } = await supabase.from('collabs_prospects').update(updates).eq('id', id)
   if (error) return NextResponse.json({ error: error.message }, { status: 400 })

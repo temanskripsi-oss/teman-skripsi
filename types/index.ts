@@ -155,6 +155,8 @@ export interface CollabsProspect {
   dm_sent_at: string | null
   deal_at: string | null
   live_at: string | null
+  next_followup_at: string | null
+  last_contact_at: string | null
   created_at: string
   updated_at: string
   sales_ft?: number
