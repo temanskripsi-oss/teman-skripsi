@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink, Clock } from 'lucide-react'
+import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink, Clock, MessageSquare, ChevronDown, Check } from 'lucide-react'
 import type { CollabsProspect, ProspectStatus, FormatCollab, DmStatus } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
@@ -33,6 +33,30 @@ function tierPrefix(followers: number) {
   if (followers >= 10_000) return 'KOL'
   if (followers >= 5_000) return 'MC'
   return ''
+}
+
+// Template DM awal — sengaja disimpen di localStorage (bukan DB) biar bisa diubah-ubah
+// sambil nyari angle yang works, tanpa migration/deploy.
+const TEMPLATE_KEY = 'collabs_hunter_dm_template'
+const DEFAULT_DM_TEMPLATE = `Halo kak @{username}! 👋
+
+Aku Reza dari Teman Skripsi — kita bantu mahasiswa nyelesain skripsi lewat program Fast Track & Mentoring Privat.
+
+Aku lihat konten kakak, dan kayaknya banyak followers kakak yang lagi di fase skripsi. Kita lagi buka kerja sama affiliate nih:
+
+• Kakak dapet kode diskon atas nama sendiri
+• Tiap ada yang daftar pakai kode kakak, komisinya Rp50.000 (Fast Track) / Rp100.000 (Mentoring Privat)
+• Nggak ada target, nggak ada biaya apa pun
+
+Followers kakak dapet diskon, kakak dapet komisi.
+
+Kalau tertarik, aku kirimin detail lengkapnya ya kak?`
+
+function fillTemplate(tpl: string, p: CollabsProspect) {
+  return tpl
+    .replace(/\{username\}/g, p.username_ig)
+    .replace(/\{kampus\}/g, p.kampus ?? '')
+    .replace(/\{followers\}/g, formatFollowers(p.followers_count))
 }
 
 // Target harian yang dikontrol penuh (activity), dipisah dari target deal mingguan (outcome)
@@ -72,6 +96,27 @@ export default function CollabsHunterPage() {
   const [dealSaving, setDealSaving] = useState(false)
 
   const [detailTarget, setDetailTarget] = useState<CollabsProspect | null>(null)
+
+  const [template, setTemplate] = useState(DEFAULT_DM_TEMPLATE)
+  const [showTemplate, setShowTemplate] = useState(false)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const saved = localStorage.getItem(TEMPLATE_KEY)
+    if (saved) setTemplate(saved)
+  }, [])
+
+  const saveTemplate = (value: string) => {
+    setTemplate(value)
+    localStorage.setItem(TEMPLATE_KEY, value)
+  }
+
+  const copyDm = (p: CollabsProspect) => {
+    navigator.clipboard.writeText(fillTemplate(template, p))
+    setMenuId(null)
+    setCopiedId(p.id)
+    setTimeout(() => setCopiedId(null), 1500)
+  }
 
   const fetchProspects = useCallback(async () => {
     const res = await fetch('/api/admin/collabs-hunter')
@@ -315,6 +360,10 @@ export default function CollabsHunterPage() {
                   </span>
                 )}
                 <div className="ml-auto flex items-center gap-1.5">
+                  <button onClick={() => copyDm(p)}
+                    className="text-[11px] font-semibold text-[#7C6FCD] border border-[#7C6FCD]/30 rounded-lg px-2.5 py-1 hover:bg-[#f5f3ff] transition-colors">
+                    {copiedId === p.id ? 'Tersalin!' : 'Salin DM'}
+                  </button>
                   <button onClick={() => rescheduleFollowup(p, 3)}
                     className="text-[11px] font-semibold text-[#6B6B8A] border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors">
                     Tunda 3h
@@ -353,6 +402,34 @@ export default function CollabsHunterPage() {
             </button>
           )
         })}
+      </div>
+
+      {/* Template DM */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 overflow-hidden">
+        <button onClick={() => setShowTemplate(v => !v)}
+          className="w-full flex items-center gap-2.5 px-5 py-3.5 text-left hover:bg-[#fafafa] transition-colors">
+          <MessageSquare size={15} className="text-[#7C6FCD] flex-shrink-0" />
+          <span className="text-sm font-semibold text-[#1E1B4B]">Template DM</span>
+          <span className="text-xs text-[#9CA3AF]">— dipakai tombol &ldquo;Salin DM&rdquo; di tiap prospect</span>
+          <ChevronDown size={15} className={`ml-auto text-[#9CA3AF] transition-transform ${showTemplate ? 'rotate-180' : ''}`} />
+        </button>
+        {showTemplate && (
+          <div className="px-5 pb-5 border-t border-gray-50 pt-4">
+            <textarea value={template} onChange={e => saveTemplate(e.target.value)} rows={14}
+              className={`${INPUT} font-mono text-xs leading-relaxed resize-y`} />
+            <div className="flex items-center justify-between gap-3 mt-2.5 flex-wrap">
+              <p className="text-[11px] text-[#9CA3AF]">
+                Placeholder: <code className="text-[#7C6FCD]">{'{username}'}</code>{' '}
+                <code className="text-[#7C6FCD]">{'{kampus}'}</code>{' '}
+                <code className="text-[#7C6FCD]">{'{followers}'}</code> — auto-keisi per prospect. Kesimpen di browser ini aja.
+              </p>
+              <button onClick={() => saveTemplate(DEFAULT_DM_TEMPLATE)}
+                className="text-[11px] font-semibold text-[#9CA3AF] border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors flex-shrink-0">
+                Reset ke default
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Filter & Search */}
@@ -461,6 +538,16 @@ export default function CollabsHunterPage() {
           <>
             <div className="fixed inset-0 z-40" onClick={() => setMenuId(null)} />
             <div className="fixed z-50 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 w-44" style={{ top: menuPos.top, right: menuPos.right }}>
+              <button onClick={() => copyDm(p)}
+                className="w-full text-left px-4 py-2 text-xs text-[#7C6FCD] font-semibold hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+                <MessageSquare size={12} /> Salin DM
+              </button>
+              <a href={`https://instagram.com/${p.username_ig}`} target="_blank" rel="noopener noreferrer"
+                onClick={() => setMenuId(null)}
+                className="w-full text-left px-4 py-2 text-xs text-[#1E1B4B] hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+                <ExternalLink size={12} /> Buka IG
+              </a>
+              <div className="border-t border-gray-100 my-1.5" />
               {(Object.keys(STATUS_LABEL) as ProspectStatus[]).filter(s => s !== p.status).map(s => (
                 <button key={s} onClick={() => updateStatus(p, s)}
                   className="w-full text-left px-4 py-2 text-xs text-[#1E1B4B] hover:bg-gray-50 transition-colors">
@@ -586,6 +673,13 @@ export default function CollabsHunterPage() {
               </div>
               <button onClick={() => setDetailTarget(null)} className="p-1.5 rounded-lg hover:bg-gray-100 text-[#9CA3AF]"><X size={16} /></button>
             </div>
+
+            <button onClick={() => copyDm(detailTarget)}
+              className="w-full mb-4 py-2.5 rounded-xl border border-[#7C6FCD]/30 bg-[#f5f3ff] text-[#7C6FCD] text-sm font-bold hover:bg-[#ede9fe] transition-colors flex items-center justify-center gap-2">
+              {copiedId === detailTarget.id
+                ? <><Check size={14} /> Tersalin!</>
+                : <><MessageSquare size={14} /> Salin DM buat @{detailTarget.username_ig}</>}
+            </button>
 
             <div className="flex flex-col gap-3 mb-4">
               <TimelineRow label="Created" date={detailTarget.created_at} />
