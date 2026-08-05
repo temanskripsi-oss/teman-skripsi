@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react'
-import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink, Clock, MessageSquare, ChevronDown, Check } from 'lucide-react'
+import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink, Clock, MessageSquare, ChevronDown, Check, AlertTriangle } from 'lucide-react'
 import type { CollabsProspect, ProspectStatus, FormatCollab, DmStatus } from '@/types'
 
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
@@ -64,6 +64,14 @@ const DAILY_DM_TARGET = 20
 const WEEKLY_DEAL_MIN = 2
 const WEEKLY_DEAL_MAX = 5
 const DAY_LABELS = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+
+// Deal cuma janji — duitnya baru jalan pas KOL-nya posting. Lewat sekian hari
+// masih nyangkut di 'deal', tagih sebelum keburu dingin.
+const ACTIVATION_DAYS = 7
+
+function daysSince(iso: string) {
+  return Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
+}
 
 /** YYYY-MM-DD di timezone lokal (bukan UTC, biar ga geser sehari) */
 function localDay(d: Date | string) {
@@ -200,6 +208,12 @@ export default function CollabsHunterPage() {
     return prospects
       .filter(p => p.next_followup_at && p.next_followup_at <= today)
       .sort((a, b) => (a.next_followup_at! < b.next_followup_at! ? -1 : 1))
+  }, [prospects])
+
+  const stalledDeals = useMemo(() => {
+    return prospects
+      .filter(p => p.status === 'deal' && p.deal_at && daysSince(p.deal_at) >= ACTIVATION_DAYS)
+      .sort((a, b) => (a.deal_at! < b.deal_at! ? -1 : 1))
   }, [prospects])
 
   const filtered = useMemo(() => {
@@ -363,6 +377,40 @@ export default function CollabsHunterPage() {
           </div>
         ))}
       </div>
+
+      {/* Deal yang belum posting */}
+      {stalledDeals.length > 0 && (
+        <div className="bg-[#fef2f2] border border-red-200 rounded-2xl p-5 mb-4">
+          <div className="flex items-center gap-2 mb-1">
+            <AlertTriangle size={15} className="text-red-600" />
+            <p className="text-sm font-bold text-red-700">Belum Posting ({stalledDeals.length})</p>
+          </div>
+          <p className="text-xs text-red-600/70 mb-3">
+            Udah deal lewat {ACTIVATION_DAYS} hari tapi belum Live. Tagih sebelum keburu dingin.
+          </p>
+          <div className="flex flex-col gap-2">
+            {stalledDeals.map(p => (
+              <div key={p.id} className="bg-white border border-red-200/60 rounded-xl px-3.5 py-2.5 flex items-center gap-3 flex-wrap">
+                <a href={`https://instagram.com/${p.username_ig}`} target="_blank" rel="noopener noreferrer"
+                  className="font-semibold text-sm text-[#1E1B4B] hover:text-[#2232dd] flex items-center gap-1">
+                  @{p.username_ig} <ExternalLink size={11} />
+                </a>
+                <span className="text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
+                  {daysSince(p.deal_at!)} hari nganggur
+                </span>
+                {p.format_collab && <span className="text-xs text-[#9CA3AF]">{FORMAT_LABEL[p.format_collab]}</span>}
+                <span className="text-xs text-[#9CA3AF]">{(p.sales_ft ?? 0) + (p.sales_mp ?? 0)} closing</span>
+                <div className="ml-auto flex items-center gap-1.5">
+                  <button onClick={() => updateStatus(p, 'live')}
+                    className="text-[11px] font-semibold text-[#16a34a] border border-[#16a34a]/30 rounded-lg px-2.5 py-1 hover:bg-[#f0fdf4] transition-colors">
+                    Udah Posting
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Follow-up hari ini */}
       {followups.length > 0 && (
