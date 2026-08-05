@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react'
 import { Target, Send, Handshake, Radio, XCircle, Plus, Loader2, X, MoreVertical, Copy, Trash2, ExternalLink, Clock, MessageSquare, ChevronDown, Check } from 'lucide-react'
 import type { CollabsProspect, ProspectStatus, FormatCollab, DmStatus } from '@/types'
 
@@ -85,7 +85,21 @@ export default function CollabsHunterPage() {
   const [filter, setFilter] = useState<ProspectStatus | 'all'>('all')
   const [search, setSearch] = useState('')
   const [menuId, setMenuId] = useState<string | null>(null)
-  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null)
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number; anchorTop: number } | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Menu-nya fixed-positioned (biar ga kepotong overflow-x tabel), tapi kalau barisnya
+  // deket bawah layar dia kepotong viewport. Ukur tingginya abis render, terus flip ke atas.
+  useLayoutEffect(() => {
+    if (!menuId || !menuPos || !menuRef.current) return
+    const h = menuRef.current.offsetHeight
+    const maxTop = window.innerHeight - h - 8
+    if (menuPos.top <= maxTop) return
+    // Cukup ruang di atas anchor? flip. Kalau ga, tempel ke bawah viewport.
+    const flipped = menuPos.anchorTop - h - 4
+    const next = flipped >= 8 ? flipped : Math.max(8, maxTop)
+    if (Math.abs(next - menuPos.top) > 1) setMenuPos({ ...menuPos, top: next })
+  }, [menuId, menuPos])
 
   const [showAddModal, setShowAddModal] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -105,6 +119,18 @@ export default function CollabsHunterPage() {
     const saved = localStorage.getItem(TEMPLATE_KEY)
     if (saved) setTemplate(saved)
   }, [])
+
+  // Posisi menu dihitung sekali pas dibuka, jadi bakal ngaco kalau halaman gerak
+  useEffect(() => {
+    if (!menuId) return
+    const close = () => setMenuId(null)
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    return () => {
+      window.removeEventListener('scroll', close, true)
+      window.removeEventListener('resize', close)
+    }
+  }, [menuId])
 
   const saveTemplate = (value: string) => {
     setTemplate(value)
@@ -516,7 +542,7 @@ export default function CollabsHunterPage() {
                       <button onClick={e => {
                         if (menuId === p.id) { setMenuId(null); return }
                         const rect = e.currentTarget.getBoundingClientRect()
-                        setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right })
+                        setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right, anchorTop: rect.top })
                         setMenuId(p.id)
                       }} className="p-1.5 rounded-lg hover:bg-gray-100 text-[#9CA3AF] transition-colors">
                         <MoreVertical size={14} />
@@ -537,7 +563,7 @@ export default function CollabsHunterPage() {
         return (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setMenuId(null)} />
-            <div className="fixed z-50 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 w-44" style={{ top: menuPos.top, right: menuPos.right }}>
+            <div ref={menuRef} className="fixed z-50 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 w-44 max-h-[80vh] overflow-y-auto" style={{ top: menuPos.top, right: menuPos.right }}>
               <button onClick={() => copyDm(p)}
                 className="w-full text-left px-4 py-2 text-xs text-[#7C6FCD] font-semibold hover:bg-gray-50 transition-colors flex items-center gap-1.5">
                 <MessageSquare size={12} /> Salin DM
