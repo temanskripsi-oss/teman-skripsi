@@ -19,7 +19,34 @@ export async function GET() {
     .from('affiliate_codes')
     .select('*')
     .order('total_sales', { ascending: false })
-  return NextResponse.json(data ?? [])
+
+  const codes = data ?? []
+
+  // Kode dari Collabs Hunter dilengkapi info prospect-nya (format collabs, followers)
+  // biar di halaman Sales Team kelihatan mana KOL dan dia ambil paket yang mana.
+  const collabCodes = codes.filter(c => c.source === 'collabs_hunter').map(c => c.code)
+  if (collabCodes.length === 0) return NextResponse.json(codes)
+
+  const { data: prospects } = await supabase
+    .from('collabs_prospects')
+    .select('username_ig, followers_count, format_collab, affiliate_code_ft, affiliate_code_mp')
+    .or(`affiliate_code_ft.in.(${collabCodes.join(',')}),affiliate_code_mp.in.(${collabCodes.join(',')})`)
+
+  const byCode = new Map<string, NonNullable<typeof prospects>[number]>()
+  for (const p of prospects ?? []) {
+    if (p.affiliate_code_ft) byCode.set(p.affiliate_code_ft, p)
+    if (p.affiliate_code_mp) byCode.set(p.affiliate_code_mp, p)
+  }
+
+  return NextResponse.json(codes.map(c => {
+    const p = byCode.get(c.code)
+    return p ? {
+      ...c,
+      collab_username: p.username_ig,
+      collab_format: p.format_collab,
+      collab_followers: p.followers_count,
+    } : c
+  }))
 }
 
 export async function POST(req: NextRequest) {

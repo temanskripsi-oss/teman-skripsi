@@ -6,8 +6,11 @@ import type { AffiliateCode, AffiliateTransaction } from '@/types'
 const INPUT = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#2232dd]/30 focus:border-[#2232dd] transition-all placeholder:text-gray-400'
 
 const PRODUCT_LABEL: Record<string, string> = { fastrack: 'Fastrack', mentoring: 'Mentoring' }
+const FORMAT_LABEL: Record<string, string> = { sg_statis: 'SG Statis', video_promosi: 'Video Promosi' }
 
 type Tab = 'sales' | 'komisi'
+/** Filter tipe affiliate di tab Sales Team */
+type SalesFilter = 'all' | 'kol' | 'internal'
 
 interface SalesGroup {
   sales_email: string
@@ -16,10 +19,22 @@ interface SalesGroup {
   codes: AffiliateCode[]
   total_sales: number
   total_commission: number
+  /** Grup ini dari Collabs Hunter (KOL/base account), bukan sales internal */
+  is_kol: boolean
+  collab_username: string | null
+  collab_format: string | null
+  collab_followers: number | null
+}
+
+function formatFollowers(n: number) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace('.0', '')}jt`
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace('.0', '')}rb`
+  return String(n)
 }
 
 export default function SalesTeamPage() {
   const [tab, setTab] = useState<Tab>('sales')
+  const [salesFilter, setSalesFilter] = useState<SalesFilter>('all')
   const [salesList, setSalesList] = useState<AffiliateCode[]>([])
   const [transactions, setTransactions] = useState<AffiliateTransaction[]>([])
   const [loading, setLoading] = useState(true)
@@ -51,6 +66,10 @@ export default function SalesTeamPage() {
         existing.codes.push(s)
         existing.total_sales += s.total_sales
         existing.total_commission += s.total_commission
+        existing.is_kol = existing.is_kol || s.source === 'collabs_hunter'
+        existing.collab_username ??= s.collab_username ?? null
+        existing.collab_format ??= s.collab_format ?? null
+        existing.collab_followers ??= s.collab_followers ?? null
       } else {
         map.set(s.sales_email, {
           sales_email: s.sales_email,
@@ -59,6 +78,10 @@ export default function SalesTeamPage() {
           codes: [s],
           total_sales: s.total_sales,
           total_commission: s.total_commission,
+          is_kol: s.source === 'collabs_hunter',
+          collab_username: s.collab_username ?? null,
+          collab_format: s.collab_format ?? null,
+          collab_followers: s.collab_followers ?? null,
         })
       }
     }
@@ -136,6 +159,10 @@ export default function SalesTeamPage() {
     await fetchSales()
   }
 
+  const kolCount = salesGroups.filter(g => g.is_kol).length
+  const visibleGroups = salesGroups.filter(g =>
+    salesFilter === 'all' ? true : salesFilter === 'kol' ? g.is_kol : !g.is_kol)
+
   const topSales = salesGroups[0]
   const totalClosing = salesGroups.reduce((s, a) => s + a.total_sales, 0)
   const totalCommissionPending = transactions.filter(t => t.status === 'pending').reduce((s, t) => s + t.commission_amount, 0)
@@ -198,20 +225,57 @@ export default function SalesTeamPage() {
             <p className="text-[#9CA3AF] text-sm">Belum ada sales team. Tambah sales pertama!</p>
           </div>
         ) : (
+          <>
+          {/* Filter tipe cuma relevan kalau emang ada KOL dari Collabs Hunter */}
+          {kolCount > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {([
+                ['all', `Semua (${salesGroups.length})`],
+                ['kol', `KOL / Collabs (${kolCount})`],
+                ['internal', `Sales Internal (${salesGroups.length - kolCount})`],
+              ] as [SalesFilter, string][]).map(([key, label]) => (
+                <button key={key} onClick={() => setSalesFilter(key)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-colors ${salesFilter === key ? 'bg-[#2232dd] text-white border-[#2232dd]' : 'bg-white text-[#6B6B8A] border-gray-200 hover:bg-gray-50'}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 bg-[#fafafa]">
-                    {['Nama', 'Kode Diskon', 'Email', 'WhatsApp', 'Closing', 'Komisi', 'Aksi'].map(h => (
+                    {['Nama', 'Tipe', 'Kode Diskon', 'Email', 'WhatsApp', 'Closing', 'Komisi', 'Aksi'].map(h => (
                       <th key={h} className="text-left px-5 py-3.5 text-[#9CA3AF] text-xs font-semibold whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {salesGroups.map(g => (
+                  {visibleGroups.map(g => (
                     <tr key={g.sales_email} className="hover:bg-[#fafafa] transition-colors align-top">
-                      <td className="px-5 py-3.5 font-semibold text-[#1E1B4B]">{g.sales_name}</td>
+                      <td className="px-5 py-3.5">
+                        <p className="font-semibold text-[#1E1B4B]">{g.sales_name}</p>
+                        {g.is_kol && g.collab_username && (
+                          <a href={`https://instagram.com/${g.collab_username}`} target="_blank" rel="noopener noreferrer"
+                            className="text-[11px] text-[#9CA3AF] hover:text-[#2232dd] transition-colors">
+                            @{g.collab_username}
+                            {g.collab_followers ? ` · ${formatFollowers(g.collab_followers)} followers` : ''}
+                          </a>
+                        )}
+                      </td>
+                      <td className="px-5 py-3.5">
+                        {g.is_kol ? (
+                          <div className="flex flex-col gap-1 items-start">
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#f5f3ff] text-[#7C6FCD] border border-[#7C6FCD]/20 whitespace-nowrap">KOL / Collabs</span>
+                            {g.collab_format
+                              ? <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#eff6ff] text-[#2232dd] border border-[#2232dd]/15 whitespace-nowrap">{FORMAT_LABEL[g.collab_format] ?? g.collab_format}</span>
+                              : <span className="text-[10px] text-[#9CA3AF]">format belum diset</span>}
+                          </div>
+                        ) : (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-[#6B6B8A] border border-gray-200 whitespace-nowrap">Sales Internal</span>
+                        )}
+                      </td>
                       <td className="px-5 py-3.5">
                         <div className="flex flex-col gap-1.5">
                           {g.codes.map(c => (
@@ -244,7 +308,11 @@ export default function SalesTeamPage() {
                 </tbody>
               </table>
             </div>
+            {visibleGroups.length === 0 && (
+              <p className="text-[#9CA3AF] text-sm text-center py-10">Nggak ada yang cocok sama filter ini.</p>
+            )}
           </div>
+          </>
         )
       ) : (
         /* Komisi Table */

@@ -35,6 +35,13 @@ function tierPrefix(followers: number) {
   return ''
 }
 
+/** Samain sama sanitizeUsername di API: cuma huruf & angka, uppercase */
+function sanitizeCode(v: string) {
+  return v.toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+const CODE_MAX = 20
+
 // Template DM awal — sengaja disimpen di localStorage (bukan DB) biar bisa diubah-ubah
 // sambil nyari angle yang works, tanpa migration/deploy.
 const TEMPLATE_KEY = 'collabs_hunter_dm_template'
@@ -115,6 +122,8 @@ export default function CollabsHunterPage() {
 
   const [dealTarget, setDealTarget] = useState<CollabsProspect | null>(null)
   const [dealFormat, setDealFormat] = useState<FormatCollab>('sg_statis')
+  /** Basis kode diskon (tanpa prefix tier & suffix produk), bisa dipendekin manual */
+  const [dealCodeBase, setDealCodeBase] = useState('')
   const [dealSaving, setDealSaving] = useState(false)
 
   const [detailTarget, setDetailTarget] = useState<CollabsProspect | null>(null)
@@ -247,6 +256,7 @@ export default function CollabsHunterPage() {
     setMenuId(null)
     if (status === 'deal') {
       setDealFormat('sg_statis')
+      setDealCodeBase(sanitizeCode(p.username_ig))
       setDealTarget(p)
       return
     }
@@ -288,12 +298,12 @@ export default function CollabsHunterPage() {
   }
 
   const confirmDeal = async () => {
-    if (!dealTarget) return
+    if (!dealTarget || !dealSanitized) return
     setDealSaving(true)
     const res = await fetch('/api/admin/collabs-hunter', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: dealTarget.id, status: 'deal', format_collab: dealFormat }),
+      body: JSON.stringify({ id: dealTarget.id, status: 'deal', format_collab: dealFormat, code_base: dealSanitized }),
     })
     const data = await res.json()
     if (!res.ok) { alert(data.error); setDealSaving(false); return }
@@ -319,7 +329,7 @@ export default function CollabsHunterPage() {
   }
 
   const dealPrefix = dealTarget ? tierPrefix(dealTarget.followers_count) : ''
-  const dealSanitized = dealTarget ? dealTarget.username_ig.replace(/[._\-\s]/g, '').toUpperCase() : ''
+  const dealSanitized = sanitizeCode(dealCodeBase)
 
   return (
     <div className="p-8 max-w-6xl">
@@ -705,10 +715,34 @@ export default function CollabsHunterPage() {
               ))}
             </div>
 
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs font-semibold text-[#1E1B4B]">Basis kode diskon</label>
+              {dealSanitized !== sanitizeCode(dealTarget.username_ig) && (
+                <button onClick={() => setDealCodeBase(sanitizeCode(dealTarget.username_ig))}
+                  className="text-[10px] font-semibold text-[#7C6FCD] hover:underline">
+                  Reset ke username
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 mb-1.5">
+              {dealPrefix && <span className="font-mono text-sm font-bold text-[#9CA3AF] flex-shrink-0">{dealPrefix}</span>}
+              <input value={dealCodeBase} maxLength={CODE_MAX}
+                onChange={e => setDealCodeBase(sanitizeCode(e.target.value).slice(0, CODE_MAX))}
+                placeholder="MISAL: FARIZ"
+                className="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2 font-mono text-sm font-bold text-[#1E1B4B] tracking-wide focus:outline-none focus:border-[#2232dd]" />
+            </div>
+            <p className="text-[10px] text-[#9CA3AF] mb-3">Huruf & angka aja, maks {CODE_MAX} karakter. Suffix 50/100 ditambahin otomatis.</p>
+
             <p className="text-xs font-semibold text-[#1E1B4B] mb-1.5">Kode yang akan di-generate</p>
             <div className="bg-gray-50 border border-gray-100 rounded-xl px-3.5 py-3 mb-4 flex flex-col gap-1">
-              <p className="font-mono text-sm font-bold text-[#2232dd]">{dealPrefix}{dealSanitized}50 <span className="text-[10px] font-sans font-normal text-[#9CA3AF]">Fast Track</span></p>
-              <p className="font-mono text-sm font-bold text-[#7C6FCD]">{dealPrefix}{dealSanitized}100 <span className="text-[10px] font-sans font-normal text-[#9CA3AF]">Mentoring Privat</span></p>
+              {dealSanitized ? (
+                <>
+                  <p className="font-mono text-sm font-bold text-[#2232dd]">{dealPrefix}{dealSanitized}50 <span className="text-[10px] font-sans font-normal text-[#9CA3AF]">Fast Track</span></p>
+                  <p className="font-mono text-sm font-bold text-[#7C6FCD]">{dealPrefix}{dealSanitized}100 <span className="text-[10px] font-sans font-normal text-[#9CA3AF]">Mentoring Privat</span></p>
+                </>
+              ) : (
+                <p className="text-xs text-[#9CA3AF]">Isi basis kodenya dulu ya.</p>
+              )}
             </div>
 
             <div className="bg-[#f5f3ff] border border-[#7C6FCD]/15 rounded-xl px-3.5 py-3 mb-2">
@@ -722,7 +756,7 @@ export default function CollabsHunterPage() {
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-[#9CA3AF] hover:bg-gray-50 transition-colors">
                 Batal
               </button>
-              <button onClick={confirmDeal} disabled={dealSaving}
+              <button onClick={confirmDeal} disabled={dealSaving || !dealSanitized}
                 className="flex-1 py-2.5 rounded-xl bg-[#2232dd] text-white text-sm font-bold hover:bg-[#1a28b8] disabled:opacity-60 transition-colors flex items-center justify-center gap-2">
                 {dealSaving ? <Loader2 size={14} className="animate-spin" /> : null}
                 Confirm & Deal

@@ -135,6 +135,11 @@ export interface AffiliateCode {
   is_active: boolean
   source: string
   created_at: string
+  // Diisi server buat kode hasil Collabs Hunter (source = 'collabs_hunter'),
+  // datanya diambil dari prospect yang punya kode ini.
+  collab_username?: string | null
+  collab_format?: FormatCollab | null
+  collab_followers?: number | null
 }
 
 export type ProspectStatus = 'target' | 'dm_sent' | 'deal' | 'live' | 'rejected'

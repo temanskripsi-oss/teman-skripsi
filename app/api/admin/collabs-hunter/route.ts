@@ -15,7 +15,7 @@ function tierPrefix(followers: number) {
 }
 
 function sanitizeUsername(username: string) {
-  return username.replace(/[._\-\s]/g, '').toUpperCase()
+  return username.toUpperCase().replace(/[^A-Z0-9]/g, '')
 }
 
 const FOLLOWUP_DAYS = 3
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json()
-  const { id, status, dm_status, format_collab, username_ig, followers_count, kampus, notes, next_followup_at } = body
+  const { id, status, dm_status, format_collab, code_base, username_ig, followers_count, kampus, notes, next_followup_at } = body
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
   const supabase = createServiceClient()
@@ -129,7 +129,11 @@ export async function PATCH(req: NextRequest) {
     if (!prospect) return NextResponse.json({ error: 'Prospect tidak ditemukan' }, { status: 404 })
 
     const prefix = tierPrefix(prospect.followers_count)
-    const sanitized = sanitizeUsername(prospect.username_ig)
+    // Admin boleh mempersingkat basis kode lewat modal (nama lengkap sering kepanjangan
+    // buat dipakai sebagai kode diskon). Kalau kosong, balik ke username-nya.
+    const sanitized = sanitizeUsername(code_base || prospect.username_ig)
+    if (!sanitized) return NextResponse.json({ error: 'Kode diskon nggak boleh kosong' }, { status: 400 })
+    if (sanitized.length > 20) return NextResponse.json({ error: 'Kode diskon maksimal 20 karakter' }, { status: 400 })
     const randomPass = await bcrypt.hash(randomBytes(16).toString('hex'), 10)
 
     const rows = (['fastrack', 'mentoring'] as const).map(product => ({
