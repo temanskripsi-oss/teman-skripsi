@@ -62,12 +62,10 @@ const STAGE_PLACEHOLDERS: Record<TemplateStage, string[]> = {
   follow_up: ['{username}', '{kode}'],
 }
 
-const DEFAULT_OPENER = `Halo kak @{username}! 👋
+const DEFAULT_OPENER = `Halo kak! 👋
+Aku Ratu dari Teman Skripsi — kita bantu mahasiswa nyelesain skripsi lewat program Fast Track & Mentoring Privat.
 
-Aku Reza dari Teman Skripsi — kita bantu mahasiswa nyelesain skripsi lewat program Fast Track & Mentoring Privat.
-
-Aku lihat konten kakak, dan kayaknya banyak followers kakak yang lagi di fase skripsi. Kita lagi buka kerja sama affiliate nih:
-
+Btw, kita lagi buka kerja sama affiliate nih kaa:
 • Kakak dapet kode diskon atas nama sendiri
 • Tiap ada yang daftar pakai kode kakak, komisinya Rp50.000 (Fast Track) / Rp100.000 (Mentoring Privat)
 • Nggak ada target, nggak ada biaya apa pun
