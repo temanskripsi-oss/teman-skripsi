@@ -42,10 +42,27 @@ function sanitizeCode(v: string) {
 
 const CODE_MAX = 20
 
-// Template DM awal — sengaja disimpen di localStorage (bukan DB) biar bisa diubah-ubah
-// sambil nyari angle yang works, tanpa migration/deploy.
-const TEMPLATE_KEY = 'collabs_hunter_dm_template'
-const DEFAULT_DM_TEMPLATE = `Halo kak @{username}! 👋
+// Template DM — sengaja disimpen di localStorage (bukan DB) biar bisa diubah-ubah
+// sambil nyari angle yang works, tanpa migration/deploy. Tiap admin punya gaya sendiri.
+const TEMPLATE_KEY = 'collabs_hunter_dm_templates'
+/** key lama waktu template masih satu biji — dimigrasi ke stage opener */
+const LEGACY_TEMPLATE_KEY = 'collabs_hunter_dm_template'
+
+type TemplateStage = 'opener' | 'detail' | 'deal_confirmation' | 'follow_up'
+type Templates = Record<TemplateStage, string>
+
+const STAGE_LABEL: Record<TemplateStage, string> = {
+  opener: 'Opener', detail: 'Detail', deal_confirmation: 'Deal', follow_up: 'Follow-up',
+}
+/** Placeholder yang relevan per stage — sisanya cuma bikin bingung pas ngedit */
+const STAGE_PLACEHOLDERS: Record<TemplateStage, string[]> = {
+  opener: ['{username}', '{kampus}', '{followers}'],
+  detail: ['{username}'],
+  deal_confirmation: ['{username}', '{kode}', '{format}'],
+  follow_up: ['{username}', '{kode}'],
+}
+
+const DEFAULT_OPENER = `Halo kak @{username}! 👋
 
 Aku Reza dari Teman Skripsi — kita bantu mahasiswa nyelesain skripsi lewat program Fast Track & Mentoring Privat.
 
@@ -59,11 +76,59 @@ Followers kakak dapet diskon, kakak dapet komisi.
 
 Kalau tertarik, aku kirimin detail lengkapnya ya kak?`
 
+const DEFAULT_TEMPLATES: Templates = {
+  opener: DEFAULT_OPENER,
+
+  detail: `Sip kak! Jadi gini detailnya:
+
+Kakak bisa pilih salah satu format:
+
+1️⃣ SG Statis — story 1x post foto/desain dari kita + kode diskon kakak, tayang 24 jam
+2️⃣ Video Promosi — bikin video singkat ajakan/review pake kode kakak, bisa di-repost berkali-kali
+
+Komisinya sama buat kedua format: Rp50.000 (Fast Track) / Rp100.000 (Mentoring Privat) per orang yang daftar pake kode kakak.
+
+Kakak mau pilih yang mana?`,
+
+  deal_confirmation: `Mantap kak! Ini kode diskon kakak: {kode}
+
+Tinggal kakak post {format} kapan pun kakak siap, sertain kode ini biar followers bisa pake pas daftar di web kita.
+
+Nanti abis posting, kirim aja screenshot-nya ke sini biar aku catet. Komisi otomatis kehitung tiap ada yang daftar pake kode kakak — kakak bisa pantau progressnya, nanti aku update juga kalau ada yang closing.
+
+Ada yang mau ditanyain dulu kak, atau langsung gas aja?`,
+
+  follow_up: `Halo kak, gimana kabarnya? 👋
+
+Kode diskon kakak ({kode}) masih aktif nih, tinggal tunggu postingnya aja. Ada kendala kah kak, atau mau aku bantuin sesuatu?`,
+}
+
+/** Prospect punya 2 kode (FT & MP) — dirangkai jadi satu baris biar enak di-paste */
+function codeText(p: CollabsProspect) {
+  const parts: string[] = []
+  if (p.affiliate_code_ft) parts.push(`${p.affiliate_code_ft} (Fast Track)`)
+  if (p.affiliate_code_mp) parts.push(`${p.affiliate_code_mp} (Mentoring Privat)`)
+  return parts.join(' / ')
+}
+
 function fillTemplate(tpl: string, p: CollabsProspect) {
   return tpl
     .replace(/\{username\}/g, p.username_ig)
     .replace(/\{kampus\}/g, p.kampus ?? '')
     .replace(/\{followers\}/g, formatFollowers(p.followers_count))
+    .replace(/\{kode\}/g, codeText(p))
+    .replace(/\{format\}/g, p.format_collab ? FORMAT_LABEL[p.format_collab] : '')
+}
+
+/** Stage DM ditentuin dari status prospect — admin ga perlu milih manual */
+function resolveStage(p: CollabsProspect): TemplateStage | null {
+  if (p.status === 'target') return 'opener'
+  if (p.status === 'dm_sent') return 'detail'
+  if (p.status === 'deal' && !p.live_at) {
+    if (p.deal_at && daysSince(p.deal_at) > FOLLOWUP_DAYS) return 'follow_up'
+    return 'deal_confirmation'
+  }
+  return null // live / rejected — ga ada DM yang perlu dikirim
 }
 
 // Target harian yang dikontrol penuh (activity), dipisah dari target deal mingguan (outcome)
@@ -75,6 +140,9 @@ const DAY_LABELS = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
 // Deal cuma janji — duitnya baru jalan pas KOL-nya posting. Lewat sekian hari
 // masih nyangkut di 'deal', tagih sebelum keburu dingin.
 const ACTIVATION_DAYS = 7
+
+// Deal yang nyangkut segini hari udah waktunya ditagih halus lewat template follow-up
+const FOLLOWUP_DAYS = 5
 
 function daysSince(iso: string) {
   return Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
@@ -128,13 +196,22 @@ export default function CollabsHunterPage() {
 
   const [detailTarget, setDetailTarget] = useState<CollabsProspect | null>(null)
 
-  const [template, setTemplate] = useState(DEFAULT_DM_TEMPLATE)
+  const [templates, setTemplates] = useState<Templates>(DEFAULT_TEMPLATES)
   const [showTemplate, setShowTemplate] = useState(false)
+  const [activeStage, setActiveStage] = useState<TemplateStage>('opener')
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem(TEMPLATE_KEY)
-    if (saved) setTemplate(saved)
+    if (saved) {
+      try {
+        setTemplates({ ...DEFAULT_TEMPLATES, ...JSON.parse(saved) })
+        return
+      } catch { /* data korup — pakai default */ }
+    }
+    // Migrasi dari versi satu-template: isinya jadi opener
+    const legacy = localStorage.getItem(LEGACY_TEMPLATE_KEY)
+    if (legacy) setTemplates({ ...DEFAULT_TEMPLATES, opener: legacy })
   }, [])
 
   // Posisi menu dihitung sekali pas dibuka, jadi bakal ngaco kalau halaman gerak
@@ -149,13 +226,19 @@ export default function CollabsHunterPage() {
     }
   }, [menuId])
 
-  const saveTemplate = (value: string) => {
-    setTemplate(value)
-    localStorage.setItem(TEMPLATE_KEY, value)
+  const saveTemplate = (stage: TemplateStage, value: string) => {
+    setTemplates(prev => {
+      const next = { ...prev, [stage]: value }
+      localStorage.setItem(TEMPLATE_KEY, JSON.stringify(next))
+      return next
+    })
   }
 
   const copyDm = (p: CollabsProspect) => {
-    navigator.clipboard.writeText(fillTemplate(template, p))
+    // Prospect yang udah live/rejected ga punya stage — jatuhin ke opener biar tombol
+    // manapun tetep ngasih sesuatu yang bisa di-paste.
+    const stage = resolveStage(p) ?? 'opener'
+    navigator.clipboard.writeText(fillTemplate(templates[stage], p))
     setMenuId(null)
     setCopiedId(p.id)
     setTimeout(() => setCopiedId(null), 1500)
@@ -411,6 +494,10 @@ export default function CollabsHunterPage() {
                 {p.format_collab && <span className="text-xs text-[#9CA3AF]">{FORMAT_LABEL[p.format_collab]}</span>}
                 <span className="text-xs text-[#9CA3AF]">{(p.sales_ft ?? 0) + (p.sales_mp ?? 0)} closing</span>
                 <div className="ml-auto flex items-center gap-1.5">
+                  <button onClick={() => copyDm(p)}
+                    className="text-[11px] font-semibold text-[#7C6FCD] border border-[#7C6FCD]/30 rounded-lg px-2.5 py-1 hover:bg-[#f5f3ff] transition-colors">
+                    {copiedId === p.id ? 'Tersalin!' : 'Salin Follow-up'}
+                  </button>
                   <button onClick={() => updateStatus(p, 'live')}
                     className="text-[11px] font-semibold text-[#16a34a] border border-[#16a34a]/30 rounded-lg px-2.5 py-1 hover:bg-[#f0fdf4] transition-colors">
                     Udah Posting
@@ -494,20 +581,32 @@ export default function CollabsHunterPage() {
           className="w-full flex items-center gap-2.5 px-5 py-3.5 text-left hover:bg-[#fafafa] transition-colors">
           <MessageSquare size={15} className="text-[#7C6FCD] flex-shrink-0" />
           <span className="text-sm font-semibold text-[#1E1B4B]">Template DM</span>
-          <span className="text-xs text-[#9CA3AF]">— dipakai tombol &ldquo;Salin DM&rdquo; di tiap prospect</span>
+          <span className="text-xs text-[#9CA3AF]">— dipakai tombol &ldquo;Salin DM&rdquo; di tiap prospect, otomatis sesuai status</span>
           <ChevronDown size={15} className={`ml-auto text-[#9CA3AF] transition-transform ${showTemplate ? 'rotate-180' : ''}`} />
         </button>
         {showTemplate && (
           <div className="px-5 pb-5 border-t border-gray-50 pt-4">
-            <textarea value={template} onChange={e => saveTemplate(e.target.value)} rows={14}
+            <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+              {(Object.keys(STAGE_LABEL) as TemplateStage[]).map(s => (
+                <button key={s} onClick={() => setActiveStage(s)}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors ${activeStage === s
+                    ? 'bg-[#f5f3ff] text-[#7C6FCD] border-[#7C6FCD]/30'
+                    : 'text-[#9CA3AF] border-gray-200 hover:bg-gray-50'}`}>
+                  {STAGE_LABEL[s]}
+                </button>
+              ))}
+            </div>
+            <textarea value={templates[activeStage]} onChange={e => saveTemplate(activeStage, e.target.value)} rows={14}
               className={`${INPUT} font-mono text-xs leading-relaxed resize-y`} />
             <div className="flex items-center justify-between gap-3 mt-2.5 flex-wrap">
               <p className="text-[11px] text-[#9CA3AF]">
-                Placeholder: <code className="text-[#7C6FCD]">{'{username}'}</code>{' '}
-                <code className="text-[#7C6FCD]">{'{kampus}'}</code>{' '}
-                <code className="text-[#7C6FCD]">{'{followers}'}</code> — auto-keisi per prospect. Kesimpen di browser ini aja.
+                Placeholder:{' '}
+                {STAGE_PLACEHOLDERS[activeStage].map(ph => (
+                  <code key={ph} className="text-[#7C6FCD] mr-1">{ph}</code>
+                ))}
+                — auto-keisi per prospect. Kesimpen di browser ini aja.
               </p>
-              <button onClick={() => saveTemplate(DEFAULT_DM_TEMPLATE)}
+              <button onClick={() => saveTemplate(activeStage, DEFAULT_TEMPLATES[activeStage])}
                 className="text-[11px] font-semibold text-[#9CA3AF] border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors flex-shrink-0">
                 Reset ke default
               </button>
@@ -559,9 +658,16 @@ export default function CollabsHunterPage() {
                     <td className="px-5 py-3.5 text-[#6B6B8A]">{formatFollowers(p.followers_count)}</td>
                     <td className="px-5 py-3.5 text-[#6B6B8A] text-xs">{p.kampus ?? '-'}</td>
                     <td className="px-5 py-3.5">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap w-fit inline-block ${STATUS_BADGE[p.status]}`}>
-                        {STATUS_LABEL[p.status]}
-                      </span>
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border whitespace-nowrap ${STATUS_BADGE[p.status]}`}>
+                          {STATUS_LABEL[p.status]}
+                        </span>
+                        {resolveStage(p) === 'follow_up' && (
+                          <span className="text-[10px] font-bold text-[#b45309] bg-[#fffbeb] border border-[#fbbf24]/40 px-2 py-0.5 rounded-full whitespace-nowrap">
+                            ⏰ Perlu follow-up
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-5 py-3.5">
                       <select value={p.dm_status} onChange={e => updateDmStatus(p, e.target.value as DmStatus)}
@@ -622,10 +728,12 @@ export default function CollabsHunterPage() {
           <>
             <div className="fixed inset-0 z-40" onClick={() => setMenuId(null)} />
             <div ref={menuRef} className="fixed z-50 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 w-44 max-h-[80vh] overflow-y-auto" style={{ top: menuPos.top, right: menuPos.right }}>
-              <button onClick={() => copyDm(p)}
-                className="w-full text-left px-4 py-2 text-xs text-[#7C6FCD] font-semibold hover:bg-gray-50 transition-colors flex items-center gap-1.5">
-                <MessageSquare size={12} /> Salin DM
-              </button>
+              {resolveStage(p) && (
+                <button onClick={() => copyDm(p)}
+                  className="w-full text-left px-4 py-2 text-xs text-[#7C6FCD] font-semibold hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+                  <MessageSquare size={12} /> Salin DM · {STAGE_LABEL[resolveStage(p)!]}
+                </button>
+              )}
               <a href={`https://instagram.com/${p.username_ig}`} target="_blank" rel="noopener noreferrer"
                 onClick={() => setMenuId(null)}
                 className="w-full text-left px-4 py-2 text-xs text-[#1E1B4B] hover:bg-gray-50 transition-colors flex items-center gap-1.5">
@@ -782,12 +890,14 @@ export default function CollabsHunterPage() {
               <button onClick={() => setDetailTarget(null)} className="p-1.5 rounded-lg hover:bg-gray-100 text-[#9CA3AF]"><X size={16} /></button>
             </div>
 
-            <button onClick={() => copyDm(detailTarget)}
-              className="w-full mb-4 py-2.5 rounded-xl border border-[#7C6FCD]/30 bg-[#f5f3ff] text-[#7C6FCD] text-sm font-bold hover:bg-[#ede9fe] transition-colors flex items-center justify-center gap-2">
-              {copiedId === detailTarget.id
-                ? <><Check size={14} /> Tersalin!</>
-                : <><MessageSquare size={14} /> Salin DM buat @{detailTarget.username_ig}</>}
-            </button>
+            {resolveStage(detailTarget) && (
+              <button onClick={() => copyDm(detailTarget)}
+                className="w-full mb-4 py-2.5 rounded-xl border border-[#7C6FCD]/30 bg-[#f5f3ff] text-[#7C6FCD] text-sm font-bold hover:bg-[#ede9fe] transition-colors flex items-center justify-center gap-2">
+                {copiedId === detailTarget.id
+                  ? <><Check size={14} /> Tersalin!</>
+                  : <><MessageSquare size={14} /> Salin DM {STAGE_LABEL[resolveStage(detailTarget)!]} buat @{detailTarget.username_ig}</>}
+              </button>
+            )}
 
             <div className="flex flex-col gap-3 mb-4">
               <TimelineRow label="Created" date={detailTarget.created_at} />
